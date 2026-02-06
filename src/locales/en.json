@@ -1,0 +1,340 @@
+{
+  "common": {
+    "appName": "Unbiased",
+    "tagline": "AI-Powered Feasibility Analysis",
+    "loading": "Loading...",
+    "translating": "Translating report...",
+    "error": "Error",
+    "success": "Success",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "search": "Search reports...",
+    "filter": "Filter",
+    "sort": "Sort",
+    "all": "All",
+    "allCategories": "All Categories",
+    "noResults": "No results found",
+    "noResultsDescription": "Try adjusting your search or filters to find what you're looking for.",
+    "clearFilters": "Clear filters",
+    "noReportsYet": "No reports yet",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or",
+    "and": "and",
+    "english": "EN"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "analyze": "Analyze",
+    "reports": "Reports",
+    "selectCountry": "Select Country",
+    "selectLanguage": "Language"
+  },
+  "home": {
+    "hero": {
+      "title": "Unbiased Feasibility Analysis",
+      "subtitle": "AI-powered analysis for infrastructure and development projects",
+      "description": "Get comprehensive, data-driven feasibility reports for government projects, infrastructure initiatives, and policy proposals.",
+      "cta": "Start Analysis",
+      "learnMore": "Learn More"
+    },
+    "features": {
+      "title": "Why Use Unbiased?",
+      "realData": {
+        "title": "Real-Time Data",
+        "description": "Analysis powered by current census, budget, and economic data"
+      },
+      "demandAnalysis": {
+        "title": "Demand Analysis",
+        "description": "Assess if project scale matches actual population needs"
+      },
+      "budgetAlignment": {
+        "title": "Budget Alignment",
+        "description": "Check affordability against government budgets"
+      },
+      "transparent": {
+        "title": "Transparent Scoring",
+        "description": "Clear scoring across 6 feasibility categories"
+      }
+    },
+    "countries": {
+      "title": "Available Countries",
+      "description": "Select a country to start analyzing projects"
+    }
+  },
+  "analysis": {
+    "title": "Project Analysis",
+    "form": {
+      "title": "Describe Your Project",
+      "description": "Tell us about the project or policy you want to analyze",
+      "projectDescription": {
+        "label": "Project Description",
+        "placeholder": "Describe your project in detail. For example: 'Build a 100-bed hospital in the northern region' or 'Implement a new renewable energy policy'",
+        "hint": "Minimum 20 characters. Be specific about scope, size, and objectives."
+      },
+      "location": {
+        "label": "Location (Optional)",
+        "placeholder": "Select or enter a location",
+        "hint": "Leave empty for AI to suggest best locations"
+      },
+      "submit": "Analyze Feasibility",
+      "analyzing": "Analyzing...",
+      "validating": "Validating...",
+      "allowedProjects": {
+        "title": "What can be analyzed?",
+        "description": "Government projects, public infrastructure, development initiatives, and policy proposals. Personal purchases, private business, and political campaigns cannot be analyzed."
+      }
+    },
+    "rejection": {
+      "title": "Request Not Suitable",
+      "suggestion": "Try something like:",
+      "tryAgain": "Try Again"
+    },
+    "streaming": {
+      "searching": "Searching for real-world data...",
+      "analyzing": "Analyzing feasibility...",
+      "generating": "Generating report...",
+      "thinking": "Thinking...",
+      "researching": "Researching data...",
+      "evaluating": "Evaluating factors...",
+      "calculating": "Calculating scores...",
+      "generatingReport": "Generating your report",
+      "projectType": "Project Type",
+      "score": "Score"
+    },
+    "reconnecting": {
+      "title": "Reconnecting...",
+      "description": "Connection interrupted. Attempting to reconnect (attempt {{attempt}}).",
+      "attempt": "Attempt {{current}} of {{max}}",
+      "partialData": "Data received so far:"
+    },
+    "disconnected": {
+      "title": "Connection Lost",
+      "description": "Unable to reconnect to the analysis. Your partial results have been saved."
+    }
+  },
+  "report": {
+    "title": "Feasibility Report",
+    "generatedOn": "Generated on",
+    "analyzedRequest": "Analysis Request",
+    "overallScore": "Overall Feasibility Score",
+    "confidence": "Confidence Level",
+    "projectType": "Project Type",
+    "location": "Location",
+    "suggestedLocations": "Suggested Locations",
+    "estimatedCost": "Estimated Cost",
+    "costBreakdown": "Cost Breakdown",
+    "categories": {
+      "title": "Feasibility Categories",
+      "technical": "Technical Feasibility",
+      "economic": "Economic Viability",
+      "environmental": "Environmental Impact",
+      "social": "Social Impact",
+      "legal": "Legal & Political",
+      "operational": "Operational Feasibility"
+    },
+    "sections": {
+      "financial": "Financial Analysis",
+      "financialDesc": "Budget impact and cost breakdown",
+      "timeframeDesc": "Project duration and administration analysis",
+      "locationDesc": "Recommended implementation sites",
+      "categoriesDesc": "Score breakdown by category",
+      "actionItems": "Action Items",
+      "actionItemsDesc": "Key risks to address and recommended next steps",
+      "alternativeDesc": "A suggested alternative approach"
+    },
+    "demandAnalysis": {
+      "title": "Demand Analysis",
+      "targetPopulation": "Target Population",
+      "currentCapacity": "Current Capacity",
+      "proposedCapacity": "Proposed Capacity",
+      "capacityGap": "Capacity Gap",
+      "utilizationForecast": "Expected Utilization",
+      "demandScore": "Demand Score",
+      "scalingRecommendation": "Scaling Recommendation",
+      "appropriate": "Scale is Appropriate",
+      "scaleUp": "Consider Scaling Up",
+      "scaleDown": "Consider Scaling Down",
+      "reconsider": "Reconsider Project"
+    },
+    "budgetAlignment": {
+      "title": "Budget Alignment",
+      "costVsBudget": "Cost vs Available Budget",
+      "affordabilityScore": "Affordability Score",
+      "fundingGap": "Funding Gap",
+      "suggestedSources": "Suggested Funding Sources",
+      "budgetImpact": "Budget Impact",
+      "cofogCategory": "Expenditure Classification (COFOG)",
+      "sectorBudget": "Sector Budget",
+      "entityAllocation": "Entity Budget Allocation",
+      "allocatedBudget": "Allocated Budget"
+    },
+    "verdict": {
+      "title": "Should the Country Proceed?"
+    },
+    "budgetRatio": {
+      "title": "Budget Impact",
+      "ofBudget": "of budget",
+      "projectCost": "Project Cost",
+      "totalBudget": "Country Budget"
+    },
+    "alternative": {
+      "title": "Suggested Alternative Project",
+      "why": "Why consider this alternative?",
+      "benefits": "Potential Benefits"
+    },
+    "timeframe": {
+      "title": "Project Timeline",
+      "months": "months",
+      "range": "Range",
+      "canComplete": "Current administration can complete",
+      "cannotComplete": "May extend beyond current term",
+      "delayRisk": "Risk of Delay",
+      "delayFactors": "Potential Delay Factors",
+      "risk": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      }
+    },
+    "risks": {
+      "title": "Key Risks"
+    },
+    "nextSteps": {
+      "title": "Recommended Next Steps"
+    },
+    "pros": "Advantages",
+    "cons": "Challenges",
+    "recommendations": "Recommendations",
+    "dataQuality": "Data Quality Note",
+    "disclaimer": "Disclaimer",
+    "share": "Share Report",
+    "download": "Download PDF",
+    "newAnalysis": "New Analysis",
+    "discussion": {
+      "title": "Panel Discussion",
+      "discuss": "Discuss",
+      "start": "Start Discussion",
+      "join": "Join Discussion",
+      "ctaTitle": "Start a Panel Discussion",
+      "ctaDescription": "Get deeper insights from our AI expert panel. Ask questions and receive perspectives from economic, technical, legal, environmental, social, and operational experts.",
+      "loadingReport": "Loading report...",
+      "loadingDiscussion": "Loading discussion...",
+      "backToReport": "Back to Report",
+      "concluded": "Concluded",
+      "discussionConcluded": "Discussion Concluded",
+      "summaryLabel": "Summary",
+      "concludeDiscussion": "Conclude Discussion",
+      "concludeConfirm": "Are you sure you want to conclude this discussion? This action cannot be undone.",
+      "stopAutoDiscussion": "Stop Auto Discussion",
+      "showExperts": "Show Experts",
+      "hideExperts": "Hide Experts",
+      "panelExperts": "Panel Experts",
+      "startTitle": "Start the Discussion",
+      "startDescription": "Ask questions about this feasibility analysis and get insights from our panel of AI experts. Each expert will provide their domain-specific perspective.",
+      "concludedMessage": "This discussion has been concluded.",
+      "returnToReport": "Return to report",
+      "placeholder": "Ask the panel a question...",
+      "autoInProgress": "Auto discussion in progress...",
+      "noDescription": "No description available",
+      "locationTbd": "Location TBD",
+      "scoreLabel": "Score",
+      "confidenceLabel": "Confidence",
+      "experts": "AI Experts",
+      "guests": "Active Guests",
+      "stop": "Stop",
+      "description": "Description",
+      "autoDiscussion": "Auto Discussion",
+      "you": "You",
+      "input": {
+        "allExperts": "All Experts",
+        "askAllExperts": "Ask all experts",
+        "quick": "Quick",
+        "enterToSend": "Press Enter to send, Shift+Enter for new line",
+        "autoDiscussion": "Auto Discussion",
+        "autoDiscussionDesc": "Watch AI experts discuss automatically",
+        "askAll": "Ask All",
+        "askAllDesc": "Get input from all experts",
+        "challengeScore": "Challenge Score",
+        "challengeScoreDesc": "Question a category score",
+        "deepDive": "Deep Dive",
+        "deepDiveDesc": "Request detailed analysis",
+        "summarize": "Summarize",
+        "summarizeDesc": "Get discussion summary",
+        "mentionExpert": "Mention an expert",
+        "auto": "Auto",
+        "placeholder": "Type your message...",
+        "mentionHint": "Type",
+        "toSend": "to send",
+        "replyingTo": "Replying to {{name}}"
+      }
+    }
+  },
+  "countries": {
+    "maldives": "Maldives",
+    "india": "India",
+    "bangladesh": "Bangladesh",
+    "srilanka": "Sri Lanka"
+  },
+  "languages": {
+    "en": "English",
+    "dv": "Dhivehi",
+    "hi": "Hindi",
+    "bn": "Bengali",
+    "si": "Sinhala",
+    "ta": "Tamil"
+  },
+  "footer": {
+    "description": "AI-powered feasibility analysis for transparent governance",
+    "madeWith": "Made with",
+    "forThe": "for the people of",
+    "copyright": "All rights reserved",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact Us",
+    "githubLabel": "GitHub",
+    "twitterLabel": "Twitter"
+  },
+  "score": {
+    "highlyFeasible": "Highly Feasible",
+    "moderatelyFeasible": "Moderately Feasible",
+    "challenging": "Challenging",
+    "difficult": "Difficult",
+    "notRecommended": "Not Recommended"
+  },
+  "ui": {
+    "less": "Less",
+    "details": "Details",
+    "showLess": "Show Less",
+    "showMore": "Show More",
+    "linkCopied": "Link copied to clipboard!",
+    "toggleTheme": "Toggle theme"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "notFound": "Page not found",
+    "invalidInput": "Please check your input and try again",
+    "analysisError": "Analysis failed. Please try again.",
+    "highUsage": "Our servers are experiencing high demand. Please try again in a moment.",
+    "highUsageTitle": "High Demand",
+    "reportNotFound": "Report Not Found",
+    "reportNotFoundDescription": "This report doesn't exist or has been removed.",
+    "failedToStartAnalysis": "Failed to start analysis",
+    "streamingNotSupported": "Streaming not supported",
+    "failedToStartDiscussion": "Failed to start discussion",
+    "failedToStartAutoDiscussion": "Failed to start auto discussion",
+    "translationFailed": "Translation failed",
+    "reconnectionFailed": "Unable to reconnect. Please try starting a new analysis."
+  }
+}

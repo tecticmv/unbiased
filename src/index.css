@@ -1,0 +1,216 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Dhivehi Font */
+@font-face {
+  font-family: 'MV Faseyha';
+  src: url('/fonts/MV_Faseyha.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* Color palettes */
+    --color-ink-black-50: #e5f2ff;
+    --color-ink-black-100: #cce5ff;
+    --color-ink-black-200: #99caff;
+    --color-ink-black-300: #66b0ff;
+    --color-ink-black-400: #3396ff;
+    --color-ink-black-500: #007bff;
+    --color-ink-black-600: #0063cc;
+    --color-ink-black-700: #004a99;
+    --color-ink-black-800: #003166;
+    --color-ink-black-900: #001933;
+    --color-ink-black-950: #001124;
+
+    --color-dark-teal-50: #e7fefe;
+    --color-dark-teal-100: #cefcfd;
+    --color-dark-teal-200: #9df9fb;
+    --color-dark-teal-300: #6cf7f9;
+    --color-dark-teal-400: #3bf4f7;
+    --color-dark-teal-500: #0af1f5;
+    --color-dark-teal-600: #08c1c4;
+    --color-dark-teal-700: #069193;
+    --color-dark-teal-800: #046062;
+    --color-dark-teal-900: #023031;
+    --color-dark-teal-950: #012222;
+
+    --color-ocean-blue-50: #e8f5fd;
+    --color-ocean-blue-100: #d1ecfa;
+    --color-ocean-blue-200: #a3d8f5;
+    --color-ocean-blue-300: #75c5f0;
+    --color-ocean-blue-400: #46b2ec;
+    --color-ocean-blue-500: #189ee7;
+    --color-ocean-blue-600: #137fb9;
+    --color-ocean-blue-700: #0f5f8a;
+    --color-ocean-blue-800: #0a3f5c;
+    --color-ocean-blue-900: #05202e;
+    --color-ocean-blue-950: #031620;
+
+    --color-sky-surge-50: #e7f8fd;
+    --color-sky-surge-100: #d0f2fb;
+    --color-sky-surge-200: #a0e5f8;
+    --color-sky-surge-300: #71d8f4;
+    --color-sky-surge-400: #41cbf1;
+    --color-sky-surge-500: #12beed;
+    --color-sky-surge-600: #0e98be;
+    --color-sky-surge-700: #0b728e;
+    --color-sky-surge-800: #074c5f;
+    --color-sky-surge-900: #04262f;
+    --color-sky-surge-950: #021b21;
+
+    --color-bright-sky-50: #e7f8fe;
+    --color-bright-sky-100: #cff2fc;
+    --color-bright-sky-200: #9ee4fa;
+    --color-bright-sky-300: #6ed7f7;
+    --color-bright-sky-400: #3dcaf5;
+    --color-bright-sky-500: #0dbdf2;
+    --color-bright-sky-600: #0a97c2;
+    --color-bright-sky-700: #087191;
+    --color-bright-sky-800: #054b61;
+    --color-bright-sky-900: #032630;
+    --color-bright-sky-950: #021a22;
+
+    /* Theme colors - Light mode */
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #ffffff;
+    --card-foreground: #000000;
+    --popover: #ffffff;
+    --popover-foreground: #000000;
+    --primary: #000000;
+    --primary-foreground: #ffffff;
+    --secondary: var(--color-ocean-blue-50);
+    --secondary-foreground: var(--color-ocean-blue-700);
+    --muted: var(--color-ink-black-50);
+    --muted-foreground: #000000;
+    --accent: var(--color-dark-teal-100);
+    --accent-foreground: var(--color-dark-teal-800);
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: var(--color-ink-black-100);
+    --input: var(--color-ink-black-100);
+    --ring: var(--color-ocean-blue-500);
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: var(--color-ink-black-950);
+    --foreground: #ffffff;
+    --card: var(--color-ink-black-900);
+    --card-foreground: #ffffff;
+    --popover: var(--color-ink-black-900);
+    --popover-foreground: #ffffff;
+    --primary: #ffffff;
+    --primary-foreground: #000000;
+    --secondary: var(--color-ink-black-800);
+    --secondary-foreground: var(--color-ink-black-100);
+    --muted: var(--color-ink-black-800);
+    --muted-foreground: #ffffff;
+    --accent: var(--color-dark-teal-900);
+    --accent-foreground: var(--color-dark-teal-300);
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --border: var(--color-ink-black-800);
+    --input: var(--color-ink-black-800);
+    --ring: var(--color-ocean-blue-400);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--muted-foreground) 30%, transparent);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--muted-foreground) 50%, transparent);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mobile viewport height fix - prevents content being cut off by mobile browser chrome */
+@supports (height: 100dvh) {
+  :root {
+    --vh-fallback: 100dvh;
+  }
+}
+
+@supports not (height: 100dvh) {
+  :root {
+    --vh-fallback: 100vh;
+  }
+}
+
+/* RTL Support for Dhivehi and other RTL languages */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+[dir="rtl"] .ml-1 {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+
+[dir="rtl"] .mr-1 {
+  margin-right: 0;
+  margin-left: 0.25rem;
+}
+
+/* Ensure proper font rendering for various scripts */
+html[lang="dv"] body {
+  font-family: "MV Faseyha", "Faruma", "MV Boli", "Mv Iyyu Nala", system-ui, sans-serif;
+}
+
+html[lang="hi"] body,
+html[lang="bn"] body,
+html[lang="si"] body,
+html[lang="ta"] body {
+  font-family: system-ui, -apple-system, "Noto Sans", sans-serif;
+}
