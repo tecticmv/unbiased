@@ -534,7 +534,7 @@ export function PanelDiscussion({
           {/* Messages - scrollable area */}
           <div
             ref={messagesContainerRef}
-            className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 space-y-3"
+            className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-4 space-y-3 bg-card"
           >
             {/* Translation indicator */}
             {isTranslating && (
@@ -638,7 +638,7 @@ export function PanelDiscussion({
 
           {/* Fixed Input */}
           {!isConcluded ? (
-            <div className="flex-shrink-0 border-t bg-background p-3">
+            <div className="flex-shrink-0 border-t bg-card p-3 shadow-[0_-2px_8px_rgba(0,0,0,0.04)]">
               <MessageInput
                 onSend={handleSendMessage}
                 replyingTo={replyingTo}

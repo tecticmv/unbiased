@@ -250,7 +250,7 @@ export function MessageInput({
       )}
 
       {/* Modern input container */}
-      <div className="flex items-end gap-2 p-1 rounded-2xl bg-transparent border border-border/50 focus-within:border-primary/30 focus-within:bg-transparent transition-all">
+      <div className="flex items-end gap-2 p-1 rounded-2xl bg-background border border-border focus-within:border-primary/40 focus-within:shadow-sm transition-all">
         {/* Textarea */}
         <div className="flex-1 relative">
           <Textarea
