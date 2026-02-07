@@ -14,6 +14,10 @@ import {
   TrendingUp,
   MessageSquare,
   Globe2,
+  Cpu,
+  DollarSign,
+  Leaf,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -81,30 +85,12 @@ export function LearnMorePage() {
   ];
 
   const categories = [
-    {
-      key: "technical",
-      icon: "🔧",
-    },
-    {
-      key: "economic",
-      icon: "💰",
-    },
-    {
-      key: "environmental",
-      icon: "🌱",
-    },
-    {
-      key: "social",
-      icon: "👥",
-    },
-    {
-      key: "legal",
-      icon: "⚖️",
-    },
-    {
-      key: "operational",
-      icon: "⚙️",
-    },
+    { key: "technical", icon: Cpu, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/30", border: "border-blue-100 dark:border-blue-900/50" },
+    { key: "economic", icon: DollarSign, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-950/30", border: "border-emerald-100 dark:border-emerald-900/50" },
+    { key: "environmental", icon: Leaf, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-950/30", border: "border-green-100 dark:border-green-900/50" },
+    { key: "social", icon: Users, color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-950/30", border: "border-amber-100 dark:border-amber-900/50" },
+    { key: "legal", icon: Scale, color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-950/30", border: "border-purple-100 dark:border-purple-900/50" },
+    { key: "operational", icon: Settings, color: "text-rose-600 dark:text-rose-400", bg: "bg-rose-50 dark:bg-rose-950/30", border: "border-rose-100 dark:border-rose-900/50" },
   ];
 
   return (
@@ -255,26 +241,29 @@ export function LearnMorePage() {
           </ScrollReveal>
 
           <StaggerContainer>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {categories.map((category) => (
-                <StaggerItem key={category.key}>
-                  <Card className="h-full border-2 hover:border-primary/50 transition-colors">
-                    <CardContent className="p-6 h-full">
-                      <div className="flex items-start gap-3 h-full">
-                        <div className="text-3xl flex-shrink-0">{category.icon}</div>
-                        <div className="flex-1">
-                          <h3 className="mb-1 text-lg font-semibold">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              {categories.map((category) => {
+                const Icon = category.icon;
+                return (
+                  <StaggerItem key={category.key}>
+                    <div className={`rounded-xl border ${category.border} bg-white dark:bg-card p-5 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 h-full`}>
+                      <div className="flex items-start gap-4">
+                        <div className={`flex-shrink-0 h-10 w-10 rounded-lg ${category.bg} flex items-center justify-center`}>
+                          <Icon className={`h-5 w-5 ${category.color}`} />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-sm">
                             {t(`report.categories.${category.key}`)}
-                          </h3>
-                          <p className="text-sm text-muted-foreground">
+                          </h4>
+                          <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
                             {t(`learnMore.categories.${category.key}`)}
                           </p>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </StaggerItem>
-              ))}
+                    </div>
+                  </StaggerItem>
+                );
+              })}
             </div>
           </StaggerContainer>
         </div>

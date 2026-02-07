@@ -145,33 +145,33 @@ export function HomePage() {
       </section>
 
       {/* Analysis Categories — what the platform evaluates */}
-      <section className="py-16 lg:py-20">
+      <section className="py-16 lg:py-20 bg-muted/40">
         <div className="container">
           <ScrollReveal>
             <div className="text-center max-w-2xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold tracking-tight mb-3">
-                {t('home.categories.title')}
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-3">
+                {t('learnMore.categories.title')}
               </h2>
               <p className="text-muted-foreground">
-                {t('home.categories.description')}
+                {t('learnMore.categories.description')}
               </p>
             </div>
           </ScrollReveal>
 
-          <StaggerContainer className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {categories.map((category) => {
               const Icon = category.icon;
               return (
                 <StaggerItem key={category.key}>
-                  <div className={`rounded-xl border ${category.border} bg-background p-5 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 h-full`}>
+                  <div className={`rounded-xl border ${category.border} bg-white dark:bg-card p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 h-full`}>
                     <div className="flex items-start gap-4">
-                      <div className={`flex-shrink-0 h-10 w-10 rounded-lg ${category.bg} flex items-center justify-center`}>
-                        <Icon className={`h-5 w-5 ${category.color}`} />
+                      <div className={`flex-shrink-0 h-12 w-12 rounded-xl ${category.bg} flex items-center justify-center`}>
+                        <Icon className={`h-6 w-6 ${category.color}`} />
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-sm">{t(`report.categories.${category.key}`)}</h4>
-                        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                          {t(`report.categories.${category.key}Desc`)}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-base mb-1">{t(`report.categories.${category.key}`)}</h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {t(`learnMore.categories.${category.key}`)}
                         </p>
                       </div>
                     </div>
