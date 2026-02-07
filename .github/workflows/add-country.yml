@@ -199,23 +199,25 @@ jobs:
             # Write prompt to file to avoid argument list too long error
             echo "$PROMPT" > /tmp/prompt.txt
 
+            # Build JSON payload using jq to avoid YAML parsing issues
+            jq -n \
+              --arg prompt "$(cat /tmp/prompt.txt)" \
+              '{
+                contents: [{
+                  parts: [{
+                    text: $prompt
+                  }]
+                }],
+                generationConfig: {
+                  temperature: 0.2,
+                  maxOutputTokens: 8000,
+                  responseMimeType: "application/json"
+                }
+              }' > /tmp/payload.json
+
             RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp:generateContent?key=${GEMINI_API_KEY}" \
               -H "Content-Type: application/json" \
-              -d @- <<EOF
-{
-  "contents": [{
-    "parts": [{
-      "text": $(cat /tmp/prompt.txt | jq -Rs .)
-    }]
-  }],
-  "generationConfig": {
-    "temperature": 0.2,
-    "maxOutputTokens": 8000,
-    "responseMimeType": "application/json"
-  }
-}
-EOF
-            )
+              -d @/tmp/payload.json)
 
             GENERATED=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text')
 
