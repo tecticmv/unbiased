@@ -237,7 +237,9 @@ jobs:
 
             if ! echo "$GENERATED" | jq -e . > /dev/null 2>&1; then
               echo "Invalid JSON from Gemini"
+              echo "Response length: ${#GENERATED} chars"
               echo "First 500 chars: ${GENERATED:0:500}"
+              echo "Last 500 chars: ${GENERATED: -500}"
               echo "$GENERATED" > /tmp/build_errors.txt
               continue
             fi
