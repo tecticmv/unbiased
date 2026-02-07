@@ -158,6 +158,7 @@ export function FeasibilityReport({
 }: FeasibilityReportProps) {
   const { t, i18n } = useTranslation();
   const [showAllRisks, setShowAllRisks] = useState(false);
+  const [showAllReferences, setShowAllReferences] = useState(false);
 
   // Format the report date
   const formattedDate = useMemo(() => {
@@ -785,42 +786,6 @@ export function FeasibilityReport({
           </Card>
         </motion.div>
 
-        {/* REFERENCES & SOURCES SECTION */}
-        {report.references && report.references.length > 0 && (
-          <motion.section
-            variants={scrollVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportSettings}
-            className="mb-10"
-          >
-            <SectionHeader
-              icon={BookOpen}
-              title={t('report.references.title', 'References & Sources')}
-              subtitle={t('report.references.subtitle', 'Data sources used in this feasibility analysis')}
-            />
-            <Card className="overflow-hidden border-l-4 border-l-blue-500">
-              <CardContent className="p-6">
-                <ul className="space-y-3">
-                  {report.references.map((ref, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <span className="text-muted-foreground">{index + 1}.</span>
-                      <a
-                        href={ref.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
-                      >
-                        {ref.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </motion.section>
-        )}
-
         {/* RISKS & NEXT STEPS SECTION */}
         <motion.div
           variants={scrollVariants}
@@ -1064,6 +1029,68 @@ export function FeasibilityReport({
             </div>
           </div>
         </motion.div>
+
+        {/* References & Sources */}
+        {report.references && report.references.length > 0 && (
+          <motion.div
+            variants={scrollVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportSettings}
+            className="mb-8"
+          >
+            <div className="rounded-xl border border-muted bg-muted/20 px-5 py-4">
+              <div className="flex gap-4">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
+                  <BookOpen className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    {t('report.references.title', 'References & Sources')}
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    {(showAllReferences
+                      ? report.references
+                      : report.references.slice(0, 3)
+                    ).map((ref, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-muted-foreground">{index + 1}.</span>
+                        <a
+                          href={ref.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline leading-relaxed"
+                        >
+                          {ref.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  {report.references.length > 3 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="mt-3 h-auto p-0 text-xs font-medium hover:bg-transparent"
+                      onClick={() => setShowAllReferences(!showAllReferences)}
+                    >
+                      {showAllReferences ? (
+                        <>
+                          <ChevronUp className="mr-1 h-3 w-3" />
+                          {t('ui.showLess')}
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="mr-1 h-3 w-3" />
+                          {t('ui.showMore')} ({report.references.length - 3} more)
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Actions */}
         {!isSharedView && (

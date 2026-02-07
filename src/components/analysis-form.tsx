@@ -375,10 +375,6 @@ export function AnalysisForm({ country }: AnalysisFormProps) {
                 </>
               )}
             </Button>
-
-            <p className="text-center text-[10px] sm:text-xs text-muted-foreground">
-              {t('report.disclaimer')}
-            </p>
           </form>
         </CardContent>
       </Card>

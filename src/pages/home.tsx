@@ -108,58 +108,51 @@ export function HomePage() {
       </section>
 
       {/* Analysis Categories */}
-      <section className="border-t bg-muted/30 py-16 overflow-hidden">
-        <div className="container">
-          <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
-            <div className="flex-shrink-0 md:w-64">
-              <h2 className="text-2xl font-bold md:text-3xl">
-                {t('report.categories.title')}
-              </h2>
-            </div>
+      <section className="border-t bg-muted/30 py-16 overflow-hidden relative">
+        <style>{`
+          @keyframes scroll {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+          .animate-scroll {
+            animation: scroll 20s linear infinite;
+          }
+          .animate-scroll:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
 
-            <div className="flex-1 overflow-hidden relative">
-              <style>{`
-                @keyframes scroll {
-                  0% {
-                    transform: translateX(0);
-                  }
-                  100% {
-                    transform: translateX(-50%);
-                  }
-                }
-                .animate-scroll {
-                  animation: scroll 20s linear infinite;
-                }
-                .animate-scroll:hover {
-                  animation-play-state: paused;
-                }
-              `}</style>
-              <div className="flex gap-4 animate-scroll">
-                {[...Array(2)].map((_, setIndex) => (
-                  <div key={setIndex} className="flex gap-4">
-                    {[
-                      { key: "technical" },
-                      { key: "economic" },
-                      { key: "environmental" },
-                      { key: "social" },
-                      { key: "legal" },
-                      { key: "operational" },
-                    ].map((category) => (
-                      <div
-                        key={`${setIndex}-${category.key}`}
-                        className="flex-shrink-0 w-64 flex items-start gap-3 rounded-lg border bg-background p-4 shadow-sm hover:shadow-md transition-shadow"
-                      >
-                        <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary flex-shrink-0" />
-                        <div>
-                          <h4 className="font-medium">{t(`report.categories.${category.key}`)}</h4>
-                        </div>
-                      </div>
-                    ))}
+        {/* Fade overlays */}
+        <div className="absolute left-0 top-0 bottom-0 w-96 bg-gradient-to-r from-background via-background/80 via-background/40 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-96 bg-gradient-to-l from-background via-background/80 via-background/40 to-transparent z-10 pointer-events-none" />
+
+        <div className="flex gap-4 animate-scroll">
+          {[...Array(2)].map((_, setIndex) => (
+            <div key={setIndex} className="flex gap-4">
+              {[
+                { key: "technical" },
+                { key: "economic" },
+                { key: "environmental" },
+                { key: "social" },
+                { key: "legal" },
+                { key: "operational" },
+              ].map((category) => (
+                <div
+                  key={`${setIndex}-${category.key}`}
+                  className="flex-shrink-0 w-64 flex items-start gap-3 rounded-lg border bg-background p-4 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary flex-shrink-0" />
+                  <div>
+                    <h4 className="font-medium">{t(`report.categories.${category.key}`)}</h4>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          </div>
+          ))}
         </div>
       </section>
 

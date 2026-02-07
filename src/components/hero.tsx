@@ -18,13 +18,9 @@ export function Hero({ country }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <h1 className="mb-1 sm:mb-2 text-base font-semibold tracking-tight sm:text-xl md:text-3xl">
+          <h1 className="text-base font-semibold tracking-tight sm:text-xl md:text-3xl">
             {t('analysis.title')}
           </h1>
-
-          <p className="text-xs text-muted-foreground sm:text-sm">
-            {country.description}
-          </p>
         </motion.div>
       </div>
     </section>
