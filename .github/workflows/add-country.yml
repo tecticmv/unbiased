@@ -227,6 +227,10 @@ jobs:
               continue
             fi
 
+            # Check finish reason
+            FINISH_REASON=$(echo "$RESPONSE" | jq -r '.candidates[0].finishReason // empty')
+            echo "Finish reason: $FINISH_REASON"
+
             GENERATED=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
 
             if [ -z "$GENERATED" ] || [ "$GENERATED" = "null" ]; then
