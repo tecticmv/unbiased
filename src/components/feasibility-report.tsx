@@ -719,111 +719,71 @@ export function FeasibilityReport({
               />
 
               <div className="rounded-xl border bg-card overflow-hidden">
-                {/* Duration timeline bar */}
-                <div className="p-5 pb-4">
-                  <div className="flex items-baseline justify-between mb-5">
-                    <div>
-                      <span className="text-3xl font-bold tracking-tight text-foreground">{report.timeframe.estimatedDuration.mostLikely}</span>
-                      <span className="text-sm text-muted-foreground ml-1.5">{t('report.timeframe.months')}</span>
+                {/* Duration + Delay Risk side by side */}
+                <div className="p-5">
+                  <div className="flex items-center gap-4">
+                    {/* Estimated duration */}
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-3xl font-bold text-primary tabular-nums">{report.timeframe.estimatedDuration.mostLikely}</span>
+                      <span className="text-sm text-primary font-medium">{t('report.timeframe.months')}</span>
                     </div>
+
+                    {/* Delay risk badge */}
                     {report.timeframe.riskOfDelay && (
-                      <Badge
-                        className={`text-[11px] font-medium ${
-                          report.timeframe.riskOfDelay === "low"
-                            ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30"
-                            : report.timeframe.riskOfDelay === "medium"
-                              ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30"
-                              : "bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/30"
-                        }`}
-                      >
+                      <div className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
+                        report.timeframe.riskOfDelay === "low"
+                          ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                          : report.timeframe.riskOfDelay === "medium"
+                            ? "bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                            : "bg-red-500/10 text-red-700 dark:text-red-300"
+                      }`}>
+                        <AlertTriangle className="h-3 w-3" />
                         {t(`report.timeframe.risk.${report.timeframe.riskOfDelay}`, { defaultValue: report.timeframe.riskOfDelay })} {t('report.timeframe.delayRisk').toLowerCase()}
-                      </Badge>
+                      </div>
                     )}
                   </div>
 
-                  {/* Range visualization */}
-                  <div className="relative">
-                    <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700" />
-                    {(() => {
-                      const min = report.timeframe.estimatedDuration.minimum;
-                      const max = report.timeframe.estimatedDuration.maximum;
-                      const est = report.timeframe.estimatedDuration.mostLikely;
-                      const range = max * 1.15;
-                      const leftPct = (min / range) * 100;
-                      const widthPct = ((max - min) / range) * 100;
-                      const estPct = (est / range) * 100;
-                      return (
-                        <>
-                          <div
-                            className="absolute top-0 h-2 rounded-full bg-primary/25"
-                            style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
-                          />
-                          <div
-                            className="absolute top-0 h-2 rounded-l-full bg-primary"
-                            style={{ left: `${leftPct}%`, width: `${estPct - leftPct}%` }}
-                          />
-                          <div
-                            className="absolute -top-1 h-4 w-1 rounded-full bg-primary shadow-sm"
-                            style={{ left: `${estPct}%` }}
-                          />
-                        </>
-                      );
-                    })()}
+                  {/* Admin completion */}
+                  <div className="flex items-center gap-2 mt-3">
+                    {report.timeframe.canCurrentAdminComplete ? (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    ) : (
+                      <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                    )}
+                    <span className={`text-sm font-medium ${
+                      report.timeframe.canCurrentAdminComplete
+                        ? "text-emerald-700 dark:text-emerald-300"
+                        : "text-amber-700 dark:text-amber-300"
+                    }`}>
+                      {report.timeframe.canCurrentAdminComplete
+                        ? t('report.timeframe.canComplete')
+                        : t('report.timeframe.cannotComplete')}
+                    </span>
                   </div>
-                  <div className="flex justify-between mt-2">
-                    <span className="text-[11px] text-muted-foreground">{report.timeframe.estimatedDuration.minimum} {t('report.timeframe.months')}</span>
-                    <span className="text-[11px] text-muted-foreground">{report.timeframe.estimatedDuration.maximum} {t('report.timeframe.months')}</span>
-                  </div>
+                  {report.timeframe.adminTermAnalysis && (
+                    <div className="mt-1 ms-6 text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                      <Markdown>{report.timeframe.adminTermAnalysis}</Markdown>
+                    </div>
+                  )}
                 </div>
 
-                <div className="border-t" />
-
-                {/* Admin completion + Delay factors */}
-                <div className="p-5 space-y-4">
-                  {/* Admin term */}
-                  <div className="flex items-start gap-3">
-                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg mt-0.5 ${
-                      report.timeframe.canCurrentAdminComplete
-                        ? "bg-emerald-500/15"
-                        : "bg-amber-500/15"
-                    }`}>
-                      {report.timeframe.canCurrentAdminComplete ? (
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                      ) : (
-                        <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                      )}
-                    </div>
-                    <div>
-                      <span className={`text-sm font-semibold ${
-                        report.timeframe.canCurrentAdminComplete
-                          ? "text-emerald-700 dark:text-emerald-300"
-                          : "text-amber-700 dark:text-amber-300"
-                      }`}>
-                        {report.timeframe.canCurrentAdminComplete
-                          ? t('report.timeframe.canComplete')
-                          : t('report.timeframe.cannotComplete')}
-                      </span>
-                      <div className="mt-0.5 text-sm text-muted-foreground leading-relaxed">
-                        <Markdown>{report.timeframe.adminTermAnalysis ?? ''}</Markdown>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Delay factors */}
-                  {report.timeframe.delayFactors && report.timeframe.delayFactors.length > 0 && (
-                    <div className="rounded-lg bg-muted/40 p-4">
+                {/* Delay factors */}
+                {report.timeframe.delayFactors && report.timeframe.delayFactors.length > 0 && (
+                  <>
+                    <div className="border-t" />
+                    <div className="px-5 py-4">
                       <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-semibold">{t('report.timeframe.delayFactors')}</span>
-                      <ul className="mt-2.5 space-y-2">
+                      <ul className="mt-2.5 space-y-1.5">
                         {report.timeframe.delayFactors.slice(0, 3).map((factor, index) => (
-                          <li key={index} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                            <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
+                          <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                            <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
                             <Markdown>{factor ?? ''}</Markdown>
                           </li>
                         ))}
                       </ul>
                     </div>
-                  )}
-                </div>
+                  </>
+                )}
               </div>
             </motion.div>
             <Divider />
