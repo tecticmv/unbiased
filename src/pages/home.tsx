@@ -112,6 +112,11 @@ export function HomePage() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
+              <Button asChild size="xl" variant="outline" className="min-w-[200px]">
+                <Link to={`/${defaultCountry}/reports`}>
+                  {t('home.hero.viewReports') || 'View Reports'}
+                </Link>
+              </Button>
             </div>
           </motion.div>
         </div>
