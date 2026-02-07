@@ -75,48 +75,48 @@
     --color-bright-sky-950: #021a22;
 
     /* Theme colors - Light mode */
-    --background: #ffffff;
-    --foreground: #000000;
+    --background: #eef1f6;
+    --foreground: #1e2433;
     --card: #ffffff;
-    --card-foreground: #000000;
+    --card-foreground: #1e2433;
     --popover: #ffffff;
-    --popover-foreground: #000000;
-    --primary: #000000;
+    --popover-foreground: #1e2433;
+    --primary: #6082B6;
     --primary-foreground: #ffffff;
-    --secondary: var(--color-ocean-blue-50);
-    --secondary-foreground: var(--color-ocean-blue-700);
-    --muted: var(--color-ink-black-50);
-    --muted-foreground: #000000;
-    --accent: var(--color-dark-teal-100);
-    --accent-foreground: var(--color-dark-teal-800);
+    --secondary: #edf1f7;
+    --secondary-foreground: #4a6a96;
+    --muted: #f0f2f5;
+    --muted-foreground: #64748b;
+    --accent: #eaf0f8;
+    --accent-foreground: #3d5f8a;
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
-    --border: var(--color-ink-black-100);
-    --input: var(--color-ink-black-100);
-    --ring: var(--color-ocean-blue-500);
+    --border: #e2e6ec;
+    --input: #e2e6ec;
+    --ring: #6082B6;
     --radius: 0.75rem;
   }
 
   .dark {
-    --background: var(--color-ink-black-950);
-    --foreground: #ffffff;
-    --card: var(--color-ink-black-900);
-    --card-foreground: #ffffff;
-    --popover: var(--color-ink-black-900);
-    --popover-foreground: #ffffff;
-    --primary: #ffffff;
-    --primary-foreground: #000000;
-    --secondary: var(--color-ink-black-800);
-    --secondary-foreground: var(--color-ink-black-100);
-    --muted: var(--color-ink-black-800);
-    --muted-foreground: #ffffff;
-    --accent: var(--color-dark-teal-900);
-    --accent-foreground: var(--color-dark-teal-300);
+    --background: #0f1218;
+    --foreground: #dfe4ec;
+    --card: #181d26;
+    --card-foreground: #dfe4ec;
+    --popover: #181d26;
+    --popover-foreground: #dfe4ec;
+    --primary: #8aaed4;
+    --primary-foreground: #0f1218;
+    --secondary: #222a36;
+    --secondary-foreground: #b0c0d4;
+    --muted: #1c2230;
+    --muted-foreground: #8b9ab4;
+    --accent: #1e283a;
+    --accent-foreground: #a3bfde;
     --destructive: #dc2626;
     --destructive-foreground: #ffffff;
-    --border: var(--color-ink-black-800);
-    --input: var(--color-ink-black-800);
-    --ring: var(--color-ocean-blue-400);
+    --border: #283040;
+    --input: #283040;
+    --ring: #8aaed4;
   }
 }
 

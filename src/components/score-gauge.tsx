@@ -6,16 +6,21 @@ interface ScoreGaugeProps {
 }
 
 export function ScoreGauge({ score, size = 160 }: ScoreGaugeProps) {
-  // Dynamic stroke width based on size
-  const strokeWidth = size >= 200 ? 12 : size >= 160 ? 10 : 8;
+  const strokeWidth = size >= 200 ? 10 : size >= 150 ? 8 : 6;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = (score / 100) * circumference;
   const offset = circumference - progress;
 
-  // Dynamic font sizing
-  const scoreFontSize = size >= 200 ? "text-6xl" : size >= 160 ? "text-5xl" : "text-4xl";
-  const labelFontSize = size >= 200 ? "text-sm" : "text-xs";
+  const scoreFontSize = size >= 200 ? "text-6xl" : size >= 150 ? "text-5xl" : "text-4xl";
+  const labelFontSize = size >= 200 ? "text-sm" : "text-[11px]";
+
+  // Score-based color
+  const getStrokeColor = (s: number) => {
+    if (s >= 70) return "text-emerald-500";
+    if (s >= 50) return "text-amber-500";
+    return "text-red-500";
+  };
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
@@ -33,7 +38,7 @@ export function ScoreGauge({ score, size = 160 }: ScoreGaugeProps) {
           fill="none"
           stroke="currentColor"
           strokeWidth={strokeWidth}
-          className="text-muted"
+          className="text-border/30"
         />
         {/* Progress circle */}
         <motion.circle
@@ -47,21 +52,21 @@ export function ScoreGauge({ score, size = 160 }: ScoreGaugeProps) {
           strokeDasharray={circumference}
           initial={{ strokeDashoffset: circumference }}
           animate={{ strokeDashoffset: offset }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="text-primary"
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className={getStrokeColor(score)}
         />
       </svg>
       {/* Center content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <motion.span
-          className={`${scoreFontSize} font-bold`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
+          className={`${scoreFontSize} font-bold tabular-nums`}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
         >
           {score}
         </motion.span>
-        <span className={`${labelFontSize} text-muted-foreground`}>out of 100</span>
+        <span className={`${labelFontSize} text-muted-foreground font-medium tracking-wide`}>/ 100</span>
       </div>
     </div>
   );

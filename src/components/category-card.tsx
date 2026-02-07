@@ -7,17 +7,22 @@ interface CategoryCardProps {
   category: Category;
 }
 
-// Get score color based on value
 const getScoreColor = (score: number) => {
-  if (score >= 70) return "text-green-600 dark:text-green-400";
-  if (score >= 50) return "text-yellow-600 dark:text-yellow-400";
-  return "text-red-600 dark:text-red-400";
+  if (score >= 70) return "text-emerald-600 dark:text-emerald-400";
+  if (score >= 50) return "text-amber-600 dark:text-amber-400";
+  return "text-red-500 dark:text-red-400";
 };
 
 const getScoreBg = (score: number) => {
-  if (score >= 70) return "bg-green-100 dark:bg-green-950/50 border-green-200 dark:border-green-900";
-  if (score >= 50) return "bg-yellow-100 dark:bg-yellow-950/50 border-yellow-200 dark:border-yellow-900";
-  return "bg-red-100 dark:bg-red-950/50 border-red-200 dark:border-red-900";
+  if (score >= 70) return "bg-emerald-500/10 border-emerald-500/25";
+  if (score >= 50) return "bg-amber-500/10 border-amber-500/25";
+  return "bg-red-500/10 border-red-500/25";
+};
+
+const getScoreBar = (score: number) => {
+  if (score >= 70) return "bg-emerald-500";
+  if (score >= 50) return "bg-amber-500";
+  return "bg-red-500";
 };
 
 export function CategoryCard({ category }: CategoryCardProps) {
@@ -30,40 +35,40 @@ export function CategoryCard({ category }: CategoryCardProps) {
   const cons = category?.cons ?? [];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {/* Score Header */}
       <div className="flex items-start gap-4">
-        <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-2 ${getScoreBg(score)}`}>
-          <span className={`text-2xl font-bold ${getScoreColor(score)}`}>{score}</span>
+        <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border ${getScoreBg(score)}`}>
+          <span className={`text-xl font-bold tabular-nums ${getScoreColor(score)}`}>{score}</span>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-semibold">{name}</h3>
+          <h3 className="text-base font-semibold text-foreground">{name}</h3>
           {summary && (
-            <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+            <div className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
               <Markdown>{summary}</Markdown>
-            </p>
+            </div>
           )}
+          <div className="mt-3 h-1.5 w-full max-w-xs rounded-full bg-border/30 overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${getScoreBar(score)}`}
+              style={{ width: `${score}%` }}
+            />
+          </div>
         </div>
       </div>
 
       {/* Pros and Cons */}
       <div className="grid gap-4 sm:grid-cols-2">
-        {/* Pros */}
         {pros.length > 0 && (
-          <div className="rounded-lg border bg-muted/30 p-4">
-            <h4 className="mb-3 flex items-center gap-2 text-sm font-medium">
-              <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-500" />
+          <div className="rounded-xl bg-emerald-500/5 border border-emerald-500/15 p-4">
+            <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">
+              <CheckCircle2 className="h-3.5 w-3.5" />
               {t('report.pros')}
             </h4>
             <ul className="space-y-2.5">
               {pros.map((pro, index) => (
-                <li
-                  key={index}
-                  className="flex items-start gap-2.5 text-sm"
-                >
-                  <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-[10px] font-medium text-green-700 dark:text-green-400">
-                    {index + 1}
-                  </span>
+                <li key={index} className="flex items-start gap-2 text-sm">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-emerald-500" />
                   <span className="leading-relaxed text-muted-foreground"><Markdown>{pro ?? ''}</Markdown></span>
                 </li>
               ))}
@@ -71,22 +76,16 @@ export function CategoryCard({ category }: CategoryCardProps) {
           </div>
         )}
 
-        {/* Cons */}
         {cons.length > 0 && (
-          <div className="rounded-lg border bg-muted/30 p-4">
-            <h4 className="mb-3 flex items-center gap-2 text-sm font-medium">
-              <XCircle className="h-4 w-4 text-red-600 dark:text-red-500" />
+          <div className="rounded-xl bg-red-500/5 border border-red-500/15 p-4">
+            <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wider">
+              <XCircle className="h-3.5 w-3.5" />
               {t('report.cons')}
             </h4>
             <ul className="space-y-2.5">
               {cons.map((con, index) => (
-                <li
-                  key={index}
-                  className="flex items-start gap-2.5 text-sm"
-                >
-                  <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-[10px] font-medium text-red-700 dark:text-red-400">
-                    {index + 1}
-                  </span>
+                <li key={index} className="flex items-start gap-2 text-sm">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-red-500" />
                   <span className="leading-relaxed text-muted-foreground"><Markdown>{con ?? ''}</Markdown></span>
                 </li>
               ))}
@@ -97,20 +96,15 @@ export function CategoryCard({ category }: CategoryCardProps) {
 
       {/* Recommendations */}
       {category?.recommendations && category.recommendations.length > 0 && (
-        <div className="rounded-lg border bg-muted/30 p-4">
-          <h4 className="mb-3 flex items-center gap-2 text-sm font-medium">
-            <Lightbulb className="h-4 w-4 text-amber-600 dark:text-amber-500" />
+        <div className="rounded-xl bg-amber-500/5 border border-amber-500/15 p-4">
+          <h4 className="mb-3 flex items-center gap-2 text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+            <Lightbulb className="h-3.5 w-3.5" />
             {t('report.recommendations')}
           </h4>
           <ul className="space-y-2.5">
             {category.recommendations.map((rec, index) => (
-              <li
-                key={index}
-                className="flex items-start gap-2.5 text-sm"
-              >
-                <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30 text-[10px] font-medium text-amber-700 dark:text-amber-400">
-                  {index + 1}
-                </span>
+              <li key={index} className="flex items-start gap-2 text-sm">
+                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-amber-500" />
                 <span className="leading-relaxed text-muted-foreground"><Markdown>{rec ?? ''}</Markdown></span>
               </li>
             ))}

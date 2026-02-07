@@ -77,7 +77,7 @@ export function MarkdownBlock({ children, className }: MarkdownBlockProps) {
         components={{
           // Style paragraphs with proper spacing
           p: ({ children }) => (
-            <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>
+            <p className="mb-3 last:mb-0 leading-[1.7]">{children}</p>
           ),
           // Style strong/bold text
           strong: ({ children }) => (
@@ -111,7 +111,7 @@ export function MarkdownBlock({ children, className }: MarkdownBlockProps) {
             <ol className="my-2 ml-4 list-decimal space-y-1">{children}</ol>
           ),
           // Style list items
-          li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+          li: ({ children }) => <li className="leading-[1.7]">{children}</li>,
           // Style headings
           h1: ({ children }) => (
             <h1 className="mb-2 text-lg font-bold">{children}</h1>
