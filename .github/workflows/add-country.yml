@@ -124,77 +124,77 @@ jobs:
             PROMPT="Add a new country to this project. Generate COMPLETE updated file contents."
             PROMPT="$PROMPT
 
-VALIDATED COUNTRY DATA - $VALIDATED_DATA"
+            VALIDATED COUNTRY DATA - $VALIDATED_DATA"
             if [ -n "$FIX_FEEDBACK" ]; then
               PROMPT="$PROMPT
 
-OWNER FEEDBACK - $FIX_FEEDBACK"
+            OWNER FEEDBACK - $FIX_FEEDBACK"
             fi
             if [ -n "$PREV_ERRORS" ]; then
               PROMPT="$PROMPT
 
-ERRORS TO FIX - $PREV_ERRORS"
+            ERRORS TO FIX - $PREV_ERRORS"
             fi
             PROMPT="$PROMPT
 
-FILES TO MODIFY
+            FILES TO MODIFY
 
-FILE src/lib/countries.ts
-$COUNTRIES_TS
+            FILE src/lib/countries.ts
+            $COUNTRIES_TS
 
-FILE functions/api/lib/constants.ts
-$CONSTANTS_TS
+            FILE functions/api/lib/constants.ts
+            $CONSTANTS_TS
 
-FILE src/types/index.ts
-$TYPES_TS
+            FILE src/types/index.ts
+            $TYPES_TS
 
-FILE functions/api/experts/personas.ts
-$PERSONAS_TS
+            FILE functions/api/experts/personas.ts
+            $PERSONAS_TS
 
-FILE src/i18n.ts
-$I18N_TS
+            FILE src/i18n.ts
+            $I18N_TS
 
-FILE src/locales/en.json
-$EN_JSON
+            FILE src/locales/en.json
+            $EN_JSON
 
-FILE src/locales/dv.json
-$DV_JSON
+            FILE src/locales/dv.json
+            $DV_JSON
 
-FILE src/locales/hi.json
-$HI_JSON
+            FILE src/locales/hi.json
+            $HI_JSON
 
-FILE src/locales/bn.json
-$BN_JSON
+            FILE src/locales/bn.json
+            $BN_JSON
 
-FILE src/locales/si.json
-$SI_JSON
+            FILE src/locales/si.json
+            $SI_JSON
 
-FILE src/locales/ta.json
-$TA_JSON
+            FILE src/locales/ta.json
+            $TA_JSON
 
-REQUIREMENTS
-1. countries.ts - Add country to 'countries' object
-2. constants.ts - Add to 'countryCurrencies' AND 'supportedCountries'
-3. types/index.ts - Add expert names to 'expertNamesByRegion' BEFORE 'default'
-4. personas.ts - Add IDENTICAL expert names to 'expertNamesByRegion' BEFORE 'default'
-5. All locale files - Add country name to 'countries' section using translations from validated data
+            REQUIREMENTS
+            1. countries.ts - Add country to 'countries' object
+            2. constants.ts - Add to 'countryCurrencies' AND 'supportedCountries'
+            3. types/index.ts - Add expert names to 'expertNamesByRegion' BEFORE 'default'
+            4. personas.ts - Add IDENTICAL expert names to 'expertNamesByRegion' BEFORE 'default'
+            5. All locale files - Add country name to 'countries' section using translations from validated data
 
-Return JSON format
-{
-  \"countries_ts\" - \"complete file\",
-  \"constants_ts\" - \"complete file\",
-  \"types_ts\" - \"complete file\",
-  \"personas_ts\" - \"complete file\",
-  \"i18n_ts\" - \"complete file or null\",
-  \"en_json\" - \"complete file\",
-  \"dv_json\" - \"complete file\",
-  \"hi_json\" - \"complete file\",
-  \"bn_json\" - \"complete file\",
-  \"si_json\" - \"complete file\",
-  \"ta_json\" - \"complete file\"
-}
+            Return JSON format
+            {
+              countries_ts: complete file,
+              constants_ts: complete file,
+              types_ts: complete file,
+              personas_ts: complete file,
+              i18n_ts: complete file or null,
+              en_json: complete file,
+              dv_json: complete file,
+              hi_json: complete file,
+              bn_json: complete file,
+              si_json: complete file,
+              ta_json: complete file
+            }
 
-Return ONLY valid JSON."
+            Return ONLY valid JSON."
 
             RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp:generateContent?key=${GEMINI_API_KEY}" \
               -H "Content-Type: application/json" \
