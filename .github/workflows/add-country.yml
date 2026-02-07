@@ -23,6 +23,10 @@ on:
 env:
   WORKER_URL: ${{ secrets.WORKER_URL }}
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   generate-and-review:
     runs-on: ubuntu-latest
