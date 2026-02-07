@@ -93,7 +93,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           VALIDATED_DATA: ${{ inputs.validated_data }}
           FIX_FEEDBACK: ${{ inputs.fix_feedback }}
-        run: |
+        run: |-
           ATTEMPT=0
           MAX_ATTEMPTS=3
           SUCCESS=false
@@ -120,69 +120,78 @@ jobs:
               PREV_ERRORS=$(cat /tmp/build_errors.txt)
             fi
 
-            PROMPT="Add a new country to this project. Generate COMPLETE updated file contents.
+            # Build prompt to avoid YAML parsing issues
+            PROMPT="Add a new country to this project. Generate COMPLETE updated file contents."
+            PROMPT="$PROMPT
 
-VALIDATED COUNTRY DATA:
-$VALIDATED_DATA
+VALIDATED COUNTRY DATA - $VALIDATED_DATA"
+            if [ -n "$FIX_FEEDBACK" ]; then
+              PROMPT="$PROMPT
 
-$(if [ -n "$FIX_FEEDBACK" ]; then echo "OWNER FEEDBACK: $FIX_FEEDBACK"; fi)
-$(if [ -n "$PREV_ERRORS" ]; then echo "ERRORS TO FIX: $PREV_ERRORS"; fi)
+OWNER FEEDBACK - $FIX_FEEDBACK"
+            fi
+            if [ -n "$PREV_ERRORS" ]; then
+              PROMPT="$PROMPT
 
-FILES TO MODIFY:
+ERRORS TO FIX - $PREV_ERRORS"
+            fi
+            PROMPT="$PROMPT
 
-=== src/lib/countries.ts ===
+FILES TO MODIFY
+
+FILE src/lib/countries.ts
 $COUNTRIES_TS
 
-=== functions/api/lib/constants.ts ===
+FILE functions/api/lib/constants.ts
 $CONSTANTS_TS
 
-=== src/types/index.ts ===
+FILE src/types/index.ts
 $TYPES_TS
 
-=== functions/api/experts/personas.ts ===
+FILE functions/api/experts/personas.ts
 $PERSONAS_TS
 
-=== src/i18n.ts ===
+FILE src/i18n.ts
 $I18N_TS
 
-=== src/locales/en.json ===
+FILE src/locales/en.json
 $EN_JSON
 
-=== src/locales/dv.json ===
+FILE src/locales/dv.json
 $DV_JSON
 
-=== src/locales/hi.json ===
+FILE src/locales/hi.json
 $HI_JSON
 
-=== src/locales/bn.json ===
+FILE src/locales/bn.json
 $BN_JSON
 
-=== src/locales/si.json ===
+FILE src/locales/si.json
 $SI_JSON
 
-=== src/locales/ta.json ===
+FILE src/locales/ta.json
 $TA_JSON
 
-REQUIREMENTS:
+REQUIREMENTS
 1. countries.ts - Add country to 'countries' object
 2. constants.ts - Add to 'countryCurrencies' AND 'supportedCountries'
 3. types/index.ts - Add expert names to 'expertNamesByRegion' BEFORE 'default'
 4. personas.ts - Add IDENTICAL expert names to 'expertNamesByRegion' BEFORE 'default'
 5. All locale files - Add country name to 'countries' section using translations from validated data
 
-Return JSON:
+Return JSON format
 {
-  \"countries_ts\": \"complete file\",
-  \"constants_ts\": \"complete file\",
-  \"types_ts\": \"complete file\",
-  \"personas_ts\": \"complete file\",
-  \"i18n_ts\": \"complete file or null\",
-  \"en_json\": \"complete file\",
-  \"dv_json\": \"complete file\",
-  \"hi_json\": \"complete file\",
-  \"bn_json\": \"complete file\",
-  \"si_json\": \"complete file\",
-  \"ta_json\": \"complete file\"
+  \"countries_ts\" - \"complete file\",
+  \"constants_ts\" - \"complete file\",
+  \"types_ts\" - \"complete file\",
+  \"personas_ts\" - \"complete file\",
+  \"i18n_ts\" - \"complete file or null\",
+  \"en_json\" - \"complete file\",
+  \"dv_json\" - \"complete file\",
+  \"hi_json\" - \"complete file\",
+  \"bn_json\" - \"complete file\",
+  \"si_json\" - \"complete file\",
+  \"ta_json\" - \"complete file\"
 }
 
 Return ONLY valid JSON."
