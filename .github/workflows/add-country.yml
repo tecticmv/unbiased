@@ -90,7 +90,7 @@ jobs:
       - name: Generate and review code
         id: generate
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           VALIDATED_DATA: ${{ inputs.validated_data }}
           FIX_FEEDBACK: ${{ inputs.fix_feedback }}
         run: |
@@ -187,23 +187,25 @@ Return JSON:
 
 Return ONLY valid JSON."
 
-            RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+            RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp:generateContent?key=${GEMINI_API_KEY}" \
               -H "Content-Type: application/json" \
-              -H "x-api-key: ${ANTHROPIC_API_KEY}" \
-              -H "anthropic-version: 2023-06-01" \
               -d "{
-                \"model\": \"claude-sonnet-4-20250514\",
-                \"max_tokens\": 64000,
-                \"messages\": [{
-                  \"role\": \"user\",
-                  \"content\": $(echo "$PROMPT" | jq -Rs .)
-                }]
+                \"contents\": [{
+                  \"parts\": [{
+                    \"text\": $(echo "$PROMPT" | jq -Rs .)
+                  }]
+                }],
+                \"generationConfig\": {
+                  \"temperature\": 0.2,
+                  \"maxOutputTokens\": 8000,
+                  \"responseMimeType\": \"application/json\"
+                }
               }")
 
-            GENERATED=$(echo "$RESPONSE" | jq -r '.content[0].text')
+            GENERATED=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text')
 
             if ! echo "$GENERATED" | jq -e . > /dev/null 2>&1; then
-              echo "Invalid JSON from Claude"
+              echo "Invalid JSON from Gemini"
               echo "$GENERATED" > /tmp/build_errors.txt
               continue
             fi
@@ -271,7 +273,7 @@ Return ONLY valid JSON."
           git commit -m "feat: add ${{ inputs.country_name }} country support
 
           Request ID: ${{ inputs.request_id }}
-          Co-Authored-By: Claude <noreply@anthropic.com>"
+          Co-Authored-By: Gemini AI <noreply@google.com>"
           git push -u origin ${{ steps.branch.outputs.branch_name }}
 
       - name: Create Pull Request

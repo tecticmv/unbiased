@@ -8,6 +8,12 @@ interface UseReportTranslationResult {
   retry: () => void;
 }
 
+interface TranslationResponse {
+  status: 'completed' | 'in_progress' | 'failed';
+  translation?: Partial<FeasibilityReport>;
+  error?: string;
+}
+
 export function useReportTranslation(
   reportId: string | null,
   language: string
@@ -46,7 +52,7 @@ export function useReportTranslation(
         throw new Error('Translation failed');
       }
 
-      const data = await response.json();
+      const data = await response.json() as TranslationResponse;
 
       // Handle different response states
       if (data.status === 'completed' && data.translation) {
@@ -82,7 +88,7 @@ export function useReportTranslation(
 
         if (!response.ok) throw new Error('Status check failed');
 
-        const data = await response.json();
+        const data = await response.json() as TranslationResponse;
 
         if (data.status === 'completed' && data.translation) {
           setTranslatedReport(data.translation);

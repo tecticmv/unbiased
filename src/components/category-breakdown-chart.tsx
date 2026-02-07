@@ -7,7 +7,7 @@ import {
   Legend,
 } from "recharts";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { projectCategoryLabels } from "@/types";
 
@@ -37,7 +37,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const isRTL = i18n.language === "dv";
 
   if (!data || data.length === 0) {
@@ -83,8 +83,8 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
                     direction: isRTL ? "rtl" : "ltr",
                   }}
                   labelStyle={{ color: "hsl(var(--foreground))" }}
-                  formatter={(value: number, name: string, props: { payload: { percentage: number } }) => [
-                    `${value} projects (${props.payload.percentage}%)`,
+                  formatter={(value: number, name: string, props: any) => [
+                    `${value} projects (${props.payload?.percentage ?? 0}%)`,
                     name,
                   ]}
                 />
@@ -93,8 +93,8 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
                     fontSize: "12px",
                     direction: isRTL ? "rtl" : "ltr",
                   }}
-                  formatter={(value: string, entry: { payload: { percentage: number } }) =>
-                    `${value} (${entry.payload.percentage}%)`
+                  formatter={(value: string, entry: any) =>
+                    `${value} (${entry.payload?.percentage ?? 0}%)`
                   }
                 />
               </PieChart>

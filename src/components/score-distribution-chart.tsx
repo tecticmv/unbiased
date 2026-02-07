@@ -9,7 +9,7 @@ import {
   Cell,
 } from "recharts";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface ScoreDistributionData {
@@ -107,8 +107,8 @@ export function ScoreDistributionChart({ data }: ScoreDistributionChartProps) {
                     direction: isRTL ? "rtl" : "ltr",
                   }}
                   labelStyle={{ color: "hsl(var(--foreground))" }}
-                  formatter={(value: number, name: string, props: { payload: { percentage: number } }) => [
-                    `${value} projects (${props.payload.percentage}%)`,
+                  formatter={(value: number) => [
+                    `${value} projects`,
                     t("home.analytics.feasibilityScore"),
                   ]}
                   labelFormatter={(label) => `Score: ${label}`}

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { createMap } from "svg-dotted-map"
+import { createMap, type Point, type ProcessedMarker } from "svg-dotted-map"
 
 import { cn } from "@/lib/utils"
 
@@ -70,7 +70,7 @@ export function DottedMap({
       className={cn("text-gray-500 dark:text-gray-500", className)}
       style={{ width: "100%", height: "100%", ...style }}
     >
-      {points.map((point, index) => {
+      {points.map((point: Point, index: number) => {
         const rowIndex = yToRowIndex.get(point.y) ?? 0
         const offsetX = stagger && rowIndex % 2 === 1 ? xStep / 2 : 0
         return (
@@ -83,7 +83,7 @@ export function DottedMap({
           />
         )
       })}
-      {processedMarkers.map((marker, index) => {
+      {processedMarkers.map((marker: ProcessedMarker, index: number) => {
         const rowIndex = yToRowIndex.get(marker.y) ?? 0
         const offsetX = stagger && rowIndex % 2 === 1 ? xStep / 2 : 0
         return (

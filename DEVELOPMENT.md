@@ -35,8 +35,7 @@ Developer documentation for contributing to and self-hosting Unbiased.
 - **API Framework**: Hono (Cloudflare Workers)
 - **Database**: Cloudflare D1 (SQLite) + Drizzle ORM
 - **Real-time**: Cloudflare Durable Objects (WebSocket)
-- **AI Models**: Google Gemini API (analysis & translation)
-- **Code Generation**: Anthropic Claude API
+- **AI Models**: Google Gemini API (analysis, translation & code generation)
 - **Hosting**: Cloudflare Workers with Static Assets
 
 ### Key Benefits of This Stack
@@ -316,10 +315,11 @@ Configured in `vite.config.ts` and `tsconfig.json`:
 | `GITHUB_REPO` | Repository in `owner/repo` format | For automation |
 | `TELEGRAM_BOT_TOKEN` | Telegram bot token for notifications | For automation |
 | `TELEGRAM_OWNER_CHAT_ID` | Owner's Telegram chat ID | For automation |
-| `CLAUDE_API_KEY` | Anthropic API key for code generation | For automation |
 | `RESEND_API_KEY` | Resend API key for email notifications | Optional |
 | `FROM_EMAIL` | Sender email (e.g., `Unbiased <noreply@yourdomain.com>`) | Optional |
 | `WORKER_URL` | Production worker URL for webhooks | For automation |
+
+**Note**: `GEMINI_API_KEY` (from Required section) is also used for code generation in automation.
 
 ### Setting Secrets
 
@@ -366,7 +366,7 @@ The platform supports **fully automated on-demand country additions** through an
 
 1. User requests a country
 2. Gemini AI validates it's a real sovereign country
-3. Claude AI generates code for 10+ files
+3. Gemini AI generates code for 10+ files
 4. GitHub Actions creates PR with Cloudflare preview
 5. Owner reviews via Telegram and approves/requests fixes
 6. PR merges automatically and goes live
@@ -423,14 +423,7 @@ wrangler secret put TELEGRAM_OWNER_CHAT_ID
 curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://your-worker.workers.dev/api/country-request/webhook/telegram"
 ```
 
-#### 4. Set Up Claude API
-
-```bash
-wrangler secret put CLAUDE_API_KEY
-# Get from https://console.anthropic.com/settings/keys
-```
-
-#### 5. Set Up Email Notifications (Optional)
+#### 4. Set Up Email Notifications (Optional)
 
 Using [Resend](https://resend.com):
 
@@ -444,7 +437,7 @@ wrangler secret put FROM_EMAIL
 # Example: Unbiased <noreply@yourdomain.com>
 ```
 
-#### 6. Set Worker URL
+#### 5. Set Worker URL
 
 ```bash
 wrangler secret put WORKER_URL
@@ -456,9 +449,9 @@ wrangler secret put WORKER_URL
 The GitHub Actions workflow (`.github/workflows/add-country.yml`) performs:
 
 1. **Validation**: Checks country doesn't already exist
-2. **Code Generation**: Claude reads 12 files and generates complete updated versions
+2. **Code Generation**: Gemini reads 12 files and generates complete updated versions
 3. **Self-Healing**: Runs TypeScript checks and builds with 3 retry attempts
-4. **Error Feedback**: Feeds errors back to Claude for automatic fixing
+4. **Error Feedback**: Feeds errors back to Gemini for automatic fixing
 5. **PR Creation**: Creates pull request with summary
 6. **Preview Deployment**: Waits for Cloudflare Pages preview
 7. **Telegram Notification**: Sends preview link to owner with action buttons
@@ -743,7 +736,6 @@ wrangler secret list
 - [Durable Objects Guide](https://developers.cloudflare.com/durable-objects/)
 - [Drizzle ORM Docs](https://orm.drizzle.team/)
 - [Gemini API Reference](https://ai.google.dev/api)
-- [Anthropic Claude API](https://docs.anthropic.com/)
 
 ---
 

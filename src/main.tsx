@@ -7,7 +7,6 @@ import { StreamingReportProvider } from "@/contexts/streaming-report";
 import { DiscussionProvider } from "@/contexts/discussion-context";
 import { CountryProvider } from "@/contexts/country-context";
 import { Layout } from "@/components/layout";
-import { defaultCountry } from "@/lib/countries";
 import "@/i18n"; // Initialize i18n
 import "@/index.css";
 

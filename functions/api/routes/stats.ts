@@ -49,7 +49,7 @@ function detectProjectCategory(projectType: string | null | undefined): string {
  */
 statsRoutes.get("/stats", async (c) => {
   const db = drizzle(c.env.DB);
-  const cache = caches.default;
+  const cache = (caches as any).default;
   const country = c.req.query("country"); // Optional country filter
 
   // Try cache first (5-minute TTL) - include country in cache key

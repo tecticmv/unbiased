@@ -18,10 +18,6 @@ import {
   Lightbulb,
   Calendar,
   Clock,
-  Timer,
-  Landmark,
-  Building2,
-  TrendingUp,
   Wallet,
   BarChart3,
   FileText,
@@ -113,42 +109,6 @@ function AnimatedProgressBar({ value, index, color }: { value: number; index: nu
           ease: [0.25, 0.46, 0.45, 0.94],
         }}
       />
-    </div>
-  );
-}
-
-// Stat card for financial/timeframe sections
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  sublabel,
-  variant = "default",
-}: {
-  icon: ElementType;
-  label: string;
-  value: string;
-  sublabel?: string;
-  variant?: "default" | "primary";
-}) {
-  return (
-    <div className={`rounded-xl border p-4 ${
-      variant === "primary"
-        ? "bg-primary/5 border-primary/20"
-        : "bg-card"
-    }`}>
-      <div className="flex items-center gap-3">
-        <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-          variant === "primary" ? "bg-primary/10" : "bg-muted"
-        }`}>
-          <Icon className={`h-5 w-5 ${variant === "primary" ? "text-primary" : "text-muted-foreground"}`} />
-        </div>
-        <div className="min-w-0">
-          <p className="text-xs text-muted-foreground">{label}</p>
-          <p className="text-sm font-semibold truncate">{value}</p>
-          {sublabel && <p className="text-xs text-muted-foreground">{sublabel}</p>}
-        </div>
-      </div>
     </div>
   );
 }

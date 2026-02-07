@@ -6,7 +6,7 @@ interface HeroProps {
   country: CountryConfig;
 }
 
-export function Hero({ country }: HeroProps) {
+export function Hero({}: HeroProps) {
   const { t } = useTranslation();
 
   return (
