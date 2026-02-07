@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Unbiased is an AI-powered feasibility analysis platform for development projects. Users submit project descriptions and receive comprehensive feasibility reports with scores across multiple categories (technical, economic, environmental, social, legal, operational). Reports can be discussed in real-time panel discussions with AI expert personas.
 
-## Development Commands
+**📚 For complete development documentation, see [DEVELOPMENT.md](DEVELOPMENT.md)**
+
+## Quick Reference
 
 ```bash
 # Install dependencies

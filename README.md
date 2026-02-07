@@ -1,212 +1,168 @@
-# Unbiased - AI Feasibility Analysis
+# 🌍 Unbiased
 
-AI-powered feasibility analysis for development projects. Get unbiased insights on infrastructure, housing, energy, and development projects.
+**AI-Powered Feasibility Analysis for Development Projects**
 
-## Stack
+Get instant, comprehensive feasibility reports for infrastructure, housing, energy, and development projects. Discuss insights with AI expert panels in real-time, in your language.
 
-- **Frontend**: Vite + React 19 + TypeScript
-- **UI**: Tailwind CSS + shadcn/ui
-- **API**: Hono (Cloudflare Workers)
-- **Database**: Cloudflare D1 + Drizzle ORM
-- **Real-time**: Cloudflare Durable Objects (WebSocket)
-- **AI**: Google Gemini API
-- **Hosting**: Cloudflare Workers with Static Assets
+---
 
-## Getting Started
+## ✨ What is Unbiased?
 
-### Prerequisites
+Unbiased helps you evaluate development projects with AI-powered analysis across six critical dimensions:
 
-- Node.js 18+
-- pnpm
-- Cloudflare account
-- Google Gemini API key
+- 💰 **Economic** - Budget viability, ROI, funding strategies
+- 🏗️ **Technical** - Infrastructure feasibility, engineering challenges
+- ⚖️ **Legal** - Regulations, permits, compliance requirements
+- 🌱 **Environmental** - Sustainability, climate impact, conservation
+- 👥 **Social** - Community benefit, equity, accessibility
+- ⚙️ **Operational** - Day-to-day logistics, maintenance, staffing
 
-### Installation
+---
 
-```bash
-# Install dependencies
-pnpm install
+## 🎯 Key Features
 
-# Set up environment variables
-cp .dev.vars.example .dev.vars
-# Edit .dev.vars with your GEMINI_API_KEY
-```
+### 🤖 **AI Expert Panel Discussions**
 
-### Development
+Discuss your project with 6 specialized AI experts + a moderator:
 
-Run two terminals for local development:
+- **Dr. [Name] - Economist**: Budget analysis, ROI, market dynamics
+- **[Name] - Lead Engineer**: Technical feasibility, implementation
+- **[Name] - Legal Counsel**: Regulations, compliance, liability
+- **Dr. [Name] - Environmental Specialist**: Sustainability, climate impact
+- **[Name] - Community Relations**: Social equity, public benefit
+- **[Name] - Operations Director**: Logistics, execution, scalability
 
-```bash
-# Terminal 1: Frontend (Vite dev server with HMR)
-pnpm dev
+Each expert has a **unique personality, speaking style, and culturally appropriate name** for your region.
 
-# Terminal 2: Worker (API + WebSocket + Durable Objects)
-pnpm dev:worker
-```
+### 🌐 **Multi-Language Support**
 
-The frontend runs on `http://localhost:5173` and proxies API requests.
-The worker runs on `http://localhost:8787` with full API and WebSocket support.
+Reports and discussions available in **6 languages** with native scripts:
+- 🇬🇧 English
+- 🇲🇻 Dhivehi (ދިވެހި - Thaana script)
+- 🇮🇳 Hindi (हिन्दी - Devanagari)
+- 🇧🇩 Bengali (বাংলা)
+- 🇱🇰 Sinhala (සිංහල) & Tamil (தமிழ்)
 
-### Database Setup
+**On-demand translation** - Click any language, AI translates instantly and caches for future users.
 
-```bash
-# Create D1 database
-wrangler d1 create unbiased-db
+### 🗺️ **Multi-Country Coverage**
 
-# Update wrangler.toml with the database_id
+Currently supporting:
+- 🏝️ **Maldives** - Dhivehi experts, MVR currency
+- 🇮🇳 **India** - Hindi experts, INR currency
+- 🇧🇩 **Bangladesh** - Bengali experts, BDT currency
+- 🇱🇰 **Sri Lanka** - Sinhala/Tamil experts, LKR currency
 
-# Run migrations locally
-pnpm db:migrate:local
+**Want your country?** Request it - AI adds it automatically!
 
-# Run migrations in production
-pnpm db:migrate
-```
+### 🚀 **Autonomous Country Addition** (Revolutionary!)
 
-### Deployment
+Don't see your country? **Request it and AI builds it for you:**
 
-```bash
-# Add Gemini API key as secret
-wrangler secret put GEMINI_API_KEY
+1. **Submit Request** - Enter country name, optional email
+2. **AI Validates** - Gemini confirms it's a real country
+3. **AI Generates Code** - Claude writes all necessary files:
+   - Country configuration
+   - Currency & regions
+   - Expert names (culturally appropriate)
+   - Translations in 6 languages
+4. **Auto-Deploy Preview** - Live preview in minutes
+5. **Owner Approves** - One-click merge or request improvements
+6. **Goes Live** - You get an email notification!
 
-# Build and deploy to Cloudflare Workers
-pnpm deploy
-```
+**No coding required. Fully automated. Goes live in minutes.** 🤯
 
-## Project Structure
+---
 
-```
-├── src/                    # React frontend
-│   ├── components/         # UI components
-│   ├── contexts/           # React contexts (discussion, etc.)
-│   ├── pages/              # Route pages
-│   ├── hooks/              # Custom hooks
-│   ├── lib/                # Utilities
-│   ├── locales/            # i18n translations
-│   └── types/              # TypeScript types
-├── functions/              # Cloudflare Worker
-│   ├── worker.ts           # Main entry point
-│   ├── discussion-room.ts  # Durable Object for WebSocket
-│   └── api/                # API routes (Hono)
-├── db/                     # Database schema
-├── migrations/             # D1 migrations
-└── public/                 # Static assets
-```
+## 💡 How It Works
 
-## Architecture
+### Step 1: Select Country & Describe Project
+Choose your country and describe your development project in any detail.
 
-### Workers with Static Assets
+### Step 2: Get Instant Feasibility Report
+AI analyzes your project across 6 categories with:
+- Overall feasibility score (0-100)
+- Detailed category breakdowns
+- Pros & cons
+- Key risks & recommendations
+- Budget impact analysis
 
-The app uses Cloudflare Workers with Static Assets (not Pages). This allows:
-- Durable Objects for real-time WebSocket connections
-- Unified deployment (frontend + API + WebSocket in one worker)
-- Full Workers features without separate service bindings
+### Step 3: Discuss with Expert Panel
+Start a real-time panel discussion:
+- Ask follow-up questions
+- Get expert opinions from different angles
+- Experts debate and build on each other's insights
+- All in natural, conversational language
 
-### Real-time Discussion
+### Step 4: Translate to Your Language
+Switch to any of 6 languages - reports and discussions translate instantly.
 
-Panel discussions use WebSocket via Durable Objects:
-- Each discussion room is a Durable Object instance
-- Participants connect via WebSocket for real-time updates
-- Messages are broadcast to all connected clients
-- Graceful reconnection with exponential backoff
+---
 
-## Environment Variables
+## 🌟 Why Unbiased?
 
-| Variable | Description |
-|----------|-------------|
-| `GEMINI_API_KEY` | Google Gemini API key |
-| `GEMINI_MODEL` | Gemini model (default: gemini-2.5-flash) |
-| `APP_NAME` | Application name |
+✅ **Instant Analysis** - Get comprehensive reports in seconds
+✅ **Multi-Perspective** - 6 expert viewpoints, not just one AI response
+✅ **Natural Conversations** - Experts have unique personalities and speaking styles
+✅ **Your Language** - Native script support for local languages
+✅ **Region-Specific** - Experts have culturally appropriate names
+✅ **Transparent** - See all reasoning, pros, cons, and risks
+✅ **Growing Coverage** - Request new countries, AI adds them automatically
 
-## Scripts
+---
 
-| Script | Description |
-|--------|-------------|
-| `pnpm dev` | Start Vite dev server (frontend only) |
-| `pnpm dev:worker` | Start Wrangler dev server (API + WebSocket) |
-| `pnpm build` | Build frontend for production |
-| `pnpm deploy` | Build and deploy to Cloudflare |
-| `pnpm db:migrate:local` | Run migrations on local D1 |
-| `pnpm db:migrate` | Run migrations on production D1 |
-| `pnpm typecheck` | Run TypeScript type checking |
+## 🚀 Getting Started
 
-## Supported Countries
+### For End Users
 
-- Maldives
-- India
-- Bangladesh
-- Sri Lanka
+1. **Visit the Platform** - [https://unbiased.talk](https://unbiased.talk)
+2. **Select Your Country** - Choose from the dropdown
+3. **Describe Your Project** - Be as detailed as you like
+4. **Get Your Report** - Instant feasibility analysis
+5. **Start Discussion** - Ask questions, get expert insights
+6. **Translate** - Switch languages anytime
 
-## Automated Country Addition
+### Request a New Country
 
-The platform supports automated on-demand country additions through a fully automated pipeline:
+1. Click **"Request a country"** in the country selector
+2. Enter the country name
+3. Optionally provide your email for updates
+4. Submit - AI validates and generates code automatically
+5. Receive email when your country goes live!
 
-### How It Works
+---
 
-1. **User Request**: Users click "Request a country" in the country selector dropdown
-2. **Instant Validation**: Gemini AI validates the country immediately in the API:
-   - Checks if it's a real sovereign country (rejects cities, regions, fictional places)
-   - User gets instant feedback if invalid (no workflow triggered)
-   - Gathers data: regions, currency, expert names, translations for all 6 languages
-3. **Code Generation**: Claude AI generates code changes for 10+ files with TypeScript validation
-4. **Preview Deployment**: Creates a feature branch, PR, and Cloudflare deploys a preview
-5. **Owner Review**: Owner receives Telegram notification with Approve/Retry/Fix buttons
-6. **Feedback Loop**: Owner can retry (auto-feedback) or provide specific feedback to re-trigger generation
-7. **Go Live**: On approval, PR merges to main and country goes live
+## 🛠️ For Developers
 
-### Files Modified by Automation
+Want to contribute or self-host? See **[DEVELOPMENT.md](DEVELOPMENT.md)** for:
+- Installation & setup
+- Development commands
+- Architecture overview
+- API documentation
+- Deployment guide
 
-- `src/lib/countries.ts` - Country configuration
-- `functions/api/lib/constants.ts` - Currency and supported countries
-- `src/types/index.ts` - Expert names by region
-- `functions/api/experts/personas.ts` - Expert personas by region
-- `src/locales/*.json` - All 6 locale files (en, dv, hi, bn, si, ta)
+---
 
-### Required Secrets
+## 📋 Supported Languages
 
-| Secret | Description |
-|--------|-------------|
-| `GITHUB_TOKEN` | GitHub token with repo/workflow permissions |
-| `GITHUB_REPO` | Repository in `owner/repo` format |
-| `TELEGRAM_BOT_TOKEN` | Telegram bot token for notifications |
-| `TELEGRAM_OWNER_CHAT_ID` | Owner's Telegram chat ID (can be group ID, e.g., `-123456789`) |
-| `CLAUDE_API_KEY` | Anthropic API key for code generation |
-| `GEMINI_API_KEY` | Google Gemini API key for validation |
-| `RESEND_API_KEY` | Resend API key for email notifications |
-| `FROM_EMAIL` | Sender email (e.g., `Unbiased <noreply@yourdomain.com>`) |
+| Code | Language | Script | Direction |
+|------|----------|--------|-----------|
+| `en` | English | Latin | LTR |
+| `dv` | Dhivehi | Thaana (ދިވެހި) | RTL |
+| `hi` | Hindi | Devanagari (हिन्दी) | LTR |
+| `bn` | Bengali | Bengali (বাংলা) | LTR |
+| `si` | Sinhala | Sinhala (සිංහල) | LTR |
+| `ta` | Tamil | Tamil (தமிழ்) | LTR |
 
-### Email Notifications (Resend)
+---
 
-Users who provide their email when requesting a country receive:
-- **Confirmation email** when their request is submitted
-- **Success email** when the country goes live
+## 🙏 Acknowledgments
 
-Note: Workflow failures and retries are internal - only the owner is notified via Telegram. End users only hear back when their country is successfully added.
+Powered by:
+- **Google Gemini** - AI analysis & translation
+- **Anthropic Claude** - Autonomous code generation
+- **Cloudflare** - Edge computing & real-time infrastructure
 
-Setup:
-1. Create an account at [resend.com](https://resend.com)
-2. Add and verify your domain
-3. Create an API key
-4. Set the secrets:
-   ```bash
-   wrangler secret put RESEND_API_KEY
-   wrangler secret put FROM_EMAIL
-   ```
+---
 
-### Telegram Bot Setup
-
-1. Create a bot via [@BotFather](https://t.me/botfather)
-2. Get your chat ID via [@userinfobot](https://t.me/userinfobot)
-3. Set the webhook:
-   ```bash
-   curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://your-worker.workers.dev/api/country-request/webhook/telegram"
-   ```
-
-### API Endpoints
-
-| Endpoint | Description |
-|----------|-------------|
-| `POST /api/country-request` | Submit a new country request |
-| `GET /api/country-request/:id` | Get request status |
-| `GET /api/country-requests` | List all requests (admin) |
-| `POST /api/country-request/webhook/github` | GitHub Actions callback |
-| `POST /api/country-request/webhook/telegram` | Telegram bot callback |
+Made with ❤️ for unbiased project analysis
