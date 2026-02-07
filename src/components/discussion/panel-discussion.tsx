@@ -539,7 +539,7 @@ export function PanelDiscussion({
             {/* Translation indicator */}
             {isTranslating && (
               <div className="flex justify-center py-2">
-                <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm text-primary">
+                <div className="flex items-center gap-2 rounded-full bg-blue-100 dark:bg-blue-900/50 px-4 py-2 text-sm text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-700">
                   <Languages className="h-4 w-4 animate-pulse" />
                   <span>{t('common.translating')}</span>
                 </div>

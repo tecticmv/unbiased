@@ -17,6 +17,7 @@ import { discussionRoutes } from "./routes/discussion";
 import { presenceRoutes } from "./routes/presence";
 import { websocketRoutes } from "./routes/websocket";
 import { countryRequestRoutes } from "./routes/country-request";
+import { statsRoutes } from "./routes/stats";
 
 // Create main app with base path
 const app = new Hono<HonoEnv>().basePath("/api");
@@ -34,5 +35,6 @@ app.route("/", discussionRoutes);
 app.route("/", presenceRoutes);
 app.route("/", websocketRoutes);
 app.route("/", countryRequestRoutes);
+app.route("/", statsRoutes);
 
 export default app;

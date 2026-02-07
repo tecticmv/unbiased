@@ -107,7 +107,7 @@ export function HomePage() {
 
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Button asChild size="xl" className="min-w-[200px]">
-                <Link to={`/${defaultCountry}`}>
+                <Link to={`/${defaultCountry}/new`}>
                   {t('home.hero.cta')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>

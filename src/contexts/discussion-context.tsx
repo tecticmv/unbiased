@@ -139,6 +139,8 @@ interface ErrorResponse {
 
 interface TranslationResponse {
   translated: boolean;
+  status?: string;
+  jobId?: number;
   language: string;
   discussion: PanelDiscussion;
   messages: DiscussionMessage[];
@@ -212,6 +214,9 @@ export function DiscussionProvider({ children }: { children: ReactNode }) {
   const [isAutoDiscussing, setIsAutoDiscussing] = useState(false);
 
   const abortControllerRef = useRef<AbortController | null>(null);
+  // Translation polling refs for cleanup
+  const translationPollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const translationPollingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoDiscussAbortRef = useRef<boolean>(false);
   const currentSlugRef = useRef<string | null>(null);
   const lastMessageIdRef = useRef<number>(0);
@@ -903,6 +908,16 @@ export function DiscussionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const loadTranslation = useCallback(async (reportSlug: string, lang: string) => {
+    // Clear any existing polling
+    if (translationPollingIntervalRef.current) {
+      clearInterval(translationPollingIntervalRef.current);
+      translationPollingIntervalRef.current = null;
+    }
+    if (translationPollingTimeoutRef.current) {
+      clearTimeout(translationPollingTimeoutRef.current);
+      translationPollingTimeoutRef.current = null;
+    }
+
     if (lang === 'en' || lang.startsWith('en-')) {
       setTranslatedMessages(null);
       setTranslatedDiscussion(null);
@@ -918,13 +933,56 @@ export function DiscussionProvider({ children }: { children: ReactNode }) {
       }
 
       const data = (await response.json()) as TranslationResponse;
-      setTranslatedMessages(data.messages);
-      setTranslatedDiscussion(data.discussion);
+
+      // If translation is in progress, poll for completion
+      if (!data.translated && data.status === 'in_progress') {
+        // Poll every 2 seconds until complete
+        translationPollingIntervalRef.current = setInterval(async () => {
+          try {
+            const statusResponse = await fetch(`/api/translation/status/discussion/${reportSlug}/${lang}`);
+            if (!statusResponse.ok) {
+              if (translationPollingIntervalRef.current) clearInterval(translationPollingIntervalRef.current);
+              setIsTranslating(false);
+              return;
+            }
+
+            const statusData = (await statusResponse.json()) as TranslationResponse;
+
+            if (statusData.status === 'completed') {
+              if (translationPollingIntervalRef.current) clearInterval(translationPollingIntervalRef.current);
+              if (translationPollingTimeoutRef.current) clearTimeout(translationPollingTimeoutRef.current);
+              setTranslatedMessages(statusData.messages);
+              setTranslatedDiscussion(statusData.discussion);
+              setIsTranslating(false);
+            } else if (statusData.status === 'failed' || statusData.status === 'stale') {
+              if (translationPollingIntervalRef.current) clearInterval(translationPollingIntervalRef.current);
+              if (translationPollingTimeoutRef.current) clearTimeout(translationPollingTimeoutRef.current);
+              setIsTranslating(false);
+            }
+          } catch (pollErr) {
+            console.error('Translation polling error:', pollErr);
+            if (translationPollingIntervalRef.current) clearInterval(translationPollingIntervalRef.current);
+            if (translationPollingTimeoutRef.current) clearTimeout(translationPollingTimeoutRef.current);
+            setIsTranslating(false);
+          }
+        }, 2000);
+
+        // Clean up interval after 60 seconds max
+        translationPollingTimeoutRef.current = setTimeout(() => {
+          if (translationPollingIntervalRef.current) clearInterval(translationPollingIntervalRef.current);
+          setIsTranslating(false);
+        }, 60000);
+      } else if (data.translated) {
+        setTranslatedMessages(data.messages);
+        setTranslatedDiscussion(data.discussion);
+        setIsTranslating(false);
+      } else {
+        setIsTranslating(false);
+      }
     } catch (err) {
       console.error("Translation error:", err);
       setTranslatedMessages(null);
       setTranslatedDiscussion(null);
-    } finally {
       setIsTranslating(false);
     }
   }, []);
