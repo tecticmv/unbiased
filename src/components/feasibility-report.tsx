@@ -30,7 +30,6 @@ import {
   BookOpen,
   List,
   ExternalLink,
-  Minus,
 } from "lucide-react";
 import { useState, useMemo, useRef, useEffect, useCallback, type ElementType } from "react";
 import { Button } from "@/components/ui/button";
@@ -103,7 +102,7 @@ function AnimatedProgressBar({ value, index, color }: { value: number; index: nu
   }, [hasAnimated]);
 
   return (
-    <div ref={ref} className="h-1.5 w-full overflow-hidden rounded-full bg-border/40">
+    <div ref={ref} className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
       <motion.div
         className={`h-full rounded-full ${color || "bg-primary"}`}
         initial={{ width: 0 }}
@@ -331,24 +330,26 @@ export function FeasibilityReport({
           whileInView="visible"
           viewport={viewportSettings}
         >
-          {/* Meta line */}
-          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
-            <FileText className="h-3.5 w-3.5" />
-            <span className="uppercase tracking-widest font-medium">Feasibility Report</span>
-            <Minus className="h-3 w-3 text-border" />
-            <span className="flex items-center gap-1">
+          {/* Meta badges */}
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-4">
+            <span className="inline-flex items-center gap-1.5 uppercase tracking-widest font-medium">
+              <FileText className="h-3.5 w-3.5" />
+              Feasibility Report
+            </span>
+            <span className="hidden sm:inline text-border">|</span>
+            <span className="inline-flex items-center gap-1">
               <MapPin className="h-3 w-3" />
               {country.name}
             </span>
-            <Minus className="h-3 w-3 text-border" />
-            <span className="flex items-center gap-1">
+            <span className="hidden sm:inline text-border">|</span>
+            <span className="inline-flex items-center gap-1">
               <Calendar className="h-3 w-3" />
               {formattedDate}
             </span>
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl font-bold sm:text-4xl md:text-[2.75rem] tracking-tight leading-[1.15] text-foreground">
+          <h1 className="text-2xl font-bold sm:text-3xl md:text-[2.75rem] tracking-tight leading-[1.15] text-foreground">
             {(report as Record<string, unknown>).translatedProjectType as string || report.detectedProjectType}
           </h1>
 
@@ -358,20 +359,20 @@ export function FeasibilityReport({
               <Button variant="outline" size="sm" className="gap-2 rounded-lg" asChild>
                 <Link to={`/${country.slug}/report/${reportId}/discussion`}>
                   <MessageSquare className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">{t('report.discussion.discuss')}</span>
+                  <span className="sm:inline">{t('report.discussion.discuss')}</span>
                 </Link>
               </Button>
             )}
             {shareUrl && (
               <Button variant="outline" size="sm" className="gap-2 rounded-lg" onClick={handleShare}>
                 <Share2 className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">{t('report.share')}</span>
+                <span className="sm:inline">{t('report.share')}</span>
               </Button>
             )}
             {!isSharedView && (
               <Button variant="outline" size="sm" className="gap-2 rounded-lg" onClick={onReset}>
                 <RotateCcw className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">{t('report.newAnalysis')}</span>
+                <span className="sm:inline">{t('report.newAnalysis')}</span>
               </Button>
             )}
           </div>
@@ -420,7 +421,7 @@ export function FeasibilityReport({
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
                 {/* Score Gauge */}
                 <div className="shrink-0 flex justify-center sm:justify-start">
-                  <ScoreGauge score={report.overallScore} size={150} />
+                  <ScoreGauge score={report.overallScore} size={130} />
                 </div>
 
                 {/* Verdict Details */}
@@ -543,149 +544,153 @@ export function FeasibilityReport({
                 subtitle={t('report.sections.financialDesc', 'Budget impact and cost breakdown')}
               />
 
-              <div className="grid gap-5 md:grid-cols-2">
-                {/* Budget Impact */}
+              <div className="rounded-xl border bg-card overflow-hidden">
+                {/* Budget Impact top section */}
                 {report.budgetRatio && (
-                  <div className="rounded-xl border bg-card p-5 space-y-5">
-                    <div className="flex items-center gap-2 text-sm font-semibold">
-                      <Wallet className="h-4 w-4 text-primary" />
-                      {t('report.budgetRatio.title')}
-                    </div>
-
-                    {/* Circular progress + stats */}
-                    <div className="flex items-center gap-5">
-                      <div className="relative flex h-20 w-20 shrink-0 items-center justify-center">
-                        <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
-                          <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="5" className="text-border/30" />
-                          <circle
-                            cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="5"
-                            strokeLinecap="round"
-                            strokeDasharray={`${Math.min(report.budgetRatio.percentageOfBudget, 100) * 2.51} 251`}
-                            className={`${
-                              report.budgetRatio.percentageOfBudget > 10 ? "text-red-500"
-                                : report.budgetRatio.percentageOfBudget > 5 ? "text-amber-500"
-                                : "text-emerald-500"
-                            }`}
-                          />
-                        </svg>
-                        <div className="absolute flex flex-col items-center">
-                          <span className="text-lg font-bold">
+                  <>
+                    <div className="p-5">
+                      {/* Key figures row */}
+                      <div className="grid grid-cols-2 gap-4 mb-5 sm:grid-cols-3">
+                        <div>
+                          <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetRatio.projectCost')}</span>
+                          <p className="text-base sm:text-lg font-bold mt-1 text-foreground truncate">
+                            {formatCost(report.budgetRatio.projectCostMidpoint, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetRatio.totalBudget')}</span>
+                          <p className="text-base sm:text-lg font-bold mt-1 text-foreground truncate">
+                            {formatCost(report.budgetRatio.countryTotalBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
+                          </p>
+                          {report.budgetRatio.fiscalYear && (
+                            <span className="text-[11px] text-muted-foreground">{report.budgetRatio.fiscalYear}</span>
+                          )}
+                        </div>
+                        <div className="col-span-2 sm:col-span-1">
+                          <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetRatio.title')}</span>
+                          <p className={`text-base sm:text-lg font-bold mt-1 ${
+                            report.budgetRatio.percentageOfBudget > 10 ? "text-red-500"
+                              : report.budgetRatio.percentageOfBudget > 5 ? "text-amber-500"
+                              : "text-emerald-600 dark:text-emerald-400"
+                          }`}>
                             {report.budgetRatio.percentageOfBudget < 0.01
                               ? "<0.01"
                               : report.budgetRatio.percentageOfBudget.toFixed(2)}%
-                          </span>
+                          </p>
                         </div>
                       </div>
 
-                      <div className="flex-1 space-y-2">
-                        <StatCard
-                          icon={TrendingUp}
-                          label={t('report.budgetRatio.projectCost')}
-                          value={formatCost(report.budgetRatio.projectCostMidpoint, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
-                          variant="primary"
-                        />
-                        <StatCard
-                          icon={Banknote}
-                          label={t('report.budgetRatio.totalBudget')}
-                          value={formatCost(report.budgetRatio.countryTotalBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
-                          sublabel={report.budgetRatio.fiscalYear ? `(${report.budgetRatio.fiscalYear})` : undefined}
-                        />
+                      {/* Budget ratio bar */}
+                      <div className="space-y-1.5">
+                        <div className="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all ${
+                              report.budgetRatio.percentageOfBudget > 10 ? "bg-red-500"
+                                : report.budgetRatio.percentageOfBudget > 5 ? "bg-amber-500"
+                                : "bg-emerald-500"
+                            }`}
+                            style={{ width: `${Math.min(report.budgetRatio.percentageOfBudget, 100)}%` }}
+                          />
+                        </div>
+                        <p className="text-[11px] text-muted-foreground">
+                          {t('report.budgetRatio.projectCost')} as percentage of national budget
+                        </p>
                       </div>
                     </div>
 
-                    {/* COFOG */}
-                    {report.budgetAlignment?.expenditureClassification && (
-                      <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
-                        <div className="flex items-center gap-2">
-                          <Landmark className="h-4 w-4 text-blue-500" />
-                          <div>
-                            <p className="text-xs text-muted-foreground">{t('report.budgetAlignment.cofogCategory', 'Expenditure Classification')}</p>
-                            <p className="text-sm font-semibold">{report.budgetAlignment.expenditureClassification.cofogCategory}</p>
-                          </div>
-                        </div>
-                        {report.budgetAlignment.expenditureClassification.sectorBudget && (
-                          <div className="space-y-1.5">
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-muted-foreground">{t('report.budgetAlignment.sectorBudget', 'Sector Budget')}</span>
-                              <span className="font-medium">
-                                {formatCost(report.budgetAlignment.expenditureClassification.sectorBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
-                              </span>
-                            </div>
-                            {report.budgetAlignment.expenditureClassification.percentageOfSectorBudget !== undefined && (
-                              <div className="space-y-1">
-                                <div className="flex items-center justify-between text-xs">
-                                  <span className="text-muted-foreground">Project % of Sector</span>
-                                  <span className={`font-semibold ${
-                                    report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 20 ? "text-red-500"
-                                      : report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 10 ? "text-amber-500"
-                                      : "text-emerald-500"
-                                  }`}>
-                                    {report.budgetAlignment.expenditureClassification.percentageOfSectorBudget.toFixed(2)}%
-                                  </span>
-                                </div>
-                                <AnimatedProgressBar
-                                  value={Math.min(report.budgetAlignment.expenditureClassification.percentageOfSectorBudget, 100)}
-                                  index={0}
-                                  color={
-                                    report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 20 ? "bg-red-500"
-                                      : report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 10 ? "bg-amber-500"
-                                      : "bg-emerald-500"
-                                  }
-                                />
+                    {/* Sector classification */}
+                    {(report.budgetAlignment?.expenditureClassification || report.budgetAlignment?.entityBudget?.hasEntityAllocation) && (
+                      <>
+                        <div className="border-t" />
+                        <div className="p-5 space-y-4">
+                          {report.budgetAlignment?.expenditureClassification && (
+                            <div className="grid gap-4 sm:grid-cols-2">
+                              <div>
+                                <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetAlignment.cofogCategory', 'Expenditure Classification')}</span>
+                                <p className="text-sm font-semibold mt-1">{report.budgetAlignment.expenditureClassification.cofogCategory}</p>
                               </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
+                              {report.budgetAlignment.expenditureClassification.sectorBudget && (
+                                <div>
+                                  <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetAlignment.sectorBudget', 'Sector Budget')}</span>
+                                  <p className="text-sm font-semibold mt-1">
+                                    {formatCost(report.budgetAlignment.expenditureClassification.sectorBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          )}
 
-                    {/* Entity Budget */}
-                    {report.budgetAlignment?.entityBudget?.hasEntityAllocation && (
-                      <div className="rounded-lg border bg-muted/30 p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Building2 className="h-4 w-4 text-purple-500" />
-                          <div>
-                            <p className="text-xs text-muted-foreground">{t('report.budgetAlignment.entityAllocation', 'Entity Budget Allocation')}</p>
-                            <p className="text-sm font-semibold">{report.budgetAlignment.entityBudget.entityName}</p>
-                          </div>
+                          {/* Sector percentage bar */}
+                          {report.budgetAlignment?.expenditureClassification?.percentageOfSectorBudget !== undefined && (
+                            <div className="rounded-lg bg-muted/40 p-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs text-muted-foreground font-medium">Project % of Sector</span>
+                                <span className={`text-sm font-bold tabular-nums ${
+                                  report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 20 ? "text-red-500"
+                                    : report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 10 ? "text-amber-500"
+                                    : "text-emerald-600 dark:text-emerald-400"
+                                }`}>
+                                  {report.budgetAlignment.expenditureClassification.percentageOfSectorBudget.toFixed(2)}%
+                                </span>
+                              </div>
+                              <AnimatedProgressBar
+                                value={Math.min(report.budgetAlignment.expenditureClassification.percentageOfSectorBudget, 100)}
+                                index={0}
+                                color={
+                                  report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 20 ? "bg-red-500"
+                                    : report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 10 ? "bg-amber-500"
+                                    : "bg-emerald-500"
+                                }
+                              />
+                            </div>
+                          )}
+
+                          {/* Entity Budget */}
+                          {report.budgetAlignment?.entityBudget?.hasEntityAllocation && (
+                            <div className="rounded-lg bg-muted/40 p-4">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetAlignment.entityAllocation', 'Entity Budget')}</span>
+                                  <p className="text-sm font-semibold mt-0.5">{report.budgetAlignment.entityBudget.entityName}</p>
+                                </div>
+                                {report.budgetAlignment.entityBudget.allocatedBudget && (
+                                  <span className="text-sm font-bold tabular-nums">
+                                    {formatCost(report.budgetAlignment.entityBudget.allocatedBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
+                                  </span>
+                                )}
+                              </div>
+                              {report.budgetAlignment.entityBudget.fiscalPolicyReference && (
+                                <p className="text-xs text-muted-foreground mt-2 pt-2 border-t border-border/50">
+                                  {report.budgetAlignment.entityBudget.fiscalPolicyReference}
+                                </p>
+                              )}
+                            </div>
+                          )}
                         </div>
-                        {report.budgetAlignment.entityBudget.allocatedBudget && (
-                          <div className="flex items-center justify-between text-sm mt-2">
-                            <span className="text-muted-foreground">{t('report.budgetAlignment.allocatedBudget', 'Allocated Budget')}</span>
-                            <span className="font-medium">
-                              {formatCost(report.budgetAlignment.entityBudget.allocatedBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
-                            </span>
-                          </div>
-                        )}
-                        {report.budgetAlignment.entityBudget.fiscalPolicyReference && (
-                          <p className="text-xs text-muted-foreground italic mt-3 pt-3 border-t">
-                            {report.budgetAlignment.entityBudget.fiscalPolicyReference}
-                          </p>
-                        )}
-                      </div>
+                      </>
                     )}
-                  </div>
+                  </>
                 )}
 
                 {/* Cost Breakdown */}
                 {hasCostBreakdown && (
-                  <div className="rounded-xl border bg-card p-5 space-y-4">
-                    <div className="flex items-center gap-2 text-sm font-semibold">
-                      <Banknote className="h-4 w-4 text-primary" />
-                      {t('report.costBreakdown')}
-                    </div>
-                    <div className="space-y-4">
-                      {report.estimatedCost.breakdown!.map((item, index) => (
-                        <div key={index} className="space-y-1.5">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">{item.item}</span>
-                            <span className="font-medium tabular-nums">{item.percentage}%</span>
+                  <>
+                    {report.budgetRatio && <div className="border-t" />}
+                    <div className="p-5">
+                      <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-semibold">{t('report.costBreakdown')}</span>
+                      <div className="mt-4 space-y-3.5">
+                        {report.estimatedCost.breakdown!.map((item, index) => (
+                          <div key={index} className="space-y-1.5">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">{item.item}</span>
+                              <span className="font-semibold tabular-nums">{item.percentage}%</span>
+                            </div>
+                            <AnimatedProgressBar value={item.percentage} index={index} />
                           </div>
-                          <AnimatedProgressBar value={item.percentage} index={index} />
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
             </motion.div>
@@ -714,93 +719,110 @@ export function FeasibilityReport({
               />
 
               <div className="rounded-xl border bg-card overflow-hidden">
-                <div className="flex flex-col md:flex-row">
-                  {/* Duration Visual */}
-                  <div className="flex flex-col items-center justify-center p-6 md:p-8 bg-gradient-to-br from-primary/8 to-primary/3 md:w-52 shrink-0">
-                    <div className="relative">
-                      <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-card shadow-sm border">
-                        <div className="text-center">
-                          <span className="text-3xl font-bold text-primary">
-                            {report.timeframe.estimatedDuration.mostLikely}
-                          </span>
-                          <p className="text-xs text-muted-foreground font-medium">{t('report.timeframe.months')}</p>
-                        </div>
-                      </div>
-                      <Timer className="absolute -bottom-1 -right-1 h-7 w-7 text-primary bg-card rounded-full p-1 border" />
+                {/* Duration timeline bar */}
+                <div className="p-5 pb-4">
+                  <div className="flex items-baseline justify-between mb-5">
+                    <div>
+                      <span className="text-3xl font-bold tracking-tight text-foreground">{report.timeframe.estimatedDuration.mostLikely}</span>
+                      <span className="text-sm text-muted-foreground ml-1.5">{t('report.timeframe.months')}</span>
                     </div>
-                    <p className="mt-4 text-xs text-muted-foreground text-center">
-                      {t('report.timeframe.range')}: {report.timeframe.estimatedDuration.minimum}-{report.timeframe.estimatedDuration.maximum} {t('report.timeframe.months')}
-                    </p>
-                  </div>
-
-                  {/* Details */}
-                  <div className="flex-1 p-6 space-y-4">
-                    {/* Admin completion */}
-                    <div className={`rounded-xl p-4 ${
-                      report.timeframe.canCurrentAdminComplete
-                        ? "bg-emerald-500/8 border border-emerald-500/20"
-                        : "bg-amber-500/8 border border-amber-500/20"
-                    }`}>
-                      <div className="flex items-start gap-3">
-                        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-                          report.timeframe.canCurrentAdminComplete ? "bg-emerald-500/15" : "bg-amber-500/15"
-                        }`}>
-                          {report.timeframe.canCurrentAdminComplete ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                          ) : (
-                            <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-                          )}
-                        </div>
-                        <div>
-                          <span className={`text-sm font-semibold ${
-                            report.timeframe.canCurrentAdminComplete
-                              ? "text-emerald-700 dark:text-emerald-300"
-                              : "text-amber-700 dark:text-amber-300"
-                          }`}>
-                            {report.timeframe.canCurrentAdminComplete
-                              ? t('report.timeframe.canComplete')
-                              : t('report.timeframe.cannotComplete')}
-                          </span>
-                          <div className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                            <Markdown>{report.timeframe.adminTermAnalysis ?? ''}</Markdown>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Risk of delay */}
                     {report.timeframe.riskOfDelay && (
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs text-muted-foreground uppercase tracking-wider">{t('report.timeframe.delayRisk')}</span>
-                        <Badge
-                          className={`rounded-full text-xs ${
-                            report.timeframe.riskOfDelay === "low"
-                              ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30"
-                              : report.timeframe.riskOfDelay === "medium"
-                                ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30"
-                                : "bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/30"
-                          }`}
-                        >
-                          {t(`report.timeframe.risk.${report.timeframe.riskOfDelay}`, { defaultValue: report.timeframe.riskOfDelay })}
-                        </Badge>
-                      </div>
-                    )}
-
-                    {/* Delay factors */}
-                    {report.timeframe.delayFactors && report.timeframe.delayFactors.length > 0 && (
-                      <div>
-                        <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium">{t('report.timeframe.delayFactors')}</span>
-                        <ul className="mt-2 space-y-2">
-                          {report.timeframe.delayFactors.slice(0, 3).map((factor, index) => (
-                            <li key={index} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                              <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-amber-500" />
-                              <Markdown>{factor ?? ''}</Markdown>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      <Badge
+                        className={`text-[11px] font-medium ${
+                          report.timeframe.riskOfDelay === "low"
+                            ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30"
+                            : report.timeframe.riskOfDelay === "medium"
+                              ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30"
+                              : "bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/30"
+                        }`}
+                      >
+                        {t(`report.timeframe.risk.${report.timeframe.riskOfDelay}`, { defaultValue: report.timeframe.riskOfDelay })} {t('report.timeframe.delayRisk').toLowerCase()}
+                      </Badge>
                     )}
                   </div>
+
+                  {/* Range visualization */}
+                  <div className="relative">
+                    <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-700" />
+                    {(() => {
+                      const min = report.timeframe.estimatedDuration.minimum;
+                      const max = report.timeframe.estimatedDuration.maximum;
+                      const est = report.timeframe.estimatedDuration.mostLikely;
+                      const range = max * 1.15;
+                      const leftPct = (min / range) * 100;
+                      const widthPct = ((max - min) / range) * 100;
+                      const estPct = (est / range) * 100;
+                      return (
+                        <>
+                          <div
+                            className="absolute top-0 h-2 rounded-full bg-primary/25"
+                            style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
+                          />
+                          <div
+                            className="absolute top-0 h-2 rounded-l-full bg-primary"
+                            style={{ left: `${leftPct}%`, width: `${estPct - leftPct}%` }}
+                          />
+                          <div
+                            className="absolute -top-1 h-4 w-1 rounded-full bg-primary shadow-sm"
+                            style={{ left: `${estPct}%` }}
+                          />
+                        </>
+                      );
+                    })()}
+                  </div>
+                  <div className="flex justify-between mt-2">
+                    <span className="text-[11px] text-muted-foreground">{report.timeframe.estimatedDuration.minimum} {t('report.timeframe.months')}</span>
+                    <span className="text-[11px] text-muted-foreground">{report.timeframe.estimatedDuration.maximum} {t('report.timeframe.months')}</span>
+                  </div>
+                </div>
+
+                <div className="border-t" />
+
+                {/* Admin completion + Delay factors */}
+                <div className="p-5 space-y-4">
+                  {/* Admin term */}
+                  <div className="flex items-start gap-3">
+                    <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg mt-0.5 ${
+                      report.timeframe.canCurrentAdminComplete
+                        ? "bg-emerald-500/15"
+                        : "bg-amber-500/15"
+                    }`}>
+                      {report.timeframe.canCurrentAdminComplete ? (
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                      )}
+                    </div>
+                    <div>
+                      <span className={`text-sm font-semibold ${
+                        report.timeframe.canCurrentAdminComplete
+                          ? "text-emerald-700 dark:text-emerald-300"
+                          : "text-amber-700 dark:text-amber-300"
+                      }`}>
+                        {report.timeframe.canCurrentAdminComplete
+                          ? t('report.timeframe.canComplete')
+                          : t('report.timeframe.cannotComplete')}
+                      </span>
+                      <div className="mt-0.5 text-sm text-muted-foreground leading-relaxed">
+                        <Markdown>{report.timeframe.adminTermAnalysis ?? ''}</Markdown>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Delay factors */}
+                  {report.timeframe.delayFactors && report.timeframe.delayFactors.length > 0 && (
+                    <div className="rounded-lg bg-muted/40 p-4">
+                      <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-semibold">{t('report.timeframe.delayFactors')}</span>
+                      <ul className="mt-2.5 space-y-2">
+                        {report.timeframe.delayFactors.slice(0, 3).map((factor, index) => (
+                          <li key={index} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                            <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
+                            <Markdown>{factor ?? ''}</Markdown>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -884,20 +906,13 @@ export function FeasibilityReport({
                     const category = report.categories[key];
                     if (!category?.score) return null;
                     const label = categoryLabels[key as CategoryKey] || key;
-                    const score = category.score;
-                    const scoreColor = score >= 70 ? "text-emerald-600 dark:text-emerald-400" :
-                                      score >= 40 ? "text-amber-600 dark:text-amber-400" :
-                                      "text-red-500 dark:text-red-400";
                     return (
                       <TabsTrigger
                         key={key}
                         value={key}
-                        className="flex items-center gap-2 rounded-lg border bg-card px-3.5 py-2 text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-sm hover:bg-muted/50"
+                        className="rounded-lg border bg-card px-3.5 py-2 text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-sm hover:bg-muted/50"
                       >
-                        <span>{(category.name || label).split(" ")[0]}</span>
-                        <span className={`font-bold tabular-nums text-xs ${scoreColor} data-[state=active]:text-primary-foreground`}>
-                          {score}
-                        </span>
+                        {(category.name || label).split(" ")[0]}
                       </TabsTrigger>
                     );
                   })}

@@ -114,7 +114,7 @@ export function BreakdownChart({ categories }: BreakdownChartProps) {
                   {item.score}
                 </motion.span>
               </div>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-border/30">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
                 <motion.div
                   className={`h-full rounded-full ${getBarColor(item.score)}`}
                   initial={{ width: 0 }}

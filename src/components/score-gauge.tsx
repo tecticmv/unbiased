@@ -38,7 +38,7 @@ export function ScoreGauge({ score, size = 160 }: ScoreGaugeProps) {
           fill="none"
           stroke="currentColor"
           strokeWidth={strokeWidth}
-          className="text-border/30"
+          className="text-gray-200 dark:text-gray-700"
         />
         {/* Progress circle */}
         <motion.circle

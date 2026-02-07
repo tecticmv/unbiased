@@ -48,7 +48,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
               <Markdown>{summary}</Markdown>
             </div>
           )}
-          <div className="mt-3 h-1.5 w-full max-w-xs rounded-full bg-border/30 overflow-hidden">
+          <div className="mt-3 h-1.5 w-full max-w-xs rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
             <div
               className={`h-full rounded-full transition-all ${getScoreBar(score)}`}
               style={{ width: `${score}%` }}
