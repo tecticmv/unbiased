@@ -71,6 +71,7 @@ discussionRoutes.post("/discussion/start", zValidator("json", startDiscussionSch
   const projectType = report?.detectedProjectType || "project";
   const overallScore = report?.overallScore || "N/A";
   const location = (report?.location as { specified?: string })?.specified || "the specified location";
+  const moderator = getExpertPersona("ai_moderator", reportData.country);
 
   const welcomeMessage = `Welcome to the Panel Discussion for this ${projectType} analysis!
 
@@ -88,8 +89,8 @@ Feel free to ask questions about any aspect of the analysis. You can direct ques
 
   await db.insert(discussionMessages).values({
     discussionId: created.id,
-    participantType: "user",
-    participantName: "Moderator",
+    participantType: "ai_moderator",
+    participantName: moderator.name,
     content: welcomeMessage,
   });
 
