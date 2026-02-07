@@ -14,6 +14,9 @@ import {
   Languages,
   DollarSign,
   WifiOff,
+  Info,
+  Users as UsersIcon,
+  X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -33,7 +36,8 @@ import { MessageInput } from "./message-input";
 import { ExpertPanel } from "./expert-panel";
 import { DiscussionSummary } from "./discussion-summary";
 import { ThemeToggle } from "@/components/theme-toggle";
-import type { FeasibilityReport } from "@/types";
+import type { FeasibilityReport, CategoryKey } from "@/types";
+import { categoryLabels } from "@/types";
 import type { CountryConfig } from "@/lib/countries";
 import { cn } from "@/lib/utils";
 
@@ -91,6 +95,7 @@ export function PanelDiscussion({
   const isNearBottomRef = useRef(true);
   const [showLeftSidebar, setShowLeftSidebar] = useState(true);
   const [showRightSidebar, setShowRightSidebar] = useState(true);
+  const [mobilePanel, setMobilePanel] = useState<"left" | "right" | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [replyingTo, setReplyingTo] = useState<typeof messages[0] | null>(null);
@@ -356,6 +361,23 @@ export function PanelDiscussion({
         </div>
 
         <div className="flex items-center gap-1">
+          {/* Mobile-only toggle buttons */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 md:hidden"
+            onClick={() => setMobilePanel(mobilePanel === "left" ? null : "left")}
+          >
+            <Info className={cn("h-4 w-4", mobilePanel === "left" && "text-primary")} />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 md:hidden"
+            onClick={() => setMobilePanel(mobilePanel === "right" ? null : "right")}
+          >
+            <UsersIcon className={cn("h-4 w-4", mobilePanel === "right" && "text-primary")} />
+          </Button>
           <Select value={i18n.language} onValueChange={handleLanguageChange}>
             <SelectTrigger className="h-8 w-8 p-0 border-0 bg-transparent hover:bg-accent">
               <Globe className="h-4 w-4" />
@@ -369,6 +391,7 @@ export function PanelDiscussion({
             </SelectContent>
           </Select>
           <ThemeToggle />
+          {/* Desktop-only toggle buttons */}
           <Button
             variant="ghost"
             size="icon"
@@ -401,7 +424,7 @@ export function PanelDiscussion({
               style={{ width: leftWidth }}
               className="hidden md:flex border-e overflow-hidden flex-shrink-0 relative"
             >
-              <div className="h-full overflow-y-auto overscroll-contain p-3 space-y-3">
+              <div className="h-full w-full min-w-0 overflow-y-auto overscroll-contain p-3 space-y-3">
                 {/* Score */}
                 <div className="p-3 rounded-lg border bg-card">
                   <div className="flex items-center justify-between mb-2">
@@ -470,13 +493,16 @@ export function PanelDiscussion({
                 )}
 
                 {/* Categories */}
+                {report.categories && typeof report.categories === 'object' && (
                 <div className="p-3 rounded-lg border bg-card">
                   <span className="text-xs text-muted-foreground">{t('report.categories.title')}</span>
                   <div className="mt-2 space-y-2">
-                    {Object.entries(report.categories).map(([key, cat]) => (
+                    {Object.entries(report.categories)
+                      .filter(([, cat]) => cat?.score != null)
+                      .map(([key, cat]) => (
                       <div key={key} className="space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs">{cat.name}</span>
+                          <span className="text-xs">{cat.name || categoryLabels[key as CategoryKey] || key}</span>
                           <span className="text-xs font-medium">{cat.score}</span>
                         </div>
                         <div className="w-full h-1 rounded-full bg-muted overflow-hidden">
@@ -492,6 +518,7 @@ export function PanelDiscussion({
                     ))}
                   </div>
                 </div>
+                )}
               </div>
               {/* Resize handle */}
               <div
@@ -663,6 +690,134 @@ export function PanelDiscussion({
           )}
         </AnimatePresence>
       </div>
+
+      {/* Mobile slide-over panels */}
+      <AnimatePresence>
+        {mobilePanel && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="fixed inset-0 z-40 bg-black/40 md:hidden"
+              onClick={() => setMobilePanel(null)}
+            />
+            {/* Panel */}
+            <motion.div
+              initial={{ x: mobilePanel === "left" ? "-100%" : "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: mobilePanel === "left" ? "-100%" : "100%" }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className={cn(
+                "fixed top-12 bottom-0 z-50 w-[280px] bg-background border-e shadow-xl md:hidden overflow-hidden flex flex-col",
+                mobilePanel === "left" ? "start-0" : "end-0 border-e-0 border-s"
+              )}
+            >
+              {/* Panel header */}
+              <div className="flex items-center justify-between px-3 py-2 border-b flex-shrink-0">
+                <span className="text-sm font-medium">
+                  {mobilePanel === "left" ? t('report.discussion.projectInfo', 'Project Info') : t('report.discussion.experts', 'Experts')}
+                </span>
+                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setMobilePanel(null)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              {/* Panel content */}
+              <div className="flex-1 overflow-y-auto overscroll-contain p-3 space-y-3">
+                {mobilePanel === "left" ? (
+                  <>
+                    {/* Score */}
+                    <div className="p-3 rounded-lg border bg-card">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-muted-foreground">{t('report.discussion.scoreLabel')}</span>
+                        <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
+                      </div>
+                      <div className="flex items-baseline gap-1">
+                        <span className={cn("text-3xl font-bold", getScoreColor(report.overallScore))}>
+                          {report.overallScore}
+                        </span>
+                        <span className="text-muted-foreground text-sm">/100</span>
+                      </div>
+                    </div>
+
+                    {/* Location */}
+                    {report.location?.specified && (
+                      <div className="p-3 rounded-lg border bg-card">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">{t('report.location')}</span>
+                        </div>
+                        <p className="text-sm">{report.location.specified}</p>
+                      </div>
+                    )}
+
+                    {/* Description */}
+                    {projectDescription && (
+                      <div className="p-3 rounded-lg border bg-card">
+                        <span className="text-xs text-muted-foreground">{t('report.discussion.description')}</span>
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-4">
+                          {projectDescription}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Budget & Cost */}
+                    {report.estimatedCost && (
+                      <div className="p-3 rounded-lg border bg-card">
+                        <div className="flex items-center gap-1.5 mb-2">
+                          <DollarSign className="h-3.5 w-3.5 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">{t('report.estimatedCost')}</span>
+                        </div>
+                        <p className="text-sm font-medium">
+                          {report.estimatedCost.currency} {formatCompactCurrency(report.estimatedCost.low)} - {formatCompactCurrency(report.estimatedCost.high)}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Categories */}
+                    {report.categories && typeof report.categories === 'object' && (
+                      <div className="p-3 rounded-lg border bg-card">
+                        <span className="text-xs text-muted-foreground">{t('report.categories.title')}</span>
+                        <div className="mt-2 space-y-2">
+                          {Object.entries(report.categories)
+                            .filter(([, cat]) => cat?.score != null)
+                            .map(([key, cat]) => (
+                              <div key={key} className="space-y-1">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs">{cat.name || categoryLabels[key as CategoryKey] || key}</span>
+                                  <span className="text-xs font-medium">{cat.score}</span>
+                                </div>
+                                <div className="w-full h-1 rounded-full bg-muted overflow-hidden">
+                                  <div
+                                    className={cn(
+                                      "h-full rounded-full",
+                                      cat.score >= 70 ? "bg-green-500" : cat.score >= 50 ? "bg-yellow-500" : "bg-red-500"
+                                    )}
+                                    style={{ width: `${cat.score}%` }}
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <ExpertPanel
+                    countrySlug={country.slug}
+                    activeGuests={activeGuests.map((guest) => ({
+                      ...guest,
+                      name: guest.id === currentUserSessionId ? `${guest.name} (${t('report.discussion.you')})` : guest.name,
+                    }))}
+                  />
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

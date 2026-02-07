@@ -315,7 +315,7 @@ export function MessageBubble({
           )}
 
           <div className={cn(
-            "inline-block rounded-2xl rounded-ss-sm px-4 py-3 shadow-sm bg-slate-100 dark:bg-slate-800",
+            "inline-block rounded-2xl rounded-ss-sm px-4 py-3 shadow-sm bg-muted",
             replyToMessage && "border-s-2 border-slate-400"
           )}>
             <div dir="auto" className="text-sm leading-relaxed">
@@ -421,7 +421,7 @@ export function MessageBubble({
 
         {/* Message content */}
         <div className={cn(
-          "rounded-2xl rounded-ss-sm px-4 py-3 shadow-sm bg-muted/50 dark:bg-muted/30",
+          "rounded-2xl rounded-ss-sm px-4 py-3 shadow-sm bg-muted",
           replyToMessage && "border-s-2 border-primary/30"
         )}>
           <div dir="auto" className="text-sm leading-relaxed">
@@ -527,7 +527,7 @@ export function StreamingMessageBubble({
         )}
 
         {/* Message content */}
-        <div className="rounded-2xl rounded-ss-sm px-4 py-3 shadow-sm bg-muted/50 dark:bg-muted/30">
+        <div className="rounded-2xl rounded-ss-sm px-4 py-3 shadow-sm bg-muted">
           <div dir="auto" className="text-sm leading-relaxed">
             <MarkdownBlock>{content}</MarkdownBlock>
             <span className="inline-block w-0.5 h-4 ms-0.5 bg-primary animate-pulse rounded-full" />
@@ -614,7 +614,7 @@ function ExpertBubbleChunk({
 
         {/* Message bubble */}
         <div className={cn(
-          "inline-block rounded-2xl px-4 py-2.5 shadow-sm bg-muted/50 dark:bg-muted/30",
+          "inline-block rounded-2xl px-4 py-2.5 shadow-sm bg-muted",
           isFirst && "rounded-ss-sm"
         )}>
           <div dir="auto" className="text-sm leading-relaxed">
