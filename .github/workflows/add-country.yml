@@ -102,40 +102,32 @@ jobs:
             ATTEMPT=$((ATTEMPT + 1))
             echo "=== Attempt $ATTEMPT of $MAX_ATTEMPTS ==="
 
-            # Read all files
-            COUNTRIES_TS=$(cat src/lib/countries.ts)
-            CONSTANTS_TS=$(cat functions/api/lib/constants.ts)
-            TYPES_TS=$(cat src/types/index.ts)
-            PERSONAS_TS=$(cat functions/api/experts/personas.ts)
-            I18N_TS=$(cat src/i18n.ts)
-            EN_JSON=$(cat src/locales/en.json)
-            DV_JSON=$(cat src/locales/dv.json)
-            HI_JSON=$(cat src/locales/hi.json)
-            BN_JSON=$(cat src/locales/bn.json)
-            SI_JSON=$(cat src/locales/si.json)
-            TA_JSON=$(cat src/locales/ta.json)
-
             PREV_ERRORS=""
             if [ -f /tmp/build_errors.txt ]; then
               PREV_ERRORS=$(cat /tmp/build_errors.txt)
             fi
 
-            # Build prompt to avoid YAML parsing issues
-            PROMPT="Add a new country to this project. Generate COMPLETE updated file contents."
-            PROMPT="$PROMPT
+            # ===== STEP 1: Generate TypeScript files =====
+            echo "Step 1: Generating TypeScript files..."
+            COUNTRIES_TS=$(cat src/lib/countries.ts)
+            CONSTANTS_TS=$(cat functions/api/lib/constants.ts)
+            TYPES_TS=$(cat src/types/index.ts)
+            PERSONAS_TS=$(cat functions/api/experts/personas.ts)
+
+            PROMPT_TS="Add a new country to this project. Generate COMPLETE updated file contents for TypeScript files.
 
             VALIDATED COUNTRY DATA - $VALIDATED_DATA"
             if [ -n "$FIX_FEEDBACK" ]; then
-              PROMPT="$PROMPT
+              PROMPT_TS="$PROMPT_TS
 
             OWNER FEEDBACK - $FIX_FEEDBACK"
             fi
             if [ -n "$PREV_ERRORS" ]; then
-              PROMPT="$PROMPT
+              PROMPT_TS="$PROMPT_TS
 
             ERRORS TO FIX - $PREV_ERRORS"
             fi
-            PROMPT="$PROMPT
+            PROMPT_TS="$PROMPT_TS
 
             FILES TO MODIFY
 
@@ -151,8 +143,63 @@ jobs:
             FILE functions/api/experts/personas.ts
             $PERSONAS_TS
 
-            FILE src/i18n.ts
-            $I18N_TS
+            REQUIREMENTS
+            1. countries.ts - Add country to 'countries' object
+            2. constants.ts - Add to 'countryCurrencies' AND 'supportedCountries'
+            3. types/index.ts - Add expert names to 'expertNamesByRegion' BEFORE 'default'
+            4. personas.ts - Add IDENTICAL expert names to 'expertNamesByRegion' BEFORE 'default'
+
+            Return JSON: {countries_ts: complete file, constants_ts: complete file, types_ts: complete file, personas_ts: complete file}
+            Return ONLY valid JSON."
+
+            echo "$PROMPT_TS" > /tmp/prompt_ts.txt
+
+            jq -n --rawfile prompt /tmp/prompt_ts.txt \
+              '{contents: [{parts: [{text: $prompt}]}], generationConfig: {temperature: 0.2, maxOutputTokens: 32768, responseMimeType: "application/json"}}' \
+              > /tmp/payload_ts.json
+
+            RESPONSE_TS=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
+              -H "Content-Type: application/json" -d @/tmp/payload_ts.json)
+
+            ERROR_MSG=$(echo "$RESPONSE_TS" | jq -r '.error.message // empty')
+            if [ -n "$ERROR_MSG" ]; then
+              echo "Gemini API error (TS): $ERROR_MSG"
+              echo "$ERROR_MSG" > /tmp/build_errors.txt
+              continue
+            fi
+
+            GENERATED_TS=$(echo "$RESPONSE_TS" | jq -r '.candidates[0].content.parts[0].text // empty')
+            if [ -z "$GENERATED_TS" ] || [ "$GENERATED_TS" = "null" ]; then
+              echo "Empty response from Gemini (TS)"
+              echo "$RESPONSE_TS" > /tmp/build_errors.txt
+              continue
+            fi
+
+            if ! echo "$GENERATED_TS" | jq -e . > /dev/null 2>&1; then
+              echo "Invalid JSON from Gemini (TS)"
+              echo "$GENERATED_TS" > /tmp/build_errors.txt
+              continue
+            fi
+
+            echo "$GENERATED_TS" | jq -r '.countries_ts' > src/lib/countries.ts
+            echo "$GENERATED_TS" | jq -r '.constants_ts' > functions/api/lib/constants.ts
+            echo "$GENERATED_TS" | jq -r '.types_ts' > src/types/index.ts
+            echo "$GENERATED_TS" | jq -r '.personas_ts' > functions/api/experts/personas.ts
+
+            # ===== STEP 2: Generate locale JSON files =====
+            echo "Step 2: Generating locale files..."
+            EN_JSON=$(cat src/locales/en.json)
+            DV_JSON=$(cat src/locales/dv.json)
+            HI_JSON=$(cat src/locales/hi.json)
+            BN_JSON=$(cat src/locales/bn.json)
+            SI_JSON=$(cat src/locales/si.json)
+            TA_JSON=$(cat src/locales/ta.json)
+
+            PROMPT_LOCALE="Add country translations to locale files. Generate COMPLETE updated file contents.
+
+            VALIDATED COUNTRY DATA - $VALIDATED_DATA
+
+            FILES TO MODIFY
 
             FILE src/locales/en.json
             $EN_JSON
@@ -172,98 +219,46 @@ jobs:
             FILE src/locales/ta.json
             $TA_JSON
 
-            REQUIREMENTS
-            1. countries.ts - Add country to 'countries' object
-            2. constants.ts - Add to 'countryCurrencies' AND 'supportedCountries'
-            3. types/index.ts - Add expert names to 'expertNamesByRegion' BEFORE 'default'
-            4. personas.ts - Add IDENTICAL expert names to 'expertNamesByRegion' BEFORE 'default'
-            5. All locale files - Add country name to 'countries' section using translations from validated data
+            REQUIREMENT - Add country name to 'countries' section using translations from validated data
 
-            Return JSON format
-            {
-              countries_ts: complete file,
-              constants_ts: complete file,
-              types_ts: complete file,
-              personas_ts: complete file,
-              i18n_ts: complete file or null,
-              en_json: complete file,
-              dv_json: complete file,
-              hi_json: complete file,
-              bn_json: complete file,
-              si_json: complete file,
-              ta_json: complete file
-            }
-
+            Return JSON: {en_json: complete file, dv_json: complete file, hi_json: complete file, bn_json: complete file, si_json: complete file, ta_json: complete file}
             Return ONLY valid JSON."
 
-            # Write prompt to file to avoid argument list too long error
-            echo "$PROMPT" > /tmp/prompt.txt
+            echo "$PROMPT_LOCALE" > /tmp/prompt_locale.txt
 
-            # Build JSON payload using jq with --rawfile to avoid argument list too long
-            jq -n \
-              --rawfile prompt /tmp/prompt.txt \
-              '{
-                contents: [{
-                  parts: [{
-                    text: $prompt
-                  }]
-                }],
-                generationConfig: {
-                  temperature: 0.2,
-                  maxOutputTokens: 65536,
-                  responseMimeType: "application/json"
-                }
-              }' > /tmp/payload.json
+            jq -n --rawfile prompt /tmp/prompt_locale.txt \
+              '{contents: [{parts: [{text: $prompt}]}], generationConfig: {temperature: 0.2, maxOutputTokens: 32768, responseMimeType: "application/json"}}' \
+              > /tmp/payload_locale.json
 
-            RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
-              -H "Content-Type: application/json" \
-              -d @/tmp/payload.json)
+            RESPONSE_LOCALE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
+              -H "Content-Type: application/json" -d @/tmp/payload_locale.json)
 
-            # Check for API errors
-            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.error.message // empty')
+            ERROR_MSG=$(echo "$RESPONSE_LOCALE" | jq -r '.error.message // empty')
             if [ -n "$ERROR_MSG" ]; then
-              echo "Gemini API error: $ERROR_MSG"
+              echo "Gemini API error (Locale): $ERROR_MSG"
               echo "$ERROR_MSG" > /tmp/build_errors.txt
               continue
             fi
 
-            # Check finish reason
-            FINISH_REASON=$(echo "$RESPONSE" | jq -r '.candidates[0].finishReason // empty')
-            echo "Finish reason: $FINISH_REASON"
-
-            GENERATED=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
-
-            if [ -z "$GENERATED" ] || [ "$GENERATED" = "null" ]; then
-              echo "Empty response from Gemini"
-              echo "$RESPONSE" > /tmp/build_errors.txt
+            GENERATED_LOCALE=$(echo "$RESPONSE_LOCALE" | jq -r '.candidates[0].content.parts[0].text // empty')
+            if [ -z "$GENERATED_LOCALE" ] || [ "$GENERATED_LOCALE" = "null" ]; then
+              echo "Empty response from Gemini (Locale)"
+              echo "$RESPONSE_LOCALE" > /tmp/build_errors.txt
               continue
             fi
 
-            if ! echo "$GENERATED" | jq -e . > /dev/null 2>&1; then
-              echo "Invalid JSON from Gemini"
-              echo "Response length: ${#GENERATED} chars"
-              echo "First 500 chars: ${GENERATED:0:500}"
-              echo "Last 500 chars: ${GENERATED: -500}"
-              echo "$GENERATED" > /tmp/build_errors.txt
+            if ! echo "$GENERATED_LOCALE" | jq -e . > /dev/null 2>&1; then
+              echo "Invalid JSON from Gemini (Locale)"
+              echo "$GENERATED_LOCALE" > /tmp/build_errors.txt
               continue
             fi
 
-            # Write files
-            echo "$GENERATED" | jq -r '.countries_ts' > src/lib/countries.ts
-            echo "$GENERATED" | jq -r '.constants_ts' > functions/api/lib/constants.ts
-            echo "$GENERATED" | jq -r '.types_ts' > src/types/index.ts
-            echo "$GENERATED" | jq -r '.personas_ts' > functions/api/experts/personas.ts
-            echo "$GENERATED" | jq -r '.en_json' > src/locales/en.json
-            echo "$GENERATED" | jq -r '.dv_json' > src/locales/dv.json
-            echo "$GENERATED" | jq -r '.hi_json' > src/locales/hi.json
-            echo "$GENERATED" | jq -r '.bn_json' > src/locales/bn.json
-            echo "$GENERATED" | jq -r '.si_json' > src/locales/si.json
-            echo "$GENERATED" | jq -r '.ta_json' > src/locales/ta.json
-
-            I18N_CONTENT=$(echo "$GENERATED" | jq -r '.i18n_ts // empty')
-            if [ -n "$I18N_CONTENT" ] && [ "$I18N_CONTENT" != "null" ]; then
-              echo "$I18N_CONTENT" > src/i18n.ts
-            fi
+            echo "$GENERATED_LOCALE" | jq -r '.en_json' > src/locales/en.json
+            echo "$GENERATED_LOCALE" | jq -r '.dv_json' > src/locales/dv.json
+            echo "$GENERATED_LOCALE" | jq -r '.hi_json' > src/locales/hi.json
+            echo "$GENERATED_LOCALE" | jq -r '.bn_json' > src/locales/bn.json
+            echo "$GENERATED_LOCALE" | jq -r '.si_json' > src/locales/si.json
+            echo "$GENERATED_LOCALE" | jq -r '.ta_json' > src/locales/ta.json
 
             # Verify
             echo "Running TypeScript check..."
