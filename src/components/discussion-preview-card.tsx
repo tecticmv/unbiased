@@ -71,7 +71,7 @@ export function DiscussionPreviewCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
     >
-      <Link to={`/${country}/report/${reportSlug}#discussion`}>
+      <Link to={`/${country}/report/${reportSlug}/discussion`}>
         <Card className="group relative overflow-hidden transition-all hover:shadow-lg hover:shadow-emerald-500/10 hover:border-emerald-500/30 hover:-translate-y-1">
           {/* Animated pulse indicator */}
           <div className="absolute top-4 right-4 z-10">

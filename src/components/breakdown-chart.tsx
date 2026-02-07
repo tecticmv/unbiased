@@ -32,14 +32,14 @@ const getScoreTextColor = (score: number) => {
 };
 
 export function BreakdownChart({ categories }: BreakdownChartProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [chartType, setChartType] = useState<"radar" | "progress">("progress");
   const isRTL = i18n.language === "dv";
 
   if (!categories || typeof categories !== 'object') {
     return (
       <div className="flex items-center justify-center h-32 text-muted-foreground text-sm">
-        Loading categories...
+        {t('chart.loadingCategories')}
       </div>
     );
   }
@@ -59,7 +59,7 @@ export function BreakdownChart({ categories }: BreakdownChartProps) {
   if (data.length === 0) {
     return (
       <div className="flex items-center justify-center h-32 text-muted-foreground text-sm">
-        No category data available
+        {t('chart.noCategoryData')}
       </div>
     );
   }
@@ -75,7 +75,7 @@ export function BreakdownChart({ categories }: BreakdownChartProps) {
           className="px-2.5 h-8 rounded-lg text-xs"
         >
           <ListChecks className="h-3.5 w-3.5 sm:mr-1" />
-          <span className="hidden sm:inline">Progress</span>
+          <span className="hidden sm:inline">{t('chart.progress')}</span>
         </Button>
         <Button
           variant={chartType === "radar" ? "default" : "outline"}
@@ -84,7 +84,7 @@ export function BreakdownChart({ categories }: BreakdownChartProps) {
           className="px-2.5 h-8 rounded-lg text-xs"
         >
           <RadarIcon className="h-3.5 w-3.5 sm:mr-1" />
-          <span className="hidden sm:inline">Radar</span>
+          <span className="hidden sm:inline">{t('chart.radar')}</span>
         </Button>
       </div>
 
@@ -168,7 +168,7 @@ export function BreakdownChart({ categories }: BreakdownChartProps) {
                   fontFamily: isRTL ? "'MV Faseyha', sans-serif" : "inherit",
                 }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
-                formatter={(value: number) => [`${value}/100`, "Score"]}
+                formatter={(value: number) => [`${value}/100`, t('chart.score')]}
                 labelFormatter={(label, payload) => {
                   const item = payload?.[0]?.payload;
                   return item?.fullName || label;

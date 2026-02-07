@@ -168,7 +168,7 @@ export function CountryPage() {
                   <p className="text-muted-foreground">
                     {totalCount === 0 && !hasFilters
                       ? t('home.countries.description')
-                      : `${totalCount} ${totalCount === 1 ? t('common.project').toLowerCase() : t('common.project').toLowerCase() + 's'}`}
+                      : t('common.project', { count: totalCount })}
                   </p>
                 </div>
                 <Button

@@ -3,6 +3,8 @@
     "appName": "Unbiased",
     "tagline": "AI-powered",
     "loading": "Loading...",
+    "loadingMore": "Loading more...",
+    "noMoreReports": "No more reports to load",
     "translating": "Translating report...",
     "error": "Error",
     "success": "Success",
@@ -32,7 +34,10 @@
     "and": "and",
     "english": "EN",
     "optional": "optional",
-    "project": "Project"
+    "project": "Project",
+    "project_one": "{{count}} project",
+    "project_other": "{{count}} projects",
+    "retry": "Retry"
   },
   "nav": {
     "home": "Home",
@@ -227,7 +232,8 @@
       "title": "Budget Impact",
       "ofBudget": "of budget",
       "projectCost": "Project Cost",
-      "totalBudget": "Country Budget"
+      "totalBudget": "Country Budget",
+      "asPercentage": "as percentage of national budget"
     },
     "alternative": {
       "title": "Suggested Alternative Project",
@@ -411,6 +417,135 @@
     "failedToStartDiscussion": "Failed to start discussion",
     "failedToStartAutoDiscussion": "Failed to start auto discussion",
     "translationFailed": "Translation failed",
+    "translationFallback": "Showing report in English. Translation could not be loaded.",
     "reconnectionFailed": "Unable to reconnect. Please try starting a new analysis."
+  },
+  "chart": {
+    "loadingCategories": "Loading categories...",
+    "noCategoryData": "No category data available",
+    "progress": "Progress",
+    "radar": "Radar",
+    "score": "Score"
+  },
+  "categories": {
+    "government": "Government",
+    "infrastructure": "Infrastructure",
+    "transportation": "Transportation",
+    "housing": "Housing",
+    "commercial": "Commercial",
+    "social": "Social",
+    "economic": "Economic",
+    "environmental": "Environmental",
+    "healthcare": "Healthcare",
+    "education": "Education",
+    "other": "Other"
+  },
+  "learnMore": {
+    "badge": "Learn More About Unbiased",
+    "hero": {
+      "title": "AI-Powered Feasibility Analysis for Better Decision Making",
+      "description": "Unbiased helps governments, policymakers, and communities make informed decisions about development projects through comprehensive AI-powered feasibility analysis.",
+      "cta": "Try It Now"
+    },
+    "whatIs": {
+      "title": "What is Unbiased?",
+      "description": "Unbiased is an innovative platform that combines artificial intelligence with real-world data to evaluate the feasibility of government and development projects.",
+      "card1": {
+        "title": "Data-Driven Insights",
+        "description": "We analyze projects using real census data, budget information, economic indicators, and environmental factors to provide comprehensive feasibility assessments."
+      },
+      "card2": {
+        "title": "AI Expert Panel",
+        "description": "Engage with AI expert personas representing different domains - economic, technical, legal, environmental, social, and operational perspectives."
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "description": "Get a comprehensive feasibility report in four simple steps",
+      "step1": {
+        "title": "Describe Your Project",
+        "description": "Provide details about your proposed project, including its scope, objectives, and estimated cost"
+      },
+      "step2": {
+        "title": "AI Analysis",
+        "description": "Our AI analyzes your project against real-world data, budget constraints, and feasibility factors"
+      },
+      "step3": {
+        "title": "Receive Detailed Report",
+        "description": "Get scores across 6 categories with actionable insights, risks, and recommendations"
+      },
+      "step4": {
+        "title": "Engage Expert Panel",
+        "description": "Start a discussion with AI experts to dive deeper into specific aspects of your project"
+      }
+    },
+    "categories": {
+      "title": "Six Comprehensive Analysis Categories",
+      "description": "Every project is evaluated across these critical dimensions",
+      "technical": "Evaluates whether the project can be built with available technology, resources, and infrastructure",
+      "economic": "Assesses financial viability, cost-benefit ratio, and economic impact on the community",
+      "environmental": "Analyzes environmental impact, sustainability, and compliance with environmental regulations",
+      "social": "Examines social benefits, community impact, accessibility, and equity considerations",
+      "legal": "Reviews regulatory compliance, permits needed, and political support for the project",
+      "operational": "Evaluates long-term sustainability, maintenance requirements, and operational feasibility"
+    },
+    "features": {
+      "title": "Key Features",
+      "description": "Everything you need to make informed project decisions",
+      "aiPowered": {
+        "title": "AI-Powered Analysis",
+        "description": "Advanced AI models analyze your project against real-world data and best practices"
+      },
+      "expertPanel": {
+        "title": "Expert Panel Discussions",
+        "description": "Engage with AI experts from different domains to explore various perspectives"
+      },
+      "comprehensive": {
+        "title": "Comprehensive Reports",
+        "description": "Detailed feasibility scores, risk assessments, budget analysis, and actionable recommendations"
+      },
+      "transparent": {
+        "title": "Transparent Scoring",
+        "description": "Clear, explainable scores with detailed reasoning for every category"
+      },
+      "fast": {
+        "title": "Fast Results",
+        "description": "Get comprehensive feasibility reports in minutes, not weeks"
+      },
+      "multilingual": {
+        "title": "Multilingual Support",
+        "description": "Available in multiple languages to serve diverse communities"
+      }
+    },
+    "useCases": {
+      "title": "Who Can Benefit?",
+      "description": "Unbiased is designed for anyone involved in development and policy decisions",
+      "infrastructure": {
+        "title": "Infrastructure Projects",
+        "description": "Roads, bridges, airports, ports, and other transportation infrastructure"
+      },
+      "publicServices": {
+        "title": "Public Services",
+        "description": "Hospitals, schools, community centers, and public facilities"
+      },
+      "environmental": {
+        "title": "Environmental Initiatives",
+        "description": "Renewable energy, waste management, conservation, and sustainability projects"
+      },
+      "technology": {
+        "title": "Technology & Innovation",
+        "description": "Digital infrastructure, smart city initiatives, and technology adoption programs"
+      },
+      "social": {
+        "title": "Social Programs",
+        "description": "Housing projects, welfare programs, and community development initiatives"
+      }
+    },
+    "cta": {
+      "title": "Ready to Analyze Your Project?",
+      "description": "Get started with Unbiased today and make data-driven decisions for a better tomorrow.",
+      "start": "Start Analysis",
+      "browse": "Browse Reports"
+    }
   }
 }

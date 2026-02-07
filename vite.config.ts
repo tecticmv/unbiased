@@ -13,6 +13,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: true,
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks: {
@@ -28,6 +29,20 @@ export default defineConfig({
             "@radix-ui/react-label",
             "@radix-ui/react-progress",
             "@radix-ui/react-slot",
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+          ],
+          "vendor-i18n": [
+            "i18next",
+            "react-i18next",
+            "i18next-browser-languagedetector",
+          ],
+          "vendor-markdown": ["react-markdown"],
+          "vendor-icons": ["lucide-react"],
+          "vendor-forms": [
+            "react-hook-form",
+            "@hookform/resolvers",
+            "zod",
           ],
         },
       },

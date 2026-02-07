@@ -51,9 +51,9 @@ export function Footer() {
             <h4 className="mb-4 text-sm font-semibold">{t('nav.about')}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#how-it-works" className="hover:text-foreground">
+                <Link to="/learn-more" className="hover:text-foreground">
                   {t('home.hero.learnMore')}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -161,7 +161,16 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Enable RTL support
+    require('tailwindcss/plugin')(({ addUtilities }: any) => {
+      addUtilities({
+        '.flip-x': {
+          transform: 'scaleX(-1)',
+        },
+      });
+    }),
+  ],
 };
 
 export default config;

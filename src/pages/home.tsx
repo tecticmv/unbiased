@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { defaultCountry } from "@/lib/countries";
 import {
   ScrollReveal,
   StaggerContainer,
@@ -21,15 +20,17 @@ import {
 } from "@/components/ui/scroll-reveal";
 import { AnalyticsDashboard } from "@/components/analytics-dashboard";
 import { HotTopicsSection } from "@/components/hot-topics-section";
+import { useCountry } from "@/contexts/country-context";
 
 export function HomePage() {
+  const { selectedCountry } = useCountry();
   const { t } = useTranslation();
   const [stats, setStats] = useState<any>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch("/api/stats");
+        const response = await fetch(`/api/stats?country=${selectedCountry}`);
         if (response.ok) {
           const data = await response.json();
           setStats(data);
@@ -40,7 +41,7 @@ export function HomePage() {
     };
 
     fetchStats();
-  }, []);
+  }, [selectedCountry]);
 
   const features = [
     {
@@ -92,13 +93,13 @@ export function HomePage() {
 
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Button asChild size="xl" className="min-w-[200px]">
-                <Link to={`/${defaultCountry}/new`}>
+                <Link to={`/${selectedCountry}/new`}>
                   {t('home.hero.cta')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button asChild size="xl" variant="outline" className="min-w-[200px]">
-                <Link to={`/${defaultCountry}/reports`}>
+                <Link to={`/${selectedCountry}`}>
                   {t('home.hero.viewReports') || 'View Reports'}
                 </Link>
               </Button>
@@ -111,7 +112,7 @@ export function HomePage() {
       </section>
 
       {/* Analytics Dashboard */}
-      <AnalyticsDashboard />
+      <AnalyticsDashboard country={selectedCountry} />
 
       {/* Hot Topics Section */}
       {stats?.trending && (

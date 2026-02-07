@@ -28,7 +28,7 @@ export function ScoreGauge({ score, size = 160 }: ScoreGaugeProps) {
         width={size}
         height={size}
         viewBox={`0 0 ${size} ${size}`}
-        className="-rotate-90"
+        className="-rotate-90 rtl:scale-x-[-1]"
       >
         {/* Background circle */}
         <circle
@@ -57,7 +57,7 @@ export function ScoreGauge({ score, size = 160 }: ScoreGaugeProps) {
         />
       </svg>
       {/* Center content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
+      <div className="absolute inset-0 flex flex-col items-center justify-center" dir="ltr">
         <motion.span
           className={`${scoreFontSize} font-bold tabular-nums`}
           initial={{ opacity: 0, scale: 0.8 }}

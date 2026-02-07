@@ -44,13 +44,16 @@ function detectProjectCategory(projectType: string | null | undefined): string {
 /**
  * GET /api/stats
  * Returns aggregated analytics for the home page
+ * Query params:
+ * - country (optional): Filter stats by country code (e.g., 'maldives', 'india')
  */
 statsRoutes.get("/stats", async (c) => {
   const db = drizzle(c.env.DB);
   const cache = caches.default;
+  const country = c.req.query("country"); // Optional country filter
 
-  // Try cache first (5-minute TTL)
-  const cacheKey = new Request("https://cache/stats", { method: "GET" });
+  // Try cache first (5-minute TTL) - include country in cache key
+  const cacheKey = new Request(`https://cache/stats${country ? `?country=${country}` : ""}`, { method: "GET" });
   const cachedResponse = await cache.match(cacheKey);
 
   if (cachedResponse) {
@@ -64,21 +67,31 @@ statsRoutes.get("/stats", async (c) => {
     // 1. Total reports count
     const totalReportsResult = await db
       .select({ count: sql<number>`count(*)` })
-      .from(reports);
+      .from(reports)
+      .where(country ? eq(reports.country, country) : sql`1=1`);
     const totalReports = Number(totalReportsResult[0]?.count) || 0;
 
     // 2. Active discussions count
     const activeDiscussionsResult = await db
       .select({ count: sql<number>`count(*)` })
       .from(panelDiscussions)
-      .where(eq(panelDiscussions.status, "active"));
+      .leftJoin(reports, eq(panelDiscussions.reportSlug, reports.slug))
+      .where(
+        country
+          ? sql`${panelDiscussions.status} = 'active' AND ${reports.country} = ${country}`
+          : eq(panelDiscussions.status, "active")
+      );
     const activeDiscussions = Number(activeDiscussionsResult[0]?.count) || 0;
 
     // 3. Recent activity (last 7 days)
     const recentReportsResult = await db
       .select({ count: sql<number>`count(*)` })
       .from(reports)
-      .where(sql`${reports.createdAt} >= ${sevenDaysAgo}`);
+      .where(
+        country
+          ? sql`${reports.createdAt} >= ${sevenDaysAgo} AND ${reports.country} = ${country}`
+          : sql`${reports.createdAt} >= ${sevenDaysAgo}`
+      );
     const recentActivity = Number(recentReportsResult[0]?.count) || 0;
 
     // 4. Get all reports for score calculations and category breakdown
@@ -87,7 +100,8 @@ statsRoutes.get("/stats", async (c) => {
         report: reports.report,
         projectType: reports.projectType,
       })
-      .from(reports);
+      .from(reports)
+      .where(country ? eq(reports.country, country) : sql`1=1`);
 
     // Calculate average feasibility score
     const scores = allReports
@@ -163,7 +177,11 @@ statsRoutes.get("/stats", async (c) => {
         createdAt: reports.createdAt,
       })
       .from(reports)
-      .where(sql`${reports.createdAt} >= ${sevenDaysAgo}`)
+      .where(
+        country
+          ? sql`${reports.createdAt} >= ${sevenDaysAgo} AND ${reports.country} = ${country}`
+          : sql`${reports.createdAt} >= ${sevenDaysAgo}`
+      )
       .orderBy(desc(reports.createdAt))
       .limit(4);
 
@@ -180,7 +198,11 @@ statsRoutes.get("/stats", async (c) => {
       })
       .from(panelDiscussions)
       .leftJoin(reports, eq(panelDiscussions.reportSlug, reports.slug))
-      .where(eq(panelDiscussions.status, "active"))
+      .where(
+        country
+          ? sql`${panelDiscussions.status} = 'active' AND ${reports.country} = ${country}`
+          : eq(panelDiscussions.status, "active")
+      )
       .orderBy(desc(panelDiscussions.startedAt))
       .limit(3);
 

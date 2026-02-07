@@ -203,6 +203,19 @@ export function FeasibilityReport({
   projectDescription,
 }: FeasibilityReportProps) {
   const { t, i18n } = useTranslation();
+
+  // Translation hook for dynamic report content
+  // TODO: Re-enable when translation API endpoints are implemented
+  // const {
+  //   translatedReport,
+  //   isLoading: translationLoading,
+  //   error: translationError,
+  //   retry: retryTranslation,
+  // } = useReportTranslation(reportId, i18n.language);
+
+  // Use original report for now (translation API not yet implemented)
+  const displayReport = report;
+
   const [showAllRisks, setShowAllRisks] = useState(false);
   const [showAllReferences, setShowAllReferences] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -267,8 +280,8 @@ export function FeasibilityReport({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Feasibility Report",
-          text: `Project feasibility analysis: ${report.overallSummary}`,
+          title: t('report.title'),
+          text: `${t('report.analyzedRequest')}: ${displayReport.overallSummary}`,
           url: shareUrl,
         });
       } catch {
@@ -285,18 +298,18 @@ export function FeasibilityReport({
     alert(t('ui.linkCopied'));
   };
 
-  const categoryKeys = Object.keys(report.categories) as (keyof typeof report.categories)[];
+  const categoryKeys = Object.keys(displayReport.categories) as (keyof typeof displayReport.categories)[];
   const hasLocationSuggestions =
-    report.location.suggested && report.location.suggested.length > 0;
+    displayReport.location.suggested && displayReport.location.suggested.length > 0;
   const hasCostBreakdown =
-    report.estimatedCost.breakdown && report.estimatedCost.breakdown.length > 0;
+    displayReport.estimatedCost.breakdown && displayReport.estimatedCost.breakdown.length > 0;
 
   const tocEntries = useMemo(() => {
     const entries: { id: string; label: string; icon: ElementType }[] = [];
-    if (report.budgetRatio || hasCostBreakdown) {
+    if (displayReport.budgetRatio || hasCostBreakdown) {
       entries.push({ id: "financial", label: t('report.sections.financial', 'Financial Analysis'), icon: Wallet });
     }
-    if (report.timeframe) {
+    if (displayReport.timeframe) {
       entries.push({ id: "timeframe", label: t('report.timeframe.title'), icon: Clock });
     }
     if (hasLocationSuggestions) {
@@ -304,7 +317,7 @@ export function FeasibilityReport({
     }
     entries.push({ id: "categories", label: t('report.categories.title'), icon: BarChart3 });
     entries.push({ id: "action-items", label: t('report.sections.actionItems', 'Action Items'), icon: Target });
-    if (report.alternativeProject) {
+    if (displayReport.alternativeProject) {
       entries.push({ id: "alternative", label: t('report.alternative.title'), icon: Sparkles });
     }
     return entries;
@@ -318,7 +331,8 @@ export function FeasibilityReport({
 
   return (
     <div className="py-8 md:py-12">
-      <div className="container max-w-4xl">
+      <div className="container max-w-4xl">{/* Translation loading removed - API endpoints not yet implemented */}
+
 
         {/* ============================================================== */}
         {/*  HEADER                                                        */}
@@ -334,7 +348,7 @@ export function FeasibilityReport({
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-4">
             <span className="inline-flex items-center gap-1.5 uppercase tracking-widest font-medium">
               <FileText className="h-3.5 w-3.5" />
-              Feasibility Report
+              {t('report.title')}
             </span>
             <span className="hidden sm:inline text-border">|</span>
             <span className="inline-flex items-center gap-1">
@@ -350,7 +364,7 @@ export function FeasibilityReport({
 
           {/* Title */}
           <h1 className="text-2xl font-bold sm:text-3xl md:text-[2.75rem] tracking-tight leading-[1.15] text-foreground">
-            {(report as Record<string, unknown>).translatedProjectType as string || report.detectedProjectType}
+            {(report as Record<string, unknown>).translatedProjectType as string || displayReport.detectedProjectType}
           </h1>
 
           {/* Actions */}
@@ -411,9 +425,9 @@ export function FeasibilityReport({
           className="mb-6"
         >
           <div className={`rounded-2xl border-2 overflow-hidden ${
-            report.verdict?.recommendation === "yes"
+            displayReport.verdict?.recommendation === "yes"
               ? "border-emerald-500/30 bg-gradient-to-br from-emerald-50/50 to-transparent dark:from-emerald-950/20"
-              : report.verdict?.recommendation === "no"
+              : displayReport.verdict?.recommendation === "no"
                 ? "border-red-500/30 bg-gradient-to-br from-red-50/50 to-transparent dark:from-red-950/20"
                 : "border-border"
           }`}>
@@ -421,41 +435,41 @@ export function FeasibilityReport({
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
                 {/* Score Gauge */}
                 <div className="shrink-0 flex justify-center sm:justify-start">
-                  <ScoreGauge score={report.overallScore} size={130} />
+                  <ScoreGauge score={displayReport.overallScore} size={130} />
                 </div>
 
                 {/* Verdict Details */}
                 <div className="flex-1 text-center sm:text-left space-y-3">
-                  {report.verdict && (
+                  {displayReport.verdict && (
                     <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start">
                       <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">
                         {t('report.verdict.title')}
                       </span>
                       <Badge
                         className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                          report.verdict.recommendation === "yes"
+                          displayReport.verdict.recommendation === "yes"
                             ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20"
                             : "border-red-500/50 bg-red-500/15 text-red-700 dark:text-red-300 hover:bg-red-500/20"
                         }`}
                       >
-                        {report.verdict.recommendation === "yes" ? (
-                          <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />
+                        {displayReport.verdict.recommendation === "yes" ? (
+                          <CheckCircle2 className="h-3.5 w-3.5 me-1.5" />
                         ) : (
-                          <XCircle className="h-3.5 w-3.5 mr-1.5" />
+                          <XCircle className="h-3.5 w-3.5 me-1.5" />
                         )}
-                        {report.verdict.recommendation === "yes"
+                        {displayReport.verdict.recommendation === "yes"
                           ? t('common.yes').toUpperCase()
                           : t('common.no').toUpperCase()}
                       </Badge>
                     </div>
                   )}
 
-                  <div className={`text-2xl sm:text-3xl font-bold tracking-tight ${getScoreColor(report.overallScore)}`}>
-                    {getScoreLabel(report.overallScore)}
+                  <div className={`text-2xl sm:text-3xl font-bold tracking-tight ${getScoreColor(displayReport.overallScore)}`}>
+                    {getScoreLabel(displayReport.overallScore)}
                   </div>
 
                   <div className="text-sm text-muted-foreground leading-[1.8] max-w-2xl">
-                    <MarkdownBlock>{report.overallSummary ?? ''}</MarkdownBlock>
+                    <MarkdownBlock>{displayReport.overallSummary ?? ''}</MarkdownBlock>
                   </div>
                 </div>
               </div>
@@ -527,7 +541,7 @@ export function FeasibilityReport({
         {/* ============================================================== */}
         {/*  FINANCIAL ANALYSIS                                            */}
         {/* ============================================================== */}
-        {(report.budgetRatio || hasCostBreakdown) && (
+        {(displayReport.budgetRatio || hasCostBreakdown) && (
           <>
             <motion.div
               data-toc-section
@@ -546,7 +560,7 @@ export function FeasibilityReport({
 
               <div className="rounded-xl border bg-card overflow-hidden">
                 {/* Budget Impact top section */}
-                {report.budgetRatio && (
+                {displayReport.budgetRatio && (
                   <>
                     <div className="p-5">
                       {/* Key figures row */}
@@ -554,28 +568,30 @@ export function FeasibilityReport({
                         <div>
                           <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetRatio.projectCost')}</span>
                           <p className="text-base sm:text-lg font-bold mt-1 text-foreground truncate">
-                            {formatCost(report.budgetRatio.projectCostMidpoint, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
+                            {formatCost(displayReport.budgetRatio.projectCostMidpoint, displayReport.budgetRatio.currencyCode || displayReport.estimatedCost.currency || country.currency)}
                           </p>
                         </div>
                         <div>
                           <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetRatio.totalBudget')}</span>
                           <p className="text-base sm:text-lg font-bold mt-1 text-foreground truncate">
-                            {formatCost(report.budgetRatio.countryTotalBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
+                            {formatCost(displayReport.budgetRatio.countryTotalBudget, displayReport.budgetRatio.currencyCode || displayReport.estimatedCost.currency || country.currency)}
                           </p>
-                          {report.budgetRatio.fiscalYear && (
-                            <span className="text-[11px] text-muted-foreground">{report.budgetRatio.fiscalYear}</span>
+                          {displayReport.budgetRatio.fiscalYear && (
+                            <span className="text-[11px] text-muted-foreground">{displayReport.budgetRatio.fiscalYear}</span>
                           )}
                         </div>
                         <div className="col-span-2 sm:col-span-1">
                           <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetRatio.title')}</span>
                           <p className={`text-base sm:text-lg font-bold mt-1 ${
-                            report.budgetRatio.percentageOfBudget > 10 ? "text-red-500"
-                              : report.budgetRatio.percentageOfBudget > 5 ? "text-amber-500"
+                            (displayReport.budgetRatio.percentageOfBudget ?? 0) > 10 ? "text-red-500"
+                              : (displayReport.budgetRatio.percentageOfBudget ?? 0) > 5 ? "text-amber-500"
                               : "text-emerald-600 dark:text-emerald-400"
                           }`}>
-                            {report.budgetRatio.percentageOfBudget < 0.01
+                            {displayReport.budgetRatio.percentageOfBudget == null
+                              ? "N/A"
+                              : displayReport.budgetRatio.percentageOfBudget < 0.01
                               ? "<0.01"
-                              : report.budgetRatio.percentageOfBudget.toFixed(2)}%
+                              : displayReport.budgetRatio.percentageOfBudget.toFixed(2)}%
                           </p>
                         </div>
                       </div>
@@ -585,35 +601,35 @@ export function FeasibilityReport({
                         <div className="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all ${
-                              report.budgetRatio.percentageOfBudget > 10 ? "bg-red-500"
-                                : report.budgetRatio.percentageOfBudget > 5 ? "bg-amber-500"
+                              displayReport.budgetRatio.percentageOfBudget > 10 ? "bg-red-500"
+                                : displayReport.budgetRatio.percentageOfBudget > 5 ? "bg-amber-500"
                                 : "bg-emerald-500"
                             }`}
-                            style={{ width: `${Math.min(report.budgetRatio.percentageOfBudget, 100)}%` }}
+                            style={{ width: `${Math.min(displayReport.budgetRatio.percentageOfBudget ?? 0, 100)}%` }}
                           />
                         </div>
                         <p className="text-[11px] text-muted-foreground">
-                          {t('report.budgetRatio.projectCost')} as percentage of national budget
+                          {t('report.budgetRatio.projectCost')} {t('report.budgetRatio.asPercentage')}
                         </p>
                       </div>
                     </div>
 
                     {/* Sector classification */}
-                    {(report.budgetAlignment?.expenditureClassification || report.budgetAlignment?.entityBudget?.hasEntityAllocation) && (
+                    {(displayReport.budgetAlignment?.expenditureClassification || displayReport.budgetAlignment?.entityBudget?.hasEntityAllocation) && (
                       <>
                         <div className="border-t" />
                         <div className="p-5 space-y-4">
-                          {report.budgetAlignment?.expenditureClassification && (
+                          {displayReport.budgetAlignment?.expenditureClassification && (
                             <div className="grid gap-4 sm:grid-cols-2">
                               <div>
                                 <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetAlignment.cofogCategory', 'Expenditure Classification')}</span>
-                                <p className="text-sm font-semibold mt-1">{report.budgetAlignment.expenditureClassification.cofogCategory}</p>
+                                <p className="text-sm font-semibold mt-1">{displayReport.budgetAlignment.expenditureClassification.cofogCategory}</p>
                               </div>
-                              {report.budgetAlignment.expenditureClassification.sectorBudget && (
+                              {displayReport.budgetAlignment.expenditureClassification.sectorBudget && (
                                 <div>
                                   <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetAlignment.sectorBudget', 'Sector Budget')}</span>
                                   <p className="text-sm font-semibold mt-1">
-                                    {formatCost(report.budgetAlignment.expenditureClassification.sectorBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
+                                    {formatCost(displayReport.budgetAlignment.expenditureClassification.sectorBudget, displayReport.budgetRatio.currencyCode || displayReport.estimatedCost.currency || country.currency)}
                                   </p>
                                 </div>
                               )}
@@ -621,24 +637,24 @@ export function FeasibilityReport({
                           )}
 
                           {/* Sector percentage bar */}
-                          {report.budgetAlignment?.expenditureClassification?.percentageOfSectorBudget !== undefined && (
+                          {displayReport.budgetAlignment?.expenditureClassification?.percentageOfSectorBudget !== undefined && (
                             <div className="rounded-lg bg-muted/40 p-4">
                               <div className="flex items-center justify-between mb-2">
                                 <span className="text-xs text-muted-foreground font-medium">Project % of Sector</span>
                                 <span className={`text-sm font-bold tabular-nums ${
-                                  report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 20 ? "text-red-500"
-                                    : report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 10 ? "text-amber-500"
+                                  (displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget ?? 0) > 20 ? "text-red-500"
+                                    : (displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget ?? 0) > 10 ? "text-amber-500"
                                     : "text-emerald-600 dark:text-emerald-400"
                                 }`}>
-                                  {report.budgetAlignment.expenditureClassification.percentageOfSectorBudget.toFixed(2)}%
+                                  {displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget?.toFixed(2) ?? 'N/A'}%
                                 </span>
                               </div>
                               <AnimatedProgressBar
-                                value={Math.min(report.budgetAlignment.expenditureClassification.percentageOfSectorBudget, 100)}
+                                value={Math.min(displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget ?? 0, 100)}
                                 index={0}
                                 color={
-                                  report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 20 ? "bg-red-500"
-                                    : report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 10 ? "bg-amber-500"
+                                  (displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget ?? 0) > 20 ? "bg-red-500"
+                                    : (displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget ?? 0) > 10 ? "bg-amber-500"
                                     : "bg-emerald-500"
                                 }
                               />
@@ -646,22 +662,22 @@ export function FeasibilityReport({
                           )}
 
                           {/* Entity Budget */}
-                          {report.budgetAlignment?.entityBudget?.hasEntityAllocation && (
+                          {displayReport.budgetAlignment?.entityBudget?.hasEntityAllocation && (
                             <div className="rounded-lg bg-muted/40 p-4">
                               <div className="flex items-center justify-between">
                                 <div>
                                   <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{t('report.budgetAlignment.entityAllocation', 'Entity Budget')}</span>
-                                  <p className="text-sm font-semibold mt-0.5">{report.budgetAlignment.entityBudget.entityName}</p>
+                                  <p className="text-sm font-semibold mt-0.5">{displayReport.budgetAlignment.entityBudget.entityName}</p>
                                 </div>
-                                {report.budgetAlignment.entityBudget.allocatedBudget && (
+                                {displayReport.budgetAlignment.entityBudget.allocatedBudget && (
                                   <span className="text-sm font-bold tabular-nums">
-                                    {formatCost(report.budgetAlignment.entityBudget.allocatedBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
+                                    {formatCost(displayReport.budgetAlignment.entityBudget.allocatedBudget, displayReport.budgetRatio.currencyCode || displayReport.estimatedCost.currency || country.currency)}
                                   </span>
                                 )}
                               </div>
-                              {report.budgetAlignment.entityBudget.fiscalPolicyReference && (
+                              {displayReport.budgetAlignment.entityBudget.fiscalPolicyReference && (
                                 <p className="text-xs text-muted-foreground mt-2 pt-2 border-t border-border/50">
-                                  {report.budgetAlignment.entityBudget.fiscalPolicyReference}
+                                  {displayReport.budgetAlignment.entityBudget.fiscalPolicyReference}
                                 </p>
                               )}
                             </div>
@@ -675,11 +691,11 @@ export function FeasibilityReport({
                 {/* Cost Breakdown */}
                 {hasCostBreakdown && (
                   <>
-                    {report.budgetRatio && <div className="border-t" />}
+                    {displayReport.budgetRatio && <div className="border-t" />}
                     <div className="p-5">
                       <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-semibold">{t('report.costBreakdown')}</span>
                       <div className="mt-4 space-y-3.5">
-                        {report.estimatedCost.breakdown!.map((item, index) => (
+                        {displayReport.estimatedCost.breakdown!.map((item, index) => (
                           <div key={index} className="space-y-1.5">
                             <div className="flex justify-between text-sm">
                               <span className="text-muted-foreground">{item.item}</span>
@@ -701,7 +717,7 @@ export function FeasibilityReport({
         {/* ============================================================== */}
         {/*  TIMEFRAME                                                     */}
         {/* ============================================================== */}
-        {report.timeframe && (
+        {displayReport.timeframe && (
           <>
             <motion.div
               data-toc-section
@@ -724,57 +740,57 @@ export function FeasibilityReport({
                   <div className="flex items-center gap-4">
                     {/* Estimated duration */}
                     <div className="flex items-baseline gap-1.5">
-                      <span className="text-3xl font-bold text-primary tabular-nums">{report.timeframe.estimatedDuration.mostLikely}</span>
+                      <span className="text-3xl font-bold text-primary tabular-nums">{displayReport.timeframe.estimatedDuration.mostLikely}</span>
                       <span className="text-sm text-primary font-medium">{t('report.timeframe.months')}</span>
                     </div>
 
                     {/* Delay risk badge */}
-                    {report.timeframe.riskOfDelay && (
+                    {displayReport.timeframe.riskOfDelay && (
                       <div className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
-                        report.timeframe.riskOfDelay === "low"
+                        displayReport.timeframe.riskOfDelay === "low"
                           ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-                          : report.timeframe.riskOfDelay === "medium"
+                          : displayReport.timeframe.riskOfDelay === "medium"
                             ? "bg-amber-500/10 text-amber-700 dark:text-amber-300"
                             : "bg-red-500/10 text-red-700 dark:text-red-300"
                       }`}>
                         <AlertTriangle className="h-3 w-3" />
-                        {t(`report.timeframe.risk.${report.timeframe.riskOfDelay}`, { defaultValue: report.timeframe.riskOfDelay })} {t('report.timeframe.delayRisk').toLowerCase()}
+                        {t(`report.timeframe.risk.${displayReport.timeframe.riskOfDelay}`, { defaultValue: displayReport.timeframe.riskOfDelay })} {t('report.timeframe.delayRisk').toLowerCase()}
                       </div>
                     )}
                   </div>
 
                   {/* Admin completion */}
                   <div className="flex items-center gap-2 mt-3">
-                    {report.timeframe.canCurrentAdminComplete ? (
+                    {displayReport.timeframe.canCurrentAdminComplete ? (
                       <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     ) : (
                       <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
                     )}
                     <span className={`text-sm font-medium ${
-                      report.timeframe.canCurrentAdminComplete
+                      displayReport.timeframe.canCurrentAdminComplete
                         ? "text-emerald-700 dark:text-emerald-300"
                         : "text-amber-700 dark:text-amber-300"
                     }`}>
-                      {report.timeframe.canCurrentAdminComplete
+                      {displayReport.timeframe.canCurrentAdminComplete
                         ? t('report.timeframe.canComplete')
                         : t('report.timeframe.cannotComplete')}
                     </span>
                   </div>
-                  {report.timeframe.adminTermAnalysis && (
+                  {displayReport.timeframe.adminTermAnalysis && (
                     <div className="mt-1 ms-6 text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                      <Markdown>{report.timeframe.adminTermAnalysis}</Markdown>
+                      <Markdown>{displayReport.timeframe.adminTermAnalysis}</Markdown>
                     </div>
                   )}
                 </div>
 
                 {/* Delay factors */}
-                {report.timeframe.delayFactors && report.timeframe.delayFactors.length > 0 && (
+                {displayReport.timeframe.delayFactors && displayReport.timeframe.delayFactors.length > 0 && (
                   <>
                     <div className="border-t" />
                     <div className="px-5 py-4">
                       <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-semibold">{t('report.timeframe.delayFactors')}</span>
                       <ul className="mt-2.5 space-y-1.5">
-                        {report.timeframe.delayFactors.slice(0, 3).map((factor, index) => (
+                        {displayReport.timeframe.delayFactors.slice(0, 3).map((factor, index) => (
                           <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
                             <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
                             <Markdown>{factor ?? ''}</Markdown>
@@ -810,7 +826,7 @@ export function FeasibilityReport({
                 subtitle={t('report.sections.locationDesc', 'Recommended implementation sites')}
               />
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {report.location.suggested!.map((loc, index) => (
+                {displayReport.location.suggested!.map((loc, index) => (
                   <div key={index} className="rounded-xl border bg-card p-4 hover:shadow-md transition-shadow">
                     <div className="flex items-start gap-3">
                       <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-xs font-bold">
@@ -851,7 +867,7 @@ export function FeasibilityReport({
 
           {/* Breakdown Chart */}
           <div className="rounded-xl border bg-card p-5 mb-6">
-            <BreakdownChart categories={report.categories} />
+            <BreakdownChart categories={displayReport.categories} />
           </div>
 
           {/* Category Tabs */}
@@ -863,7 +879,7 @@ export function FeasibilityReport({
               <Tabs defaultValue="technical" className="w-full">
                 <TabsList className="mb-6 grid h-auto w-full grid-cols-3 gap-1.5 bg-transparent p-0 sm:grid-cols-6">
                   {categoryKeys.map((key) => {
-                    const category = report.categories[key];
+                    const category = displayReport.categories[key];
                     if (!category?.score) return null;
                     const label = categoryLabels[key as CategoryKey] || key;
                     return (
@@ -879,7 +895,7 @@ export function FeasibilityReport({
                 </TabsList>
 
                 {categoryKeys.map((key) => {
-                  const category = report.categories[key];
+                  const category = displayReport.categories[key];
                   if (!category?.score) return null;
                   const categoryWithName = {
                     ...category,
@@ -927,8 +943,8 @@ export function FeasibilityReport({
               <div className="p-5">
                 <ul className="space-y-3">
                   {(showAllRisks
-                    ? (report.keyRisks ?? [])
-                    : (report.keyRisks ?? []).slice(0, 4)
+                    ? (displayReport.keyRisks ?? [])
+                    : (displayReport.keyRisks ?? []).slice(0, 4)
                   ).map((risk, index) => (
                     <li key={index} className="flex items-start gap-2.5 text-sm">
                       <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500/70" />
@@ -938,7 +954,7 @@ export function FeasibilityReport({
                     </li>
                   ))}
                 </ul>
-                {(report.keyRisks?.length ?? 0) > 4 && (
+                {(displayReport.keyRisks?.length ?? 0) > 4 && (
                   <Button
                     variant="ghost"
                     size="sm"
@@ -953,7 +969,7 @@ export function FeasibilityReport({
                     ) : (
                       <>
                         <ChevronDown className="mr-1.5 h-3.5 w-3.5" />
-                        {t('ui.showMore')} ({(report.keyRisks?.length ?? 0) - 4})
+                        {t('ui.showMore')} ({(displayReport.keyRisks?.length ?? 0) - 4})
                       </>
                     )}
                   </Button>
@@ -971,7 +987,7 @@ export function FeasibilityReport({
               </div>
               <div className="p-5">
                 <ol className="space-y-3">
-                  {(report.nextSteps ?? []).map((step, index) => (
+                  {(displayReport.nextSteps ?? []).map((step, index) => (
                     <li key={index} className="flex items-start gap-3 text-sm">
                       <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
                         {index + 1}
@@ -990,7 +1006,7 @@ export function FeasibilityReport({
         {/* ============================================================== */}
         {/*  ALTERNATIVE PROJECT                                           */}
         {/* ============================================================== */}
-        {report.alternativeProject && (
+        {displayReport.alternativeProject && (
           <>
             <Divider />
             <motion.div
@@ -1012,9 +1028,9 @@ export function FeasibilityReport({
                   <div className="flex flex-col lg:flex-row gap-6">
                     <div className="flex-1 space-y-4">
                       <div>
-                        <h3 className="text-lg font-semibold">{report.alternativeProject.name}</h3>
+                        <h3 className="text-lg font-semibold">{displayReport.alternativeProject.name}</h3>
                         <div className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                          <MarkdownBlock>{report.alternativeProject.description ?? ''}</MarkdownBlock>
+                          <MarkdownBlock>{displayReport.alternativeProject.description ?? ''}</MarkdownBlock>
                         </div>
                       </div>
 
@@ -1023,8 +1039,8 @@ export function FeasibilityReport({
                         <span className="text-sm text-amber-700 dark:text-amber-300">{t('report.estimatedCost')}:</span>
                         <span className="font-semibold text-sm text-amber-800 dark:text-amber-200">
                           {(() => {
-                            const altCost = report.alternativeProject.estimatedCost;
-                            const currency = report.estimatedCost.currency || country.currency;
+                            const altCost = displayReport.alternativeProject.estimatedCost;
+                            const currency = displayReport.estimatedCost.currency || country.currency;
                             if (typeof altCost === 'number') {
                               return formatCost(altCost, currency);
                             }
@@ -1050,14 +1066,14 @@ export function FeasibilityReport({
                               {t('report.alternative.why')}
                             </p>
                             <div className="text-sm text-amber-700 dark:text-amber-300 leading-relaxed">
-                              <Markdown>{report.alternativeProject.whySuitable ?? ''}</Markdown>
+                              <Markdown>{displayReport.alternativeProject.whySuitable ?? ''}</Markdown>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {(report.alternativeProject.potentialBenefits?.length ?? 0) > 0 && (
+                    {(displayReport.alternativeProject.potentialBenefits?.length ?? 0) > 0 && (
                       <div className="lg:w-64 shrink-0">
                         <div className="rounded-xl bg-emerald-500/8 border border-emerald-500/15 p-4 h-full">
                           <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300 mb-3 flex items-center gap-2">
@@ -1065,7 +1081,7 @@ export function FeasibilityReport({
                             {t('report.alternative.benefits')}
                           </p>
                           <ul className="space-y-2">
-                            {(report.alternativeProject.potentialBenefits ?? []).map((benefit, index) => (
+                            {(displayReport.alternativeProject.potentialBenefits ?? []).map((benefit, index) => (
                               <li key={index} className="flex items-start gap-2 text-sm text-emerald-700 dark:text-emerald-300">
                                 <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-emerald-500" />
                                 <Markdown>{benefit ?? ''}</Markdown>
@@ -1140,7 +1156,7 @@ export function FeasibilityReport({
                     {t('report.disclaimer')}
                   </p>
                   <div className="text-sm text-muted-foreground leading-relaxed">
-                    <Markdown>{report.disclaimer ?? ''}</Markdown>
+                    <Markdown>{displayReport.disclaimer ?? ''}</Markdown>
                   </div>
                 </div>
               </div>
@@ -1148,7 +1164,7 @@ export function FeasibilityReport({
           </motion.div>
 
           {/* References */}
-          {report.references && report.references.length > 0 && (
+          {displayReport.references && displayReport.references.length > 0 && (
             <motion.div
               variants={scrollVariants}
               initial="hidden"
@@ -1164,8 +1180,8 @@ export function FeasibilityReport({
                     </p>
                     <ul className="space-y-2">
                       {(showAllReferences
-                        ? report.references
-                        : report.references.slice(0, 3)
+                        ? displayReport.references
+                        : displayReport.references.slice(0, 3)
                       ).map((ref, index) => (
                         <li key={index} className="flex items-start gap-2 text-sm">
                           <span className="text-muted-foreground/60 tabular-nums text-xs mt-0.5">{index + 1}.</span>
@@ -1181,7 +1197,7 @@ export function FeasibilityReport({
                         </li>
                       ))}
                     </ul>
-                    {report.references.length > 3 && (
+                    {displayReport.references.length > 3 && (
                       <Button
                         variant="ghost"
                         size="sm"
@@ -1196,7 +1212,7 @@ export function FeasibilityReport({
                         ) : (
                           <>
                             <ChevronDown className="mr-1 h-3 w-3" />
-                            {t('ui.showMore')} ({report.references.length - 3} more)
+                            {t('ui.showMore')} ({displayReport.references.length - 3} more)
                           </>
                         )}
                       </Button>

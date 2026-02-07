@@ -38,7 +38,11 @@ interface StatsResponse {
   };
 }
 
-export function AnalyticsDashboard() {
+interface AnalyticsDashboardProps {
+  country?: string; // Optional country filter
+}
+
+export function AnalyticsDashboard({ country }: AnalyticsDashboardProps = {}) {
   const { t } = useTranslation();
   const [stats, setStats] = useState<StatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,7 +50,8 @@ export function AnalyticsDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch("/api/stats");
+        const url = country ? `/api/stats?country=${country}` : "/api/stats";
+        const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
           setStats(data);
@@ -59,7 +64,7 @@ export function AnalyticsDashboard() {
     };
 
     fetchStats();
-  }, []);
+  }, [country]);
 
   // Gracefully hide if loading fails or no data
   if (loading) {

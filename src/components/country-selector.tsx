@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronDown, Check, Plus } from "lucide-react";
 import {
@@ -12,18 +11,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { CountryRequestModal } from "@/components/country-request-modal";
 import { countries } from "@/lib/countries";
+import { useCountry } from "@/contexts/country-context";
 
-interface CountrySelectorProps {
-  currentCountry: string;
-}
-
-export function CountrySelector({ currentCountry }: CountrySelectorProps) {
-  const navigate = useNavigate();
+export function CountrySelector() {
+  const { selectedCountry, setSelectedCountry } = useCountry();
   const { t } = useTranslation();
   const [requestModalOpen, setRequestModalOpen] = useState(false);
 
-  const currentCountryConfig = countries[currentCountry];
-  const currentName = t(`countries.${currentCountry}`);
+  const currentCountryConfig = countries[selectedCountry];
+  const currentName = t(`countries.${selectedCountry}`);
 
   return (
     <>
@@ -50,7 +46,7 @@ export function CountrySelector({ currentCountry }: CountrySelectorProps) {
           {Object.entries(countries).map(([code, config]) => (
             <DropdownMenuItem
               key={code}
-              onClick={() => navigate(`/${code}`)}
+              onClick={() => setSelectedCountry(code)}
               className="flex items-center justify-between"
             >
               <span className="flex items-center gap-2">
@@ -64,7 +60,7 @@ export function CountrySelector({ currentCountry }: CountrySelectorProps) {
                 />
                 <span>{t(`countries.${code}`)}</span>
               </span>
-              {code === currentCountry && (
+              {code === selectedCountry && (
                 <Check className="h-4 w-4" />
               )}
             </DropdownMenuItem>

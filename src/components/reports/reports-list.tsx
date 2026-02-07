@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
 import { ReportCard } from "@/components/report-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
@@ -32,6 +33,7 @@ export function ReportsList({
   hasMore,
   onLoadMore,
 }: ReportsListProps) {
+  const { t } = useTranslation();
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   // Infinite scroll using Intersection Observer
@@ -78,12 +80,12 @@ export function ReportsList({
         {isLoading && (
           <div className="flex items-center gap-2 text-muted-foreground">
             <Loader2 className="h-5 w-5 animate-spin" />
-            <span className="text-sm">Loading more...</span>
+            <span className="text-sm">{t('common.loadingMore')}</span>
           </div>
         )}
         {!hasMore && reports.length > 0 && (
           <p className="text-sm text-muted-foreground">
-            No more reports to load
+            {t('common.noMoreReports')}
           </p>
         )}
       </div>

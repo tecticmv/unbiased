@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Scale, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -10,13 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { defaultCountry } from "@/lib/countries";
 import { languages, type LanguageCode } from "@/i18n";
 
 export function Navbar() {
-  const { country } = useParams();
   const { t, i18n } = useTranslation();
-  const currentCountry = country || defaultCountry;
   const currentLanguage = i18n.language as LanguageCode;
   const currentLangName = languages.find(l => l.code === currentLanguage)?.nativeName || 'English';
 
@@ -36,7 +33,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-1 sm:gap-4">
           {/* Country selector with request option */}
-          <CountrySelector currentCountry={currentCountry} />
+          <CountrySelector />
 
           {/* Language selector - icon only on mobile */}
           <Select

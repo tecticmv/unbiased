@@ -24,7 +24,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { ProjectCategory } from "@/types";
-import { projectCategoryLabels } from "@/types";
 
 // Map project categories to their icons
 const categoryIconMap: Record<ProjectCategory, LucideIcon> = {
@@ -108,7 +107,7 @@ export function ReportsFilters({
               <SelectItem key={category} value={category}>
                 <div className="flex items-center gap-2">
                   <Icon className="h-4 w-4" />
-                  <span>{projectCategoryLabels[category]}</span>
+                  <span>{t(`categories.${category}`)}</span>
                 </div>
               </SelectItem>
             );

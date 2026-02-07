@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { StreamingReportProvider } from "@/contexts/streaming-report";
 import { DiscussionProvider } from "@/contexts/discussion-context";
+import { CountryProvider } from "@/contexts/country-context";
 import { Layout } from "@/components/layout";
 import { defaultCountry } from "@/lib/countries";
 import "@/i18n"; // Initialize i18n
@@ -18,6 +19,7 @@ const ReportPage = lazy(() => import("@/pages/report").then(m => ({ default: m.R
 const DiscussionPage = lazy(() => import("@/pages/discussion").then(m => ({ default: m.DiscussionPage })));
 const PrivacyPage = lazy(() => import("@/pages/privacy").then(m => ({ default: m.PrivacyPage })));
 const TermsPage = lazy(() => import("@/pages/terms").then(m => ({ default: m.TermsPage })));
+const LearnMorePage = lazy(() => import("@/pages/learn-more").then(m => ({ default: m.LearnMorePage })));
 
 function PageLoader() {
   return (
@@ -31,29 +33,32 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="system" storageKey="unbiased-theme">
       <TooltipProvider>
-        <StreamingReportProvider>
-          <DiscussionProvider>
-            <BrowserRouter>
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  {/* Discussion page - standalone layout without navbar/footer */}
-                  <Route path=":country/report/:slug/discussion" element={<DiscussionPage />} />
+        <CountryProvider>
+          <StreamingReportProvider>
+            <DiscussionProvider>
+              <BrowserRouter>
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    {/* Discussion page - standalone layout without navbar/footer */}
+                    <Route path=":country/report/:slug/discussion" element={<DiscussionPage />} />
 
-                  {/* Main layout with navbar and footer */}
-                  <Route path="/" element={<Layout />}>
-                    <Route index element={<HomePage />} />
-                    <Route path=":country" element={<CountryPage />} />
-                    <Route path=":country/new" element={<NewAnalysisPage />} />
-                    <Route path=":country/report/:slug" element={<ReportPage />} />
-                    <Route path="privacy" element={<PrivacyPage />} />
-                    <Route path="terms" element={<TermsPage />} />
-                    <Route path="*" element={<Navigate to={`/${defaultCountry}`} replace />} />
-                  </Route>
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-          </DiscussionProvider>
-        </StreamingReportProvider>
+                    {/* Main layout with navbar and footer */}
+                    <Route path="/" element={<Layout />}>
+                      <Route index element={<HomePage />} />
+                      <Route path=":country" element={<CountryPage />} />
+                      <Route path=":country/new" element={<NewAnalysisPage />} />
+                      <Route path=":country/report/:slug" element={<ReportPage />} />
+                      <Route path="learn-more" element={<LearnMorePage />} />
+                      <Route path="privacy" element={<PrivacyPage />} />
+                      <Route path="terms" element={<TermsPage />} />
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Route>
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+            </DiscussionProvider>
+          </StreamingReportProvider>
+        </CountryProvider>
       </TooltipProvider>
     </ThemeProvider>
   </React.StrictMode>
