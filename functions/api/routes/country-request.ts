@@ -555,6 +555,7 @@ async function triggerGitHubWorkflowWithValidatedData(
         Authorization: `Bearer ${token}`,
         Accept: "application/vnd.github.v3+json",
         "Content-Type": "application/json",
+        "User-Agent": "Unbiased-App",
       },
       body: JSON.stringify({
         ref: "main",
@@ -568,7 +569,8 @@ async function triggerGitHubWorkflowWithValidatedData(
   );
 
   if (!response.ok) {
-    throw new Error(`GitHub API error: ${response.status}`);
+    const errorBody = await response.text();
+    throw new Error(`GitHub API error: ${response.status} - ${errorBody}`);
   }
 }
 
@@ -587,6 +589,7 @@ async function triggerGitHubWorkflowWithFeedback(
         Authorization: `Bearer ${token}`,
         Accept: "application/vnd.github.v3+json",
         "Content-Type": "application/json",
+        "User-Agent": "Unbiased-App",
       },
       body: JSON.stringify({
         ref: "main",
@@ -600,7 +603,8 @@ async function triggerGitHubWorkflowWithFeedback(
   );
 
   if (!response.ok) {
-    throw new Error(`GitHub API error: ${response.status}`);
+    const errorBody = await response.text();
+    throw new Error(`GitHub API error: ${response.status} - ${errorBody}`);
   }
 }
 
@@ -673,6 +677,7 @@ async function mergePullRequest(token: string, repo: string, prNumber: number) {
         Authorization: `Bearer ${token}`,
         Accept: "application/vnd.github.v3+json",
         "Content-Type": "application/json",
+        "User-Agent": "Unbiased-App",
       },
       body: JSON.stringify({
         merge_method: "squash",
