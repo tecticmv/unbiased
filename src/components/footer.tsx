@@ -1,9 +1,13 @@
-import { Scale, Github, Twitter } from "lucide-react";
+import { useState } from "react";
+import { Scale, Github, Twitter, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { countries } from "@/lib/countries";
+import { CountryRequestModal } from "@/components/country-request-modal";
 
 export function Footer() {
   const { t } = useTranslation();
+  const [countryRequestOpen, setCountryRequestOpen] = useState(false);
 
   return (
     <footer className="border-t bg-muted/50">
@@ -24,25 +28,21 @@ export function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-semibold">{t('home.countries.title')}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
+              {Object.keys(countries).map((code) => (
+                <li key={code}>
+                  <Link to={`/${code}`} className="hover:text-foreground">
+                    {t(`countries.${code}`)}
+                  </Link>
+                </li>
+              ))}
               <li>
-                <Link to="/maldives" className="hover:text-foreground">
-                  {t('countries.maldives')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/india" className="hover:text-foreground">
-                  {t('countries.india')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/bangladesh" className="hover:text-foreground">
-                  {t('countries.bangladesh')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/srilanka" className="hover:text-foreground">
-                  {t('countries.srilanka')}
-                </Link>
+                <button
+                  onClick={() => setCountryRequestOpen(true)}
+                  className="flex items-center gap-1 hover:text-foreground"
+                >
+                  <Globe className="h-3 w-3" />
+                  {t('countryRequest.requestNew')}
+                </button>
               </li>
             </ul>
           </div>
@@ -97,6 +97,11 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      <CountryRequestModal
+        open={countryRequestOpen}
+        onOpenChange={setCountryRequestOpen}
+      />
     </footer>
   );
 }

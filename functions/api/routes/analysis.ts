@@ -512,7 +512,7 @@ function extractPartialReport(text: string): Record<string, unknown> | null {
 
     while (i < text.length) {
       // Skip whitespace
-      while (i < text.length && /\s/.test(text[i])) i++;
+      while (i < text.length && /\s/.test(text[i]!)) i++;
 
       if (text[i] === ']') break; // End of array
       if (text[i] === ',') { i++; continue; } // Skip commas
@@ -542,7 +542,7 @@ function extractPartialReport(text: string): Record<string, unknown> | null {
 
   // overallScore: <number>
   const scoreMatch = text.match(/"overallScore"\s*:\s*(\d+)/);
-  if (scoreMatch) {
+  if (scoreMatch?.[1]) {
     partial.overallScore = parseInt(scoreMatch[1], 10);
   }
 
@@ -560,13 +560,13 @@ function extractPartialReport(text: string): Record<string, unknown> | null {
 
   // overallSummary: "<string>"
   const summaryMatch = text.match(/"overallSummary"\s*:\s*"((?:[^"\\]|\\.)*)"/);
-  if (summaryMatch) {
+  if (summaryMatch?.[1]) {
     partial.overallSummary = summaryMatch[1].replace(/\\"/g, '"').replace(/\\n/g, '\n');
   }
 
   // verdict object
   const verdictMatch = text.match(/"verdict"\s*:\s*\{[^}]*"recommendation"\s*:\s*"([^"]+)"[^}]*"reason"\s*:\s*"((?:[^"\\]|\\.)*)"/);
-  if (verdictMatch) {
+  if (verdictMatch?.[1] && verdictMatch[2]) {
     partial.verdict = {
       recommendation: verdictMatch[1],
       reason: verdictMatch[2].replace(/\\"/g, '"'),
@@ -579,11 +579,11 @@ function extractPartialReport(text: string): Record<string, unknown> | null {
 
   for (const catName of categoryNames) {
     const catScoreMatch = text.match(new RegExp(`"${catName}"\\s*:\\s*\\{[^}]*"score"\\s*:\\s*(\\d+)`));
-    if (catScoreMatch) {
+    if (catScoreMatch?.[1]) {
       categories[catName] = { score: parseInt(catScoreMatch[1], 10) };
 
       const catSummaryMatch = text.match(new RegExp(`"${catName}"\\s*:\\s*\\{[^}]*"summary"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"`, 's'));
-      if (catSummaryMatch) {
+      if (catSummaryMatch?.[1] && categories[catName]) {
         categories[catName].summary = catSummaryMatch[1].replace(/\\"/g, '"').replace(/\\n/g, '\n');
       }
     }
@@ -597,11 +597,11 @@ function extractPartialReport(text: string): Record<string, unknown> | null {
   const costLowMatch = text.match(/"estimatedCost"\s*:\s*\{[^}]*"low"\s*:\s*(\d+)/);
   const costHighMatch = text.match(/"estimatedCost"\s*:\s*\{[^}]*"high"\s*:\s*(\d+)/);
   const costCurrencyMatch = text.match(/"estimatedCost"\s*:\s*\{[^}]*"currency"\s*:\s*"([^"]+)"/);
-  if (costLowMatch || costHighMatch) {
+  if (costLowMatch?.[1] || costHighMatch?.[1]) {
     partial.estimatedCost = {
-      low: costLowMatch ? parseInt(costLowMatch[1], 10) : undefined,
-      high: costHighMatch ? parseInt(costHighMatch[1], 10) : undefined,
-      currency: costCurrencyMatch ? costCurrencyMatch[1] : undefined,
+      low: costLowMatch?.[1] ? parseInt(costLowMatch[1], 10) : undefined,
+      high: costHighMatch?.[1] ? parseInt(costHighMatch[1], 10) : undefined,
+      currency: costCurrencyMatch?.[1],
     };
   }
 
@@ -610,12 +610,12 @@ function extractPartialReport(text: string): Record<string, unknown> | null {
   const projectCostMatch = text.match(/"budgetRatio"\s*:\s*\{[^}]*"projectCostMidpoint"\s*:\s*(\d+)/);
   const totalBudgetMatch = text.match(/"budgetRatio"\s*:\s*\{[^}]*"countryTotalBudget"\s*:\s*(\d+)/);
   const budgetCurrencyMatch = text.match(/"budgetRatio"\s*:\s*\{[^}]*"currencyCode"\s*:\s*"([^"]+)"/);
-  if (budgetPercentMatch || projectCostMatch || totalBudgetMatch) {
+  if (budgetPercentMatch?.[1] || projectCostMatch?.[1] || totalBudgetMatch?.[1]) {
     partial.budgetRatio = {
-      percentageOfBudget: budgetPercentMatch ? parseFloat(budgetPercentMatch[1]) : undefined,
-      projectCostMidpoint: projectCostMatch ? parseInt(projectCostMatch[1], 10) : undefined,
-      countryTotalBudget: totalBudgetMatch ? parseInt(totalBudgetMatch[1], 10) : undefined,
-      currencyCode: budgetCurrencyMatch ? budgetCurrencyMatch[1] : undefined,
+      percentageOfBudget: budgetPercentMatch?.[1] ? parseFloat(budgetPercentMatch[1]) : undefined,
+      projectCostMidpoint: projectCostMatch?.[1] ? parseInt(projectCostMatch[1], 10) : undefined,
+      countryTotalBudget: totalBudgetMatch?.[1] ? parseInt(totalBudgetMatch[1], 10) : undefined,
+      currencyCode: budgetCurrencyMatch?.[1],
     };
   }
 
@@ -625,15 +625,15 @@ function extractPartialReport(text: string): Record<string, unknown> | null {
   const maxDurationMatch = text.match(/"estimatedDuration"\s*:\s*\{[^}]*"maximum"\s*:\s*(\d+)/);
   const canCompleteMatch = text.match(/"canCurrentAdminComplete"\s*:\s*(true|false)/);
   const delayRiskMatch = text.match(/"riskOfDelay"\s*:\s*"([^"]+)"/);
-  if (durationMatch || canCompleteMatch) {
+  if (durationMatch?.[1] || canCompleteMatch?.[1]) {
     partial.timeframe = {
-      estimatedDuration: durationMatch ? {
+      estimatedDuration: durationMatch?.[1] ? {
         mostLikely: parseInt(durationMatch[1], 10),
-        minimum: minDurationMatch ? parseInt(minDurationMatch[1], 10) : undefined,
-        maximum: maxDurationMatch ? parseInt(maxDurationMatch[1], 10) : undefined,
+        minimum: minDurationMatch?.[1] ? parseInt(minDurationMatch[1], 10) : undefined,
+        maximum: maxDurationMatch?.[1] ? parseInt(maxDurationMatch[1], 10) : undefined,
       } : undefined,
-      canCurrentAdminComplete: canCompleteMatch ? canCompleteMatch[1] === 'true' : undefined,
-      riskOfDelay: delayRiskMatch ? delayRiskMatch[1] : undefined,
+      canCurrentAdminComplete: canCompleteMatch?.[1] ? canCompleteMatch[1] === 'true' : undefined,
+      riskOfDelay: delayRiskMatch?.[1],
     };
   }
 
@@ -778,16 +778,18 @@ analysisRoutes.post("/analyze/stream", zValidator("json", analysisSchema), async
 
   // If job already exists and completed, return cached result as SSE stream
   if (!isNew && existingJob.status === "completed" && existingJob.resultSlug) {
+    const cachedSlug = existingJob.resultSlug;
     const reportResult = await db
       .select()
       .from(reports)
-      .where(eq(reports.slug, existingJob.resultSlug))
+      .where(eq(reports.slug, cachedSlug))
       .limit(1);
 
-    if (reportResult[0]) {
+    const cachedReport = reportResult[0];
+    if (cachedReport) {
       return streamSSE(c, async (stream) => {
-        await stream.writeSSE({ data: JSON.stringify({ type: "start", slug: existingJob.resultSlug, cached: true }) });
-        await stream.writeSSE({ data: JSON.stringify({ type: "complete", slug: existingJob.resultSlug, report: reportResult[0].report }) });
+        await stream.writeSSE({ data: JSON.stringify({ type: "start", slug: cachedSlug, cached: true }) });
+        await stream.writeSSE({ data: JSON.stringify({ type: "complete", slug: cachedSlug, report: cachedReport.report }) });
       });
     }
   }

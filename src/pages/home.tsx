@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -9,18 +10,21 @@ import {
   CheckCircle2,
   TrendingUp,
   DollarSign,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { countries } from "@/lib/countries";
+import { countries, defaultCountry } from "@/lib/countries";
 import {
   ScrollReveal,
   StaggerContainer,
   StaggerItem,
 } from "@/components/ui/scroll-reveal";
+import { CountryRequestModal } from "@/components/country-request-modal";
 
 export function HomePage() {
   const { t } = useTranslation();
+  const [countryRequestOpen, setCountryRequestOpen] = useState(false);
 
   const features = [
     {
@@ -72,7 +76,7 @@ export function HomePage() {
 
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Button asChild size="xl">
-                <Link to="/maldives">
+                <Link to={`/${defaultCountry}`}>
                   {t('home.hero.cta')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -86,24 +90,47 @@ export function HomePage() {
       </section>
 
       {/* Countries Section */}
-      <section className="border-y bg-muted/30 py-12">
+      <section className="border-y bg-muted/30 py-16">
         <div className="container">
-          <ScrollReveal>
-            <p className="mb-6 text-center text-sm font-medium text-muted-foreground">
-              {t('home.countries.title').toUpperCase()}
+          <ScrollReveal className="text-center mb-8">
+            <h2 className="text-2xl font-bold md:text-3xl mb-2">
+              {t('home.countries.title')}
+            </h2>
+            <p className="text-muted-foreground">
+              {t('home.countries.description')}
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-8">
-              {Object.entries(countries).map(([code]) => (
-                <Link
-                  key={code}
-                  to={`/${code}`}
-                  className="text-lg font-medium transition-colors hover:text-primary"
-                >
-                  {t(`countries.${code}`)}
-                </Link>
-              ))}
-            </div>
           </ScrollReveal>
+
+          <StaggerContainer className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-6">
+            {Object.entries(countries).map(([code, country]) => (
+              <StaggerItem key={code}>
+                <Link
+                  to={`/${code}`}
+                  className="flex items-center gap-2 sm:gap-3 rounded-lg border bg-background px-3 py-2 sm:px-5 sm:py-3 transition-all hover:border-primary hover:shadow-md"
+                >
+                  <img
+                    src={`https://flagcdn.com/24x18/${country.code.toLowerCase()}.png`}
+                    srcSet={`https://flagcdn.com/48x36/${country.code.toLowerCase()}.png 2x`}
+                    width="24"
+                    height="18"
+                    alt={country.name}
+                    className="rounded-sm"
+                  />
+                  <span className="font-medium text-sm sm:text-base">{t(`countries.${code}`)}</span>
+                </Link>
+              </StaggerItem>
+            ))}
+            <StaggerItem>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 px-3 py-5 sm:px-5 sm:py-6 border-dashed text-sm sm:text-base"
+                onClick={() => setCountryRequestOpen(true)}
+              >
+                <Globe className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span>{t('countryRequest.requestNew')}</span>
+              </Button>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -191,7 +218,7 @@ export function HomePage() {
               size="xl"
               variant="secondary"
             >
-              <Link to="/maldives">
+              <Link to={`/${defaultCountry}`}>
                 {t('home.hero.cta')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
@@ -199,6 +226,11 @@ export function HomePage() {
           </ScrollReveal>
         </div>
       </section>
+
+      <CountryRequestModal
+        open={countryRequestOpen}
+        onOpenChange={setCountryRequestOpen}
+      />
     </div>
   );
 }

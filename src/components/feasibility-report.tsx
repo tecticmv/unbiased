@@ -74,8 +74,9 @@ function AnimatedProgressBar({ value, index }: { value: number; index: number })
     if (!element) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
+      (entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting && !hasAnimated) {
           setIsVisible(true);
           setHasAnimated(true);
           observer.disconnect();
@@ -150,7 +151,7 @@ export function FeasibilityReport({
   country,
   onReset,
   isSharedView = false,
-  isJustCompleted = false,
+  isJustCompleted: _isJustCompleted = false,
   createdAt,
   projectDescription,
 }: FeasibilityReportProps) {

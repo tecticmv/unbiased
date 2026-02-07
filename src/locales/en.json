@@ -30,7 +30,8 @@
     "no": "No",
     "or": "or",
     "and": "and",
-    "english": "EN"
+    "english": "EN",
+    "optional": "optional"
   },
   "nav": {
     "home": "Home",
@@ -285,6 +286,28 @@
     "india": "India",
     "bangladesh": "Bangladesh",
     "srilanka": "Sri Lanka"
+  },
+  "countryRequest": {
+    "title": "Request a New Country",
+    "requestNew": "Request a country",
+    "description": "Can't find your country? Request it here and we'll add it to the platform.",
+    "countryName": "Country Name",
+    "countryNamePlaceholder": "e.g., Japan, Brazil, Kenya",
+    "yourName": "Your Name",
+    "yourNamePlaceholder": "Your name",
+    "yourEmail": "Your Email",
+    "yourEmailPlaceholder": "email@example.com",
+    "emailNote": "We'll notify you when your country is added",
+    "submit": "Submit Request",
+    "submitting": "Submitting...",
+    "success": {
+      "title": "Request Submitted!",
+      "message": "We'll review your request and notify you when it's ready.",
+      "requestId": "Request ID"
+    },
+    "errors": {
+      "nameRequired": "Please enter a country name"
+    }
   },
   "languages": {
     "en": "English",

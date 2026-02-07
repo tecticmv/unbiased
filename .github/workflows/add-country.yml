@@ -1,0 +1,350 @@
+name: Add Country Automation
+
+on:
+  workflow_dispatch:
+    inputs:
+      country_name:
+        description: 'Name of the country to add'
+        required: true
+        type: string
+      request_id:
+        description: 'Database request ID for status updates'
+        required: true
+        type: string
+      validated_data:
+        description: 'Pre-validated country data from API (JSON)'
+        required: false
+        type: string
+      fix_feedback:
+        description: 'Feedback from owner about what to fix (optional)'
+        required: false
+        type: string
+
+env:
+  WORKER_URL: ${{ secrets.WORKER_URL }}
+
+jobs:
+  generate-and-review:
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.branch.outputs.branch_name }}
+      pr_number: ${{ steps.create_pr.outputs.pr_number }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check if country already exists
+        run: |
+          COUNTRY_NAME="${{ inputs.country_name }}"
+          COUNTRY_LOWER=$(echo "$COUNTRY_NAME" | tr '[:upper:]' '[:lower:]')
+
+          # Safety check: ensure country doesn't already exist in codebase
+          if grep -qi "\"$COUNTRY_LOWER\":" src/lib/countries.ts || grep -qi "'$COUNTRY_LOWER':" src/lib/countries.ts; then
+            echo "Country '$COUNTRY_NAME' already exists in codebase"
+            curl -X POST "${{ env.WORKER_URL }}/api/country-request/webhook/github" \
+              -H "Content-Type: application/json" \
+              -d "{\"requestId\": ${{ inputs.request_id }}, \"status\": \"failed\", \"error\": \"Country already exists in the platform\"}"
+            exit 1
+          fi
+
+          echo "Country not found in codebase, proceeding with generation"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Create branch
+        id: branch
+        run: |
+          # Get slug from validated data or generate from country name
+          if [ -n "${{ inputs.validated_data }}" ]; then
+            SLUG=$(echo '${{ inputs.validated_data }}' | jq -r '.slug // empty')
+          fi
+          if [ -z "$SLUG" ]; then
+            SLUG=$(echo "${{ inputs.country_name }}" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+          fi
+
+          BRANCH_NAME="feat/add-country-${SLUG}"
+          echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin
+          if git show-ref --verify --quiet refs/remotes/origin/${BRANCH_NAME}; then
+            git push origin --delete ${BRANCH_NAME} || true
+          fi
+
+          git checkout -b "${BRANCH_NAME}"
+
+      - name: Generate and review code
+        id: generate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+          VALIDATED_DATA: ${{ inputs.validated_data }}
+          FIX_FEEDBACK: ${{ inputs.fix_feedback }}
+        run: |
+          ATTEMPT=0
+          MAX_ATTEMPTS=3
+          SUCCESS=false
+
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ] && [ "$SUCCESS" != "true" ]; do
+            ATTEMPT=$((ATTEMPT + 1))
+            echo "=== Attempt $ATTEMPT of $MAX_ATTEMPTS ==="
+
+            # Read all files
+            COUNTRIES_TS=$(cat src/lib/countries.ts)
+            CONSTANTS_TS=$(cat functions/api/lib/constants.ts)
+            TYPES_TS=$(cat src/types/index.ts)
+            PERSONAS_TS=$(cat functions/api/experts/personas.ts)
+            I18N_TS=$(cat src/i18n.ts)
+            EN_JSON=$(cat src/locales/en.json)
+            DV_JSON=$(cat src/locales/dv.json)
+            HI_JSON=$(cat src/locales/hi.json)
+            BN_JSON=$(cat src/locales/bn.json)
+            SI_JSON=$(cat src/locales/si.json)
+            TA_JSON=$(cat src/locales/ta.json)
+
+            PREV_ERRORS=""
+            if [ -f /tmp/build_errors.txt ]; then
+              PREV_ERRORS=$(cat /tmp/build_errors.txt)
+            fi
+
+            PROMPT="Add a new country to this project. Generate COMPLETE updated file contents.
+
+VALIDATED COUNTRY DATA:
+$VALIDATED_DATA
+
+$(if [ -n "$FIX_FEEDBACK" ]; then echo "OWNER FEEDBACK: $FIX_FEEDBACK"; fi)
+$(if [ -n "$PREV_ERRORS" ]; then echo "ERRORS TO FIX: $PREV_ERRORS"; fi)
+
+FILES TO MODIFY:
+
+=== src/lib/countries.ts ===
+$COUNTRIES_TS
+
+=== functions/api/lib/constants.ts ===
+$CONSTANTS_TS
+
+=== src/types/index.ts ===
+$TYPES_TS
+
+=== functions/api/experts/personas.ts ===
+$PERSONAS_TS
+
+=== src/i18n.ts ===
+$I18N_TS
+
+=== src/locales/en.json ===
+$EN_JSON
+
+=== src/locales/dv.json ===
+$DV_JSON
+
+=== src/locales/hi.json ===
+$HI_JSON
+
+=== src/locales/bn.json ===
+$BN_JSON
+
+=== src/locales/si.json ===
+$SI_JSON
+
+=== src/locales/ta.json ===
+$TA_JSON
+
+REQUIREMENTS:
+1. countries.ts - Add country to 'countries' object
+2. constants.ts - Add to 'countryCurrencies' AND 'supportedCountries'
+3. types/index.ts - Add expert names to 'expertNamesByRegion' BEFORE 'default'
+4. personas.ts - Add IDENTICAL expert names to 'expertNamesByRegion' BEFORE 'default'
+5. All locale files - Add country name to 'countries' section using translations from validated data
+
+Return JSON:
+{
+  \"countries_ts\": \"complete file\",
+  \"constants_ts\": \"complete file\",
+  \"types_ts\": \"complete file\",
+  \"personas_ts\": \"complete file\",
+  \"i18n_ts\": \"complete file or null\",
+  \"en_json\": \"complete file\",
+  \"dv_json\": \"complete file\",
+  \"hi_json\": \"complete file\",
+  \"bn_json\": \"complete file\",
+  \"si_json\": \"complete file\",
+  \"ta_json\": \"complete file\"
+}
+
+Return ONLY valid JSON."
+
+            RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+              -H "Content-Type: application/json" \
+              -H "x-api-key: ${ANTHROPIC_API_KEY}" \
+              -H "anthropic-version: 2023-06-01" \
+              -d "{
+                \"model\": \"claude-sonnet-4-20250514\",
+                \"max_tokens\": 64000,
+                \"messages\": [{
+                  \"role\": \"user\",
+                  \"content\": $(echo "$PROMPT" | jq -Rs .)
+                }]
+              }")
+
+            GENERATED=$(echo "$RESPONSE" | jq -r '.content[0].text')
+
+            if ! echo "$GENERATED" | jq -e . > /dev/null 2>&1; then
+              echo "Invalid JSON from Claude"
+              echo "$GENERATED" > /tmp/build_errors.txt
+              continue
+            fi
+
+            # Write files
+            echo "$GENERATED" | jq -r '.countries_ts' > src/lib/countries.ts
+            echo "$GENERATED" | jq -r '.constants_ts' > functions/api/lib/constants.ts
+            echo "$GENERATED" | jq -r '.types_ts' > src/types/index.ts
+            echo "$GENERATED" | jq -r '.personas_ts' > functions/api/experts/personas.ts
+            echo "$GENERATED" | jq -r '.en_json' > src/locales/en.json
+            echo "$GENERATED" | jq -r '.dv_json' > src/locales/dv.json
+            echo "$GENERATED" | jq -r '.hi_json' > src/locales/hi.json
+            echo "$GENERATED" | jq -r '.bn_json' > src/locales/bn.json
+            echo "$GENERATED" | jq -r '.si_json' > src/locales/si.json
+            echo "$GENERATED" | jq -r '.ta_json' > src/locales/ta.json
+
+            I18N_CONTENT=$(echo "$GENERATED" | jq -r '.i18n_ts // empty')
+            if [ -n "$I18N_CONTENT" ] && [ "$I18N_CONTENT" != "null" ]; then
+              echo "$I18N_CONTENT" > src/i18n.ts
+            fi
+
+            # Verify
+            echo "Running TypeScript check..."
+            if ! pnpm tsc --noEmit 2> /tmp/tsc_errors.txt; then
+              cat /tmp/tsc_errors.txt > /tmp/build_errors.txt
+              continue
+            fi
+
+            echo "Running build..."
+            if ! pnpm build 2> /tmp/build_errors.txt; then
+              continue
+            fi
+
+            SLUG=$(echo "$VALIDATED_DATA" | jq -r '.slug')
+            ERRORS=""
+
+            # Validate all files
+            grep -q "$SLUG" src/lib/countries.ts || ERRORS="$ERRORS\n- Missing in countries.ts"
+            grep -q "$SLUG" functions/api/lib/constants.ts || ERRORS="$ERRORS\n- Missing in constants.ts"
+            grep -q "$SLUG" src/types/index.ts || ERRORS="$ERRORS\n- Missing in types/index.ts"
+            grep -q "$SLUG" functions/api/experts/personas.ts || ERRORS="$ERRORS\n- Missing in personas.ts"
+
+            for L in en dv hi bn si ta; do
+              grep -q "\"$SLUG\"" src/locales/${L}.json || ERRORS="$ERRORS\n- Missing in ${L}.json"
+            done
+
+            if [ -n "$ERRORS" ]; then
+              echo -e "$ERRORS" > /tmp/build_errors.txt
+              continue
+            fi
+
+            SUCCESS=true
+          done
+
+          if [ "$SUCCESS" != "true" ]; then
+            curl -X POST "${{ env.WORKER_URL }}/api/country-request/webhook/github" \
+              -H "Content-Type: application/json" \
+              -d "{\"requestId\": ${{ inputs.request_id }}, \"status\": \"failed\", \"error\": \"Generation failed after $MAX_ATTEMPTS attempts\"}"
+            exit 1
+          fi
+
+      - name: Commit and push
+        run: |
+          git add -A
+          git commit -m "feat: add ${{ inputs.country_name }} country support
+
+          Request ID: ${{ inputs.request_id }}
+          Co-Authored-By: Claude <noreply@anthropic.com>"
+          git push -u origin ${{ steps.branch.outputs.branch_name }}
+
+      - name: Create Pull Request
+        id: create_pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_URL=$(gh pr create \
+            --title "feat: Add ${{ inputs.country_name }} country support" \
+            --body "## Summary
+          Adds **${{ inputs.country_name }}** to the platform.
+
+          ### Files Modified (10+ files)
+          - \`src/lib/countries.ts\`
+          - \`functions/api/lib/constants.ts\`
+          - \`src/types/index.ts\`
+          - \`functions/api/experts/personas.ts\`
+          - All 6 locale files
+
+          ### Automated Checks
+          - [x] TypeScript passed
+          - [x] Build passed
+          - [x] All files validated
+
+          Request ID: \`${{ inputs.request_id }}\`" \
+            --base main)
+
+          PR_NUMBER=$(echo "$PR_URL" | grep -oP '/pull/\K[0-9]+')
+          echo "pr_number=${PR_NUMBER}" >> $GITHUB_OUTPUT
+
+  deploy-preview:
+    needs: generate-and-review
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for deployment
+        id: wait_deploy
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ needs.generate-and-review.outputs.branch_name }}"
+          sleep 30
+
+          for i in $(seq 1 30); do
+            DEPLOY_ID=$(gh api repos/${{ github.repository }}/deployments --jq ".[] | select(.ref == \"${BRANCH}\") | .id" 2>/dev/null | head -1)
+            if [ -n "$DEPLOY_ID" ]; then
+              STATUS=$(gh api repos/${{ github.repository }}/deployments/${DEPLOY_ID}/statuses --jq '.[0].state' 2>/dev/null)
+              if [ "$STATUS" == "success" ]; then
+                PREVIEW_URL=$(gh api repos/${{ github.repository }}/deployments/${DEPLOY_ID}/statuses --jq '.[0].environment_url' 2>/dev/null)
+                break
+              fi
+            fi
+            sleep 20
+          done
+
+          [ -z "$PREVIEW_URL" ] && PREVIEW_URL="https://${BRANCH/\//-}.unbiased.pages.dev"
+          echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
+
+      - name: Update status
+        run: |
+          curl -X POST "${{ env.WORKER_URL }}/api/country-request/webhook/github" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "requestId": ${{ inputs.request_id }},
+              "status": "preview",
+              "previewUrl": "${{ steps.wait_deploy.outputs.preview_url }}",
+              "branchName": "${{ needs.generate-and-review.outputs.branch_name }}",
+              "prNumber": ${{ needs.generate-and-review.outputs.pr_number }}
+            }'
+
+      - name: Handle failure
+        if: failure()
+        run: |
+          curl -X POST "${{ env.WORKER_URL }}/api/country-request/webhook/github" \
+            -H "Content-Type: application/json" \
+            -d '{"requestId": ${{ inputs.request_id }}, "status": "failed", "error": "Deployment failed"}'

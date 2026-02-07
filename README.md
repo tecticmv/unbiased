@@ -136,6 +136,77 @@ Panel discussions use WebSocket via Durable Objects:
 - Bangladesh
 - Sri Lanka
 
-## License
+## Automated Country Addition
 
-MIT
+The platform supports automated on-demand country additions through a fully automated pipeline:
+
+### How It Works
+
+1. **User Request**: Users click "Request a country" in the country selector dropdown
+2. **Instant Validation**: Gemini AI validates the country immediately in the API:
+   - Checks if it's a real sovereign country (rejects cities, regions, fictional places)
+   - User gets instant feedback if invalid (no workflow triggered)
+   - Gathers data: regions, currency, expert names, translations for all 6 languages
+3. **Code Generation**: Claude AI generates code changes for 10+ files with TypeScript validation
+4. **Preview Deployment**: Creates a feature branch, PR, and Cloudflare deploys a preview
+5. **Owner Review**: Owner receives Telegram notification with Approve/Retry/Fix buttons
+6. **Feedback Loop**: Owner can retry (auto-feedback) or provide specific feedback to re-trigger generation
+7. **Go Live**: On approval, PR merges to main and country goes live
+
+### Files Modified by Automation
+
+- `src/lib/countries.ts` - Country configuration
+- `functions/api/lib/constants.ts` - Currency and supported countries
+- `src/types/index.ts` - Expert names by region
+- `functions/api/experts/personas.ts` - Expert personas by region
+- `src/locales/*.json` - All 6 locale files (en, dv, hi, bn, si, ta)
+
+### Required Secrets
+
+| Secret | Description |
+|--------|-------------|
+| `GITHUB_TOKEN` | GitHub token with repo/workflow permissions |
+| `GITHUB_REPO` | Repository in `owner/repo` format |
+| `TELEGRAM_BOT_TOKEN` | Telegram bot token for notifications |
+| `TELEGRAM_OWNER_CHAT_ID` | Owner's Telegram chat ID (can be group ID, e.g., `-123456789`) |
+| `CLAUDE_API_KEY` | Anthropic API key for code generation |
+| `GEMINI_API_KEY` | Google Gemini API key for validation |
+| `RESEND_API_KEY` | Resend API key for email notifications |
+| `FROM_EMAIL` | Sender email (e.g., `Unbiased <noreply@yourdomain.com>`) |
+
+### Email Notifications (Resend)
+
+Users who provide their email when requesting a country receive:
+- **Confirmation email** when their request is submitted
+- **Success email** when the country goes live
+
+Note: Workflow failures and retries are internal - only the owner is notified via Telegram. End users only hear back when their country is successfully added.
+
+Setup:
+1. Create an account at [resend.com](https://resend.com)
+2. Add and verify your domain
+3. Create an API key
+4. Set the secrets:
+   ```bash
+   wrangler secret put RESEND_API_KEY
+   wrangler secret put FROM_EMAIL
+   ```
+
+### Telegram Bot Setup
+
+1. Create a bot via [@BotFather](https://t.me/botfather)
+2. Get your chat ID via [@userinfobot](https://t.me/userinfobot)
+3. Set the webhook:
+   ```bash
+   curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://your-worker.workers.dev/api/country-request/webhook/telegram"
+   ```
+
+### API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `POST /api/country-request` | Submit a new country request |
+| `GET /api/country-request/:id` | Get request status |
+| `GET /api/country-requests` | List all requests (admin) |
+| `POST /api/country-request/webhook/github` | GitHub Actions callback |
+| `POST /api/country-request/webhook/telegram` | Telegram bot callback |

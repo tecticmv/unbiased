@@ -320,7 +320,14 @@ export function PanelDiscussion({
         </Button>
 
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          <span className="text-lg">{country.flag}</span>
+          <img
+            src={`https://flagcdn.com/20x15/${country.code.toLowerCase()}.png`}
+            srcSet={`https://flagcdn.com/40x30/${country.code.toLowerCase()}.png 2x`}
+            width="20"
+            height="15"
+            alt={country.name}
+            className="rounded-sm"
+          />
           <span className="font-medium text-sm truncate">
             {report.detectedProjectType}
           </span>

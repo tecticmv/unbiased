@@ -18,7 +18,16 @@ database_id = "local-dev-db"
 APP_NAME = "Unbiased"
 GEMINI_MODEL = "gemini-2.5-flash"
 
-# Add GEMINI_API_KEY via wrangler secret put GEMINI_API_KEY
+# Add secrets via wrangler secret put <SECRET_NAME>
+# Required:
+#   GEMINI_API_KEY - Google Gemini API key for analysis
+#
+# For country automation (optional):
+#   GITHUB_TOKEN - GitHub token with repo access for workflow dispatch
+#   GITHUB_REPO - Repository in format "owner/repo"
+#   TELEGRAM_BOT_TOKEN - Telegram bot token for notifications
+#   TELEGRAM_OWNER_CHAT_ID - Chat ID to send approval requests to
+#   CLAUDE_API_KEY - Anthropic API key for code generation
 
 # Durable Objects for WebSocket support
 [durable_objects]

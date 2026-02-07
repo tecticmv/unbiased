@@ -9,6 +9,15 @@ export type Bindings = {
   APP_NAME: string;
   DISCUSSION_ROOM?: DurableObjectNamespace;
   DO_SERVICE?: Fetcher;
+  // Country automation secrets
+  GITHUB_TOKEN?: string;
+  GITHUB_REPO?: string; // format: "owner/repo"
+  TELEGRAM_BOT_TOKEN?: string;
+  TELEGRAM_OWNER_CHAT_ID?: string;
+  CLAUDE_API_KEY?: string;
+  // Email notifications
+  RESEND_API_KEY?: string;
+  FROM_EMAIL?: string; // e.g., "Unbiased <noreply@yourdomain.com>"
 };
 
 export type HonoEnv = { Bindings: Bindings };

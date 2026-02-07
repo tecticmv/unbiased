@@ -1,7 +1,8 @@
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Scale, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { CountrySelector } from "@/components/country-selector";
 import {
   Select,
   SelectContent,
@@ -9,12 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { countries, defaultCountry } from "@/lib/countries";
+import { defaultCountry } from "@/lib/countries";
 import { languages, type LanguageCode } from "@/i18n";
 
 export function Navbar() {
   const { country } = useParams();
-  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const currentCountry = country || defaultCountry;
   const currentLanguage = i18n.language as LanguageCode;
@@ -34,22 +34,8 @@ export function Navbar() {
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-4">
-          {/* Country selector - compact on mobile */}
-          <Select
-            value={currentCountry}
-            onValueChange={(value) => navigate(`/${value}`)}
-          >
-            <SelectTrigger className="w-auto min-w-[80px] sm:w-[160px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(countries).map(([code]) => (
-                <SelectItem key={code} value={code}>
-                  {t(`countries.${code}`)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {/* Country selector with request option */}
+          <CountrySelector currentCountry={currentCountry} />
 
           {/* Language selector - icon only on mobile */}
           <Select

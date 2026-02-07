@@ -139,3 +139,53 @@ export const discussionTranslations = sqliteTable("discussion_translations", {
 
 export type DiscussionTranslation = typeof discussionTranslations.$inferSelect;
 export type NewDiscussionTranslation = typeof discussionTranslations.$inferInsert;
+
+// Country requests table (for tracking automated country addition requests)
+export const countryRequests = sqliteTable("country_requests", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  // Country name as requested by user
+  countryName: text("country_name").notNull(),
+  // Validated country data from Gemini (JSON)
+  validatedData: text("validated_data", { mode: "json" }),
+  // Status: 'pending', 'validating', 'generating', 'preview', 'approved', 'rejected', 'live', 'failed'
+  status: text("status").notNull().default("pending"),
+  // GitHub branch name
+  branchName: text("branch_name"),
+  // Preview URL from Cloudflare
+  previewUrl: text("preview_url"),
+  // GitHub PR number
+  prNumber: integer("pr_number"),
+  // Error message if failed
+  error: text("error"),
+  // Telegram chat ID for notifications
+  telegramChatId: text("telegram_chat_id"),
+  // Requester info
+  requesterName: text("requester_name"),
+  requesterEmail: text("requester_email"),
+  // Timestamps
+  createdAt: text("created_at")
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
+  validatedAt: text("validated_at"),
+  generatedAt: text("generated_at"),
+  approvedAt: text("approved_at"),
+  rejectedAt: text("rejected_at"),
+  liveAt: text("live_at"),
+});
+
+export type CountryRequest = typeof countryRequests.$inferSelect;
+export type NewCountryRequest = typeof countryRequests.$inferInsert;
+
+// Country request status constants
+export const COUNTRY_REQUEST_STATUS = {
+  PENDING: "pending",
+  VALIDATING: "validating",
+  GENERATING: "generating",
+  PREVIEW: "preview",
+  APPROVED: "approved",
+  REJECTED: "rejected",
+  LIVE: "live",
+  FAILED: "failed",
+} as const;
+
+export type CountryRequestStatus = (typeof COUNTRY_REQUEST_STATUS)[keyof typeof COUNTRY_REQUEST_STATUS];

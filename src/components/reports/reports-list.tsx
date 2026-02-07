@@ -37,8 +37,8 @@ export function ReportsList({
   // Infinite scroll using Intersection Observer
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
-      const [entry] = entries;
-      if (entry.isIntersecting && hasMore && !isLoading) {
+      const entry = entries[0];
+      if (entry?.isIntersecting && hasMore && !isLoading) {
         onLoadMore();
       }
     },
