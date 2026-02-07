@@ -62,14 +62,14 @@ export function Footer() {
             <h4 className="mb-4 text-sm font-semibold">{t('footer.contact')}</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground">
+                <Link to="/privacy" className="hover:text-foreground">
                   {t('footer.privacy')}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground">
+                <Link to="/terms" className="hover:text-foreground">
                   {t('footer.terms')}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

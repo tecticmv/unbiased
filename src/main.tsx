@@ -16,6 +16,8 @@ const CountryPage = lazy(() => import("@/pages/country").then(m => ({ default: m
 const NewAnalysisPage = lazy(() => import("@/pages/new-analysis").then(m => ({ default: m.NewAnalysisPage })));
 const ReportPage = lazy(() => import("@/pages/report").then(m => ({ default: m.ReportPage })));
 const DiscussionPage = lazy(() => import("@/pages/discussion").then(m => ({ default: m.DiscussionPage })));
+const PrivacyPage = lazy(() => import("@/pages/privacy").then(m => ({ default: m.PrivacyPage })));
+const TermsPage = lazy(() => import("@/pages/terms").then(m => ({ default: m.TermsPage })));
 
 function PageLoader() {
   return (
@@ -43,6 +45,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                     <Route path=":country" element={<CountryPage />} />
                     <Route path=":country/new" element={<NewAnalysisPage />} />
                     <Route path=":country/report/:slug" element={<ReportPage />} />
+                    <Route path="privacy" element={<PrivacyPage />} />
+                    <Route path="terms" element={<TermsPage />} />
                     <Route path="*" element={<Navigate to={`/${defaultCountry}`} replace />} />
                   </Route>
                 </Routes>
