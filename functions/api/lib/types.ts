@@ -14,7 +14,6 @@ export type Bindings = {
   GITHUB_REPO?: string; // format: "owner/repo"
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_OWNER_CHAT_ID?: string;
-  CLAUDE_API_KEY?: string;
   // Email notifications
   RESEND_API_KEY?: string;
   FROM_EMAIL?: string; // e.g., "Unbiased <noreply@yourdomain.com>"

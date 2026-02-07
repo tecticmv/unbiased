@@ -12,7 +12,7 @@ run_worker_first = true
 [[d1_databases]]
 binding = "DB"
 database_name = "unbiased-db"
-database_id = "local-dev-db"
+database_id = "99f60302-8489-4441-b602-38efc950ae77"
 
 [vars]
 APP_NAME = "Unbiased"
@@ -27,7 +27,6 @@ GEMINI_MODEL = "gemini-2.5-flash"
 #   GITHUB_REPO - Repository in format "owner/repo"
 #   TELEGRAM_BOT_TOKEN - Telegram bot token for notifications
 #   TELEGRAM_OWNER_CHAT_ID - Chat ID to send approval requests to
-#   CLAUDE_API_KEY - Anthropic API key for code generation
 
 # Durable Objects for WebSocket support
 [durable_objects]
@@ -37,4 +36,4 @@ bindings = [
 
 [[migrations]]
 tag = "v1"
-new_classes = ["DiscussionRoom"]
+new_sqlite_classes = ["DiscussionRoom"]
