@@ -215,7 +215,7 @@ export function MessageBubble({
         transition={{ duration: 0.2 }}
         className={cn("flex justify-end", className)}
       >
-        <div className="max-w-[75%]">
+        <div className="max-w-[75%] text-end">
           {/* Name first */}
           <div className="flex items-center gap-2 mb-1.5 justify-end">
             <span className="text-sm font-medium text-muted-foreground">
@@ -237,7 +237,7 @@ export function MessageBubble({
             </div>
           )}
           <div className={cn(
-            "rounded-2xl rounded-ee-sm bg-gray-500 dark:bg-gray-600 px-4 py-3 text-white shadow-sm",
+            "inline-block rounded-2xl rounded-ee-sm bg-gray-500 dark:bg-gray-600 px-4 py-3 text-white shadow-sm",
             replyToMessage && "border-s-2 border-gray-300"
           )}>
             <div dir="auto" className="text-sm leading-relaxed">
@@ -549,6 +549,7 @@ interface ExpertBubbleChunkProps {
   index: number;
   onCopy: () => void;
   isCopied: boolean;
+  onReply?: () => void;
 }
 
 function ExpertBubbleChunk({
@@ -561,6 +562,7 @@ function ExpertBubbleChunk({
   index,
   onCopy,
   isCopied,
+  onReply,
 }: ExpertBubbleChunkProps) {
   const expert = expertPersonas[participantType];
 
@@ -622,14 +624,14 @@ function ExpertBubbleChunk({
           </div>
         </div>
 
-        {/* Time and copy only on last chunk */}
+        {/* Time, copy, and reply on last chunk */}
         {isLast && (
           <div className="flex items-center gap-2 mt-1.5">
             <p className="text-[11px] text-muted-foreground">{formatTime(createdAt)}</p>
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 md:w-auto md:px-2 text-[11px] text-muted-foreground hover:text-foreground"
+              className="h-6 w-6 md:w-auto md:px-2 text-[11px] text-muted-foreground hover:text-foreground transition-opacity md:opacity-0 md:group-hover:opacity-100"
               onClick={onCopy}
             >
               {isCopied ? (
@@ -639,6 +641,17 @@ function ExpertBubbleChunk({
               )}
               <span className="hidden md:inline">{isCopied ? "Copied" : "Copy"}</span>
             </Button>
+            {onReply && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 px-2 text-[11px] text-muted-foreground hover:text-foreground transition-opacity md:opacity-0 md:group-hover:opacity-100"
+                onClick={onReply}
+              >
+                <Reply className="h-3 w-3 me-1" />
+                Reply
+              </Button>
+            )}
           </div>
         )}
       </div>
@@ -705,7 +718,7 @@ export function SplitMessageBubble({
 
   // Render multiple bubbles for split message
   return (
-    <div className={className}>
+    <div className={cn("group", className)}>
       {/* Reply context only shown once at the top */}
       {replyToMessage && (
         <div className="flex items-center gap-1.5 mb-2 ms-12">
@@ -733,23 +746,9 @@ export function SplitMessageBubble({
           index={index}
           onCopy={handleCopy}
           isCopied={isCopied}
+          onReply={onReply ? () => onReply(message) : undefined}
         />
       ))}
-
-      {/* Reply button after all chunks */}
-      {onReply && (
-        <div className="ms-12 mt-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-6 px-2 text-[11px] text-muted-foreground hover:text-foreground opacity-0 hover:opacity-100 transition-opacity"
-            onClick={() => onReply(message)}
-          >
-            <Reply className="h-3 w-3 me-1" />
-            Reply
-          </Button>
-        </div>
-      )}
     </div>
   );
 }
