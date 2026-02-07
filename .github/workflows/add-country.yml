@@ -219,10 +219,25 @@ jobs:
               -H "Content-Type: application/json" \
               -d @/tmp/payload.json)
 
-            GENERATED=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text')
+            # Check for API errors
+            ERROR_MSG=$(echo "$RESPONSE" | jq -r '.error.message // empty')
+            if [ -n "$ERROR_MSG" ]; then
+              echo "Gemini API error: $ERROR_MSG"
+              echo "$ERROR_MSG" > /tmp/build_errors.txt
+              continue
+            fi
+
+            GENERATED=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // empty')
+
+            if [ -z "$GENERATED" ] || [ "$GENERATED" = "null" ]; then
+              echo "Empty response from Gemini"
+              echo "$RESPONSE" > /tmp/build_errors.txt
+              continue
+            fi
 
             if ! echo "$GENERATED" | jq -e . > /dev/null 2>&1; then
               echo "Invalid JSON from Gemini"
+              echo "First 500 chars: ${GENERATED:0:500}"
               echo "$GENERATED" > /tmp/build_errors.txt
               continue
             fi
