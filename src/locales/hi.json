@@ -28,7 +28,9 @@
     "yes": "हाँ",
     "no": "नहीं",
     "or": "या",
-    "and": "और"
+    "and": "और",
+    "optional": "वैकल्पिक",
+    "project": "परियोजना"
   },
   "nav": {
     "home": "होम",
@@ -79,6 +81,34 @@
     "categories": {
       "title": "6 श्रेणियों में व्यापक विश्लेषण",
       "description": "आपको पूर्ण व्यवहार्यता मूल्यांकन प्रदान करने के लिए प्रत्येक परियोजना का कई आयामों में मूल्यांकन किया जाता है"
+    },
+    "analytics": {
+      "title": "प्लेटफ़ॉर्म विश्लेषण",
+      "subtitle": "व्यवहार्यता विश्लेषण में रीयल-टाइम अंतर्दृष्टि",
+      "totalReports": "कुल रिपोर्ट",
+      "activeDiscussions": "सक्रिय चर्चाएँ",
+      "recentActivity": "इस सप्ताह",
+      "lastSevenDays": "पिछले 7 दिन",
+      "avgScore": "औसत व्यवहार्यता",
+      "overallFeasibility": "समग्र व्यवहार्यता",
+      "categoryBreakdown": "श्रेणी के अनुसार परियोजनाएं",
+      "categoryBreakdownDescription": "विभिन्न श्रेणियों में विश्लेषित परियोजनाओं का वितरण",
+      "scoreDistribution": "व्यवहार्यता स्कोर वितरण",
+      "scoreDistributionDescription": "सभी विश्लेषणों में परियोजनाओं का स्कोर",
+      "scoreRange": "स्कोर रेंज",
+      "numberOfProjects": "परियोजनाओं की संख्या",
+      "feasibilityScore": "व्यवहार्यता स्कोर"
+    },
+    "hotTopics": {
+      "title": "हॉट टॉपिक्स",
+      "subtitle": "ट्रेंडिंग विश्लेषण और सक्रिय चर्चाएँ",
+      "trending": "ट्रेंडिंग रिपोर्ट",
+      "activeDiscussions": "लाइव चर्चाएँ",
+      "active": "सक्रिय",
+      "messages": "{{count}} संदेश",
+      "messages_one": "{{count}} संदेश",
+      "messages_other": "{{count}} संदेश",
+      "viewDiscussion": "चर्चा में शामिल हों"
     }
   },
   "analysis": {
@@ -208,6 +238,7 @@
     "share": "रिपोर्ट साझा करें",
     "download": "PDF डाउनलोड करें",
     "newAnalysis": "नया विश्लेषण",
+    "toc": "अनुभाग पर जाएं",
     "discussion": {
       "title": "पैनल चर्चा",
       "discuss": "चर्चा",
@@ -264,7 +295,14 @@
         "mentionHint": "टाइप करें",
         "toSend": "भेजने के लिए",
         "replyingTo": "{{name}} को जवाब दे रहे हैं"
-      }
+      },
+      "reconnecting": "पुनः कनेक्ट हो रहा है...",
+      "disconnected": "ऑफ़लाइन",
+      "projectInfo": "परियोजना जानकारी",
+      "suggestedQuestions": "यह पूछने का प्रयास करें:",
+      "suggestion1": "इस परियोजना के मुख्य जोखिम क्या हैं?",
+      "suggestion2": "हम व्यवहार्यता स्कोर कैसे सुधार सकते हैं?",
+      "suggestion3": "किन परमिट और अनुमोदन की आवश्यकता है?"
     }
   },
   "countries": {

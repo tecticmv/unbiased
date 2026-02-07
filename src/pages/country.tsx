@@ -3,7 +3,6 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Plus } from "lucide-react";
-import { Hero } from "@/components/hero";
 import { Button } from "@/components/ui/button";
 import { getCountry, defaultCountry } from "@/lib/countries";
 import { ReportsFilters, ReportsList, ReportsEmptyState } from "@/components/reports";
@@ -157,7 +156,6 @@ export function CountryPage() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <Hero country={countryConfig} />
         <section className="py-12 md:py-16">
           <div className="container">
             {/* Header */}
@@ -170,7 +168,7 @@ export function CountryPage() {
                   <p className="text-muted-foreground">
                     {totalCount === 0 && !hasFilters
                       ? t('home.countries.description')
-                      : `${totalCount} ${t('analysis.title').toLowerCase()}`}
+                      : `${totalCount} ${totalCount === 1 ? t('common.project').toLowerCase() : t('common.project').toLowerCase() + 's'}`}
                   </p>
                 </div>
                 <Button

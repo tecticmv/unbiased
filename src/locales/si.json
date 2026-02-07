@@ -28,7 +28,9 @@
     "yes": "ඔව්",
     "no": "නැත",
     "or": "හෝ",
-    "and": "සහ"
+    "and": "සහ",
+    "optional": "විකල්ප",
+    "project": "ව්‍යාපෘතිය"
   },
   "nav": {
     "home": "මුල් පිටුව",
@@ -79,6 +81,34 @@
     "categories": {
       "title": "ප්‍රවර්ග 6 ක් හරහා විස්තීර්ණ විශ්ලේෂණය",
       "description": "ඔබට සම්පූර්ණ ශක්‍යතා තක්සේරුවක් ලබා දීම සඳහා සෑම ව්‍යාපෘතියක්ම බහු මානයන් හරහා ඇගයීමට ලක් කෙරේ"
+    },
+    "analytics": {
+      "title": "වේදිකා විශ්ලේෂණ",
+      "subtitle": "ශක්‍යතා විශ්ලේෂණ සඳහා තත්‍ය කාලීන අවබෝධය",
+      "totalReports": "මුළු වාර්තා",
+      "activeDiscussions": "ක්‍රියාකාරී සාකච්ඡා",
+      "recentActivity": "මෙම සතියේ",
+      "lastSevenDays": "අවසන් දින 7",
+      "avgScore": "සාමාන්‍ය ශක්‍යතාව",
+      "overallFeasibility": "සමස්ත ශක්‍යතාව",
+      "categoryBreakdown": "කාණ්ඩ අනුව ව්‍යාපෘති",
+      "categoryBreakdownDescription": "විවිධ කාණ්ඩ හරහා විශ්ලේෂණය කළ ව්‍යාපෘති බෙදාහැරීම",
+      "scoreDistribution": "ශක්‍යතා ලකුණු බෙදාහැරීම",
+      "scoreDistributionDescription": "සියලුම විශ්ලේෂණ හරහා ව්‍යාපෘති ලකුණු කරන ආකාරය",
+      "scoreRange": "ලකුණු පරාසය",
+      "numberOfProjects": "ව්‍යාපෘති සංඛ්‍යාව",
+      "feasibilityScore": "ශක්‍යතා ලකුණු"
+    },
+    "hotTopics": {
+      "title": "ජනප්‍රිය මාතෘකා",
+      "subtitle": "ට්‍රෙන්ඩින් විශ්ලේෂණ සහ ක්‍රියාකාරී සාකච්ඡා",
+      "trending": "ට්‍රෙන්ඩින් වාර්තා",
+      "activeDiscussions": "සජීවී සාකච්ඡා",
+      "active": "ක්‍රියාකාරී",
+      "messages": "පණිවිඩ {{count}}",
+      "messages_one": "පණිවිඩ {{count}}",
+      "messages_other": "පණිවිඩ {{count}}",
+      "viewDiscussion": "සාකච්ඡාවට සම්බන්ධ වන්න"
     }
   },
   "analysis": {
@@ -208,6 +238,7 @@
     "share": "වාර්තාව බෙදාගන්න",
     "download": "PDF බාගන්න",
     "newAnalysis": "නව විශ්ලේෂණයක්",
+    "toc": "කොටසකට යන්න",
     "discussion": {
       "title": "විශේෂඥ සාකච්ඡාව",
       "discuss": "සාකච්ඡා කරන්න",
@@ -264,7 +295,14 @@
         "mentionHint": "ටයිප් කරන්න",
         "toSend": "යැවීමට",
         "replyingTo": "{{name}} ට පිළිතුරු දෙමින්"
-      }
+      },
+      "reconnecting": "නැවත සම්බන්ධ වෙමින්...",
+      "disconnected": "නොබැඳිව",
+      "projectInfo": "ව්‍යාපෘති තොරතුරු",
+      "suggestedQuestions": "මෙම ප්‍රශ්න අසන්න:",
+      "suggestion1": "මෙම ව්‍යාපෘතියේ ප්‍රධාන අවදානම් මොනවාද?",
+      "suggestion2": "අපට ශක්‍යතා ලකුණු වැඩිදියුණු කරන්නේ කෙසේද?",
+      "suggestion3": "කුමන බලපත්‍ර සහ අනුමැතිය අවශ්‍ය වේද?"
     }
   },
   "countries": {

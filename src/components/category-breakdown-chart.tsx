@@ -41,23 +41,7 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
   const isRTL = i18n.language === "dv";
 
   if (!data || data.length === 0) {
-    return (
-      <ScrollReveal>
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("home.analytics.categoryBreakdown")}</CardTitle>
-            <CardDescription>
-              {t("home.analytics.categoryBreakdownDescription")}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center h-64 text-muted-foreground text-sm">
-              {t("common.noResults")}
-            </div>
-          </CardContent>
-        </Card>
-      </ScrollReveal>
-    );
+    return null;
   }
 
   const chartData = data.map((item) => ({
@@ -70,13 +54,7 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
   return (
     <ScrollReveal>
       <Card>
-        <CardHeader>
-          <CardTitle>{t("home.analytics.categoryBreakdown")}</CardTitle>
-          <CardDescription>
-            {t("home.analytics.categoryBreakdownDescription")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="h-[300px] w-full" style={{ direction: isRTL ? "rtl" : "ltr" }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>

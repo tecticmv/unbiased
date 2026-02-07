@@ -19,42 +19,27 @@ import {
   StaggerContainer,
   StaggerItem,
 } from "@/components/ui/scroll-reveal";
-import { ReportCard } from "@/components/report-card";
-import type { FeasibilityReport } from "@/types";
-
-interface RecentReport {
-  id: string;
-  slug: string;
-  country: string;
-  projectDescription: string;
-  projectType: string;
-  location: string | null;
-  estimatedCost: number | null;
-  report: FeasibilityReport;
-  createdAt: string;
-}
+import { AnalyticsDashboard } from "@/components/analytics-dashboard";
+import { HotTopicsSection } from "@/components/hot-topics-section";
 
 export function HomePage() {
   const { t } = useTranslation();
-  const [recentReports, setRecentReports] = useState<RecentReport[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<any>(null);
 
   useEffect(() => {
-    const fetchRecentReports = async () => {
+    const fetchStats = async () => {
       try {
-        const response = await fetch("/api/reports?limit=4");
+        const response = await fetch("/api/stats");
         if (response.ok) {
           const data = await response.json();
-          setRecentReports(data.reports);
+          setStats(data);
         }
       } catch (error) {
-        console.error("Failed to fetch recent reports:", error);
-      } finally {
-        setLoading(false);
+        console.error("Failed to fetch stats:", error);
       }
     };
 
-    fetchRecentReports();
+    fetchStats();
   }, []);
 
   const features = [
@@ -125,86 +110,17 @@ export function HomePage() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 lg:py-28" id="how-it-works">
-        <div className="container">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold mb-3">
-              {t('home.features.title') || 'Why Use Unbiased?'}
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              {t('home.features.subtitle') || 'Data-driven insights to help you make informed decisions'}
-            </p>
-          </div>
+      {/* Analytics Dashboard */}
+      <AnalyticsDashboard />
 
-          <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature) => (
-              <StaggerItem key={feature.titleKey}>
-                <Card className="h-full transition-all hover:shadow-lg hover:scale-105 border-muted/40">
-                  <CardContent className="pt-6">
-                    <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
-                      <feature.icon className="h-7 w-7 text-primary" />
-                    </div>
-                    <h3 className="mb-2 text-lg font-semibold">
-                      {t(feature.titleKey)}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {t(feature.descKey)}
-                    </p>
-                  </CardContent>
-                </Card>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
-
-      {/* Recent Analyses Section */}
-      {!loading && recentReports.length > 0 && (
-        <section className="py-20 lg:py-28 bg-muted/20 border-y">
-          <div className="container">
-            <ScrollReveal>
-              <div className="mb-12 text-center">
-                <h2 className="text-3xl font-bold mb-3">
-                  {t('home.recentAnalyses.title') || 'Recent Feasibility Analyses'}
-                </h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  {t('home.recentAnalyses.description') || 'Explore the latest project analyses from our community'}
-                </p>
-              </div>
-            </ScrollReveal>
-
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {recentReports.map((report, index) => (
-                <ReportCard
-                  key={report.slug}
-                  slug={report.slug}
-                  country={report.country}
-                  projectDescription={report.projectDescription}
-                  location={report.location}
-                  projectType={report.projectType}
-                  report={report.report}
-                  createdAt={report.createdAt}
-                  index={index}
-                />
-              ))}
-            </div>
-
-            <div className="mt-10 text-center">
-              <Button asChild variant="outline" size="lg">
-                <Link to={`/${defaultCountry}/reports`}>
-                  {t('home.recentAnalyses.viewAll') || 'View All Reports'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
+      {/* Hot Topics Section */}
+      {stats?.trending && (
+        <HotTopicsSection data={stats.trending} />
       )}
 
       {/* Analysis Categories */}
-      <section className="border-t bg-muted/30 py-20 overflow-hidden relative">
-        <div className="container mb-12">
+      <section className="border-t bg-muted/30 py-16 overflow-hidden relative">
+        <div className="container mb-10">
           <ScrollReveal>
             <div className="text-center max-w-2xl mx-auto">
               <h2 className="text-3xl font-bold mb-3">

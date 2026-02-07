@@ -31,7 +31,8 @@
     "or": "or",
     "and": "and",
     "english": "EN",
-    "optional": "optional"
+    "optional": "optional",
+    "project": "Project"
   },
   "nav": {
     "home": "Home",
@@ -82,6 +83,34 @@
     "categories": {
       "title": "Comprehensive Analysis Across 6 Categories",
       "description": "Every project is evaluated across multiple dimensions to provide you with a complete feasibility assessment"
+    },
+    "analytics": {
+      "title": "Platform Analytics",
+      "subtitle": "Real-time insights into feasibility analyses",
+      "totalReports": "Total Reports",
+      "activeDiscussions": "Active Discussions",
+      "recentActivity": "This Week",
+      "lastSevenDays": "Last 7 days",
+      "avgScore": "Avg Feasibility",
+      "overallFeasibility": "Overall feasibility",
+      "categoryBreakdown": "Projects by Category",
+      "categoryBreakdownDescription": "Distribution of analyzed projects across different categories",
+      "scoreDistribution": "Feasibility Score Distribution",
+      "scoreDistributionDescription": "How projects score across all analyses",
+      "scoreRange": "Score Range",
+      "numberOfProjects": "Number of Projects",
+      "feasibilityScore": "Feasibility Score"
+    },
+    "hotTopics": {
+      "title": "Hot Topics",
+      "subtitle": "Trending analyses and active discussions",
+      "trending": "Trending Reports",
+      "activeDiscussions": "Live Discussions",
+      "active": "Active",
+      "messages": "{{count}} messages",
+      "messages_one": "{{count}} message",
+      "messages_other": "{{count}} messages",
+      "viewDiscussion": "Join Discussion"
     }
   },
   "analysis": {
@@ -238,6 +267,7 @@
     "share": "Share Report",
     "download": "Download PDF",
     "newAnalysis": "New Analysis",
+    "toc": "Jump to section",
     "discussion": {
       "title": "Panel Discussion",
       "discuss": "Discuss",
@@ -294,7 +324,14 @@
         "mentionHint": "Type",
         "toSend": "to send",
         "replyingTo": "Replying to {{name}}"
-      }
+      },
+      "reconnecting": "Reconnecting...",
+      "disconnected": "Offline",
+      "projectInfo": "Project Info",
+      "suggestedQuestions": "Try asking:",
+      "suggestion1": "What are the main risks of this project?",
+      "suggestion2": "How can we improve the feasibility score?",
+      "suggestion3": "What permits and approvals are needed?"
     }
   },
   "countries": {

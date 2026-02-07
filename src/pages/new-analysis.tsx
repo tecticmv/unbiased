@@ -2,7 +2,6 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft } from "lucide-react";
-import { Hero } from "@/components/hero";
 import { AnalysisForm } from "@/components/analysis-form";
 import { Button } from "@/components/ui/button";
 import { getCountry, defaultCountry } from "@/lib/countries";
@@ -18,7 +17,6 @@ export function NewAnalysisPage() {
 
   return (
     <div className="flex flex-col">
-      <Hero country={countryConfig} />
       <section className="py-12 md:py-16">
         <div className="container max-w-3xl">
           <motion.div

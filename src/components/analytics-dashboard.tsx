@@ -7,8 +7,6 @@ import {
   Target,
 } from "lucide-react";
 import { StatCard } from "@/components/stat-card";
-import { CategoryBreakdownChart } from "@/components/category-breakdown-chart";
-import { ScoreDistributionChart } from "@/components/score-distribution-chart";
 import { StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
 
 interface StatsOverview {
@@ -85,20 +83,10 @@ export function AnalyticsDashboard() {
   if (!stats) return null;
 
   return (
-    <section className="py-16 lg:py-24 bg-muted/30">
+    <section className="py-12 lg:py-16 bg-muted/30">
       <div className="container">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            {t("home.analytics.title")}
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t("home.analytics.subtitle")}
-          </p>
-        </div>
-
         {/* Stats Overview Grid */}
-        <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
+        <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <StaggerItem>
             <StatCard
               title={t("home.analytics.totalReports")}
@@ -141,12 +129,6 @@ export function AnalyticsDashboard() {
             />
           </StaggerItem>
         </StaggerContainer>
-
-        {/* Charts Grid */}
-        <div className="grid gap-8 lg:grid-cols-2">
-          <CategoryBreakdownChart data={stats.categoryBreakdown} />
-          <ScoreDistributionChart data={stats.scoreDistribution} />
-        </div>
       </div>
     </section>
   );

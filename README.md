@@ -21,6 +21,24 @@ Unbiased helps you evaluate development projects with AI-powered analysis across
 
 ## 🎯 Key Features
 
+### 📊 **Live Analytics Dashboard**
+
+Get real-time insights into platform activity on the home page:
+
+- **Platform Metrics**: Total reports, active discussions, weekly activity, avg feasibility score
+- **Category Breakdown**: Visual pie chart showing project distribution across categories
+- **Score Distribution**: Bar chart displaying feasibility score ranges
+- **5-minute edge caching** for fast load times
+
+### 🔥 **Hot Topics & Trending**
+
+Discover what's trending on the platform:
+
+- **Trending Reports**: Latest analyses from the past 7 days with feasibility scores
+- **Live Discussions**: Active panel discussions with real-time message counts
+- **Pulse Indicators**: Visual animations showing active discussions
+- **Quick Navigation**: Jump directly to trending reports and discussions
+
 ### 🤖 **AI Expert Panel Discussions**
 
 Discuss your project with 6 specialized AI experts + a moderator:
@@ -76,6 +94,9 @@ Don't see your country? **Request it and AI builds it for you:**
 
 ## 💡 How It Works
 
+### Step 0: Explore Platform Analytics
+See real-time stats, trending reports, and active discussions on the home page to get inspired.
+
 ### Step 1: Select Country & Describe Project
 Choose your country and describe your development project in any detail.
 
@@ -102,11 +123,13 @@ Switch to any of 6 languages - reports and discussions translate instantly.
 ## 🌟 Why Unbiased?
 
 ✅ **Instant Analysis** - Get comprehensive reports in seconds
+✅ **Live Analytics** - See real-time platform insights and trending topics
 ✅ **Multi-Perspective** - 6 expert viewpoints, not just one AI response
 ✅ **Natural Conversations** - Experts have unique personalities and speaking styles
 ✅ **Your Language** - Native script support for local languages
 ✅ **Region-Specific** - Experts have culturally appropriate names
 ✅ **Transparent** - See all reasoning, pros, cons, and risks
+✅ **Community Insights** - Discover what others are analyzing
 ✅ **Growing Coverage** - Request new countries, AI adds them automatically
 
 ---
@@ -129,6 +152,36 @@ Switch to any of 6 languages - reports and discussions translate instantly.
 3. Optionally provide your email for updates
 4. Submit - AI validates and generates code automatically
 5. Receive email when your country goes live!
+
+---
+
+## 🏗️ Technical Architecture
+
+### Analytics System
+
+The analytics dashboard features a robust, performant architecture:
+
+- **Backend API** (`/api/stats`)
+  - Aggregates data from D1 database (reports, discussions, messages)
+  - Calculates metrics: total reports, active discussions, weekly activity
+  - Computes averages, distributions, and category breakdowns
+  - 5-minute Cloudflare edge caching for optimal performance
+
+- **Frontend Components**
+  - `AnalyticsDashboard` - Main container with stat cards and charts
+  - `StatCard` - Reusable metric display with icons and animations
+  - `CategoryBreakdownChart` - Recharts PieChart for project categories
+  - `ScoreDistributionChart` - Recharts BarChart with color-coded ranges
+  - `TrendingCard` - Compact report cards with flame icons
+  - `DiscussionPreviewCard` - Active discussion previews with pulse animations
+
+- **Features**
+  - Graceful degradation (hides if API fails)
+  - Loading skeletons (no layout shift)
+  - Framer Motion animations (stagger effects, scroll reveals)
+  - Full RTL support for Dhivehi
+  - Responsive design (mobile-first)
+  - Dark mode compatible
 
 ---
 

@@ -28,7 +28,9 @@
     "yes": "হ্যাঁ",
     "no": "না",
     "or": "অথবা",
-    "and": "এবং"
+    "and": "এবং",
+    "optional": "ঐচ্ছিক",
+    "project": "প্রকল্প"
   },
   "nav": {
     "home": "হোম",
@@ -79,6 +81,34 @@
     "categories": {
       "title": "৬টি বিভাগে ব্যাপক বিশ্লেষণ",
       "description": "আপনাকে সম্পূর্ণ সম্ভাব্যতা মূল্যায়ন প্রদান করতে প্রতিটি প্রকল্প একাধিক মাত্রায় মূল্যায়ন করা হয়"
+    },
+    "analytics": {
+      "title": "প্ল্যাটফর্ম বিশ্লেষণ",
+      "subtitle": "সম্ভাব্যতা বিশ্লেষণে রিয়েল-টাইম অন্তর্দৃষ্টি",
+      "totalReports": "মোট রিপোর্ট",
+      "activeDiscussions": "সক্রিয় আলোচনা",
+      "recentActivity": "এই সপ্তাহে",
+      "lastSevenDays": "গত ৭ দিন",
+      "avgScore": "গড় সম্ভাব্যতা",
+      "overallFeasibility": "সামগ্রিক সম্ভাব্যতা",
+      "categoryBreakdown": "বিভাগ অনুযায়ী প্রকল্প",
+      "categoryBreakdownDescription": "বিভিন্ন বিভাগে বিশ্লেষিত প্রকল্পের বিতরণ",
+      "scoreDistribution": "সম্ভাব্যতা স্কোর বিতরণ",
+      "scoreDistributionDescription": "সমস্ত বিশ্লেষণে প্রকল্পের স্কোর",
+      "scoreRange": "স্কোর পরিসীমা",
+      "numberOfProjects": "প্রকল্পের সংখ্যা",
+      "feasibilityScore": "সম্ভাব্যতা স্কোর"
+    },
+    "hotTopics": {
+      "title": "হট টপিক্স",
+      "subtitle": "ট্রেন্ডিং বিশ্লেষণ এবং সক্রিয় আলোচনা",
+      "trending": "ট্রেন্ডিং রিপোর্ট",
+      "activeDiscussions": "লাইভ আলোচনা",
+      "active": "সক্রিয়",
+      "messages": "{{count}}টি বার্তা",
+      "messages_one": "{{count}}টি বার্তা",
+      "messages_other": "{{count}}টি বার্তা",
+      "viewDiscussion": "আলোচনায় যোগ দিন"
     }
   },
   "analysis": {
@@ -208,6 +238,7 @@
     "share": "রিপোর্ট শেয়ার করুন",
     "download": "PDF ডাউনলোড করুন",
     "newAnalysis": "নতুন বিশ্লেষণ",
+    "toc": "বিভাগে যান",
     "discussion": {
       "title": "প্যানেল আলোচনা",
       "discuss": "আলোচনা",
@@ -264,7 +295,14 @@
         "mentionHint": "টাইপ করুন",
         "toSend": "পাঠাতে",
         "replyingTo": "{{name}} কে উত্তর দিচ্ছেন"
-      }
+      },
+      "reconnecting": "পুনরায় সংযোগ করা হচ্ছে...",
+      "disconnected": "অফলাইন",
+      "projectInfo": "প্রকল্প তথ্য",
+      "suggestedQuestions": "জিজ্ঞাসা করার চেষ্টা করুন:",
+      "suggestion1": "এই প্রকল্পের প্রধান ঝুঁকিগুলি কী?",
+      "suggestion2": "আমরা কীভাবে সম্ভাব্যতা স্কোর উন্নত করতে পারি?",
+      "suggestion3": "কোন পারমিট এবং অনুমোদন প্রয়োজন?"
     }
   },
   "countries": {

@@ -45,23 +45,7 @@ export function ScoreDistributionChart({ data }: ScoreDistributionChartProps) {
   const isRTL = i18n.language === "dv";
 
   if (!data || data.length === 0) {
-    return (
-      <ScrollReveal>
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("home.analytics.scoreDistribution")}</CardTitle>
-            <CardDescription>
-              {t("home.analytics.scoreDistributionDescription")}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center h-64 text-muted-foreground text-sm">
-              {t("common.noResults")}
-            </div>
-          </CardContent>
-        </Card>
-      </ScrollReveal>
-    );
+    return null;
   }
 
   const chartData = data.map((item) => ({
@@ -74,13 +58,7 @@ export function ScoreDistributionChart({ data }: ScoreDistributionChartProps) {
   return (
     <ScrollReveal>
       <Card>
-        <CardHeader>
-          <CardTitle>{t("home.analytics.scoreDistribution")}</CardTitle>
-          <CardDescription>
-            {t("home.analytics.scoreDistributionDescription")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="h-[300px] w-full" style={{ direction: isRTL ? "rtl" : "ltr" }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
