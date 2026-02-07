@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -10,21 +9,18 @@ import {
   CheckCircle2,
   TrendingUp,
   DollarSign,
-  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { countries, defaultCountry } from "@/lib/countries";
+import { defaultCountry } from "@/lib/countries";
 import {
   ScrollReveal,
   StaggerContainer,
   StaggerItem,
 } from "@/components/ui/scroll-reveal";
-import { CountryRequestModal } from "@/components/country-request-modal";
 
 export function HomePage() {
   const { t } = useTranslation();
-  const [countryRequestOpen, setCountryRequestOpen] = useState(false);
 
   const features = [
     {
@@ -81,72 +77,15 @@ export function HomePage() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button variant="outline" size="xl" asChild>
-                <a href="#how-it-works">{t('home.hero.learnMore')}</a>
-              </Button>
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Countries Section */}
-      <section className="border-y bg-muted/30 py-16">
-        <div className="container">
-          <ScrollReveal className="text-center mb-8">
-            <h2 className="text-2xl font-bold md:text-3xl mb-2">
-              {t('home.countries.title')}
-            </h2>
-            <p className="text-muted-foreground">
-              {t('home.countries.description')}
-            </p>
-          </ScrollReveal>
-
-          <StaggerContainer className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-6">
-            {Object.entries(countries).map(([code, country]) => (
-              <StaggerItem key={code}>
-                <Link
-                  to={`/${code}`}
-                  className="flex items-center gap-2 sm:gap-3 rounded-lg border bg-background px-3 py-2 sm:px-5 sm:py-3 transition-all hover:border-primary hover:shadow-md"
-                >
-                  <img
-                    src={`https://flagcdn.com/24x18/${country.code.toLowerCase()}.png`}
-                    srcSet={`https://flagcdn.com/48x36/${country.code.toLowerCase()}.png 2x`}
-                    width="24"
-                    height="18"
-                    alt={country.name}
-                    className="rounded-sm"
-                  />
-                  <span className="font-medium text-sm sm:text-base">{t(`countries.${code}`)}</span>
-                </Link>
-              </StaggerItem>
-            ))}
-            <StaggerItem>
-              <Button
-                variant="outline"
-                className="flex items-center gap-2 px-3 py-5 sm:px-5 sm:py-6 border-dashed text-sm sm:text-base"
-                onClick={() => setCountryRequestOpen(true)}
-              >
-                <Globe className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span>{t('countryRequest.requestNew')}</span>
-              </Button>
-            </StaggerItem>
-          </StaggerContainer>
         </div>
       </section>
 
       {/* Features Section */}
       <section className="py-24" id="how-it-works">
         <div className="container">
-          <ScrollReveal className="mx-auto max-w-2xl text-center">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-              {t('home.features.title')}
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              {t('home.hero.subtitle')}
-            </p>
-          </ScrollReveal>
-
-          <StaggerContainer className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
               <StaggerItem key={feature.titleKey}>
                 <Card className="h-full transition-shadow hover:shadow-lg">
@@ -169,37 +108,58 @@ export function HomePage() {
       </section>
 
       {/* Analysis Categories */}
-      <section className="border-t bg-muted/30 py-24">
+      <section className="border-t bg-muted/30 py-16 overflow-hidden">
         <div className="container">
-          <ScrollReveal className="mx-auto max-w-2xl text-center">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-              {t('report.categories.title')}
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              {t('home.countries.description')}
-            </p>
-          </ScrollReveal>
+          <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
+            <div className="flex-shrink-0 md:w-64">
+              <h2 className="text-2xl font-bold md:text-3xl">
+                {t('report.categories.title')}
+              </h2>
+            </div>
 
-          <StaggerContainer className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              { key: "technical" },
-              { key: "economic" },
-              { key: "environmental" },
-              { key: "social" },
-              { key: "legal" },
-              { key: "operational" },
-            ].map((category) => (
-              <StaggerItem
-                key={category.key}
-                className="flex items-start gap-3 rounded-lg border bg-background p-4"
-              >
-                <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
-                <div>
-                  <h4 className="font-medium">{t(`report.categories.${category.key}`)}</h4>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
+            <div className="flex-1 overflow-hidden relative">
+              <style>{`
+                @keyframes scroll {
+                  0% {
+                    transform: translateX(0);
+                  }
+                  100% {
+                    transform: translateX(-50%);
+                  }
+                }
+                .animate-scroll {
+                  animation: scroll 20s linear infinite;
+                }
+                .animate-scroll:hover {
+                  animation-play-state: paused;
+                }
+              `}</style>
+              <div className="flex gap-4 animate-scroll">
+                {[...Array(2)].map((_, setIndex) => (
+                  <div key={setIndex} className="flex gap-4">
+                    {[
+                      { key: "technical" },
+                      { key: "economic" },
+                      { key: "environmental" },
+                      { key: "social" },
+                      { key: "legal" },
+                      { key: "operational" },
+                    ].map((category) => (
+                      <div
+                        key={`${setIndex}-${category.key}`}
+                        className="flex-shrink-0 w-64 flex items-start gap-3 rounded-lg border bg-background p-4 shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary flex-shrink-0" />
+                        <div>
+                          <h4 className="font-medium">{t(`report.categories.${category.key}`)}</h4>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -226,11 +186,6 @@ export function HomePage() {
           </ScrollReveal>
         </div>
       </section>
-
-      <CountryRequestModal
-        open={countryRequestOpen}
-        onOpenChange={setCountryRequestOpen}
-      />
     </div>
   );
 }

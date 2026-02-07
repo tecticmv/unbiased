@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Scale, Github, Twitter, Globe } from "lucide-react";
+import { Scale, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { countries } from "@/lib/countries";
@@ -75,26 +75,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t pt-8 md:flex-row">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-8 border-t pt-8">
+          <p className="text-center text-sm text-muted-foreground">
             © {new Date().getFullYear()} {t('common.appName')}. {t('footer.copyright')}
           </p>
-          <div className="flex items-center gap-4">
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-              aria-label={t('footer.githubLabel')}
-            >
-              <Github className="h-5 w-5" />
-            </a>
-            <a
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-              aria-label={t('footer.twitterLabel')}
-            >
-              <Twitter className="h-5 w-5" />
-            </a>
-          </div>
         </div>
       </div>
 

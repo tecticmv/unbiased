@@ -331,6 +331,14 @@ export const timeframeSchema = z.object({
   delayFactors: z.array(z.string()).optional(),
 });
 
+/**
+ * Reference - external source with URL
+ */
+export const referenceSchema = z.object({
+  title: z.string(),
+  url: z.string().url(),
+});
+
 export const feasibilityReportSchema = z.object({
   overallScore: z.number().min(0).max(100),
   overallSummary: z.string(),
@@ -363,6 +371,8 @@ export const feasibilityReportSchema = z.object({
   // Data quality and grounding info
   dataQualityNote: z.string().optional(), // Note about data availability/reliability
   dataFoundViaSearch: dataFoundViaSearchSchema.optional(), // Summary of data found via Google Search
+  // References - sources with URLs from Google Search
+  references: z.array(referenceSchema).optional().default([]),
 });
 
 export type Category = z.infer<typeof categorySchema>;
@@ -373,4 +383,5 @@ export type Verdict = z.infer<typeof verdictSchema>;
 export type AlternativeProject = z.infer<typeof alternativeProjectSchema>;
 export type BudgetRatio = z.infer<typeof budgetRatioSchema>;
 export type Timeframe = z.infer<typeof timeframeSchema>;
+export type Reference = z.infer<typeof referenceSchema>;
 export type FeasibilityReport = z.infer<typeof feasibilityReportSchema>;

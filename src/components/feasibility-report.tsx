@@ -26,6 +26,7 @@ import {
   FileText,
   Target,
   Sparkles,
+  BookOpen,
 } from "lucide-react";
 import { useState, useMemo, useRef, useEffect, type ElementType } from "react";
 import { Button } from "@/components/ui/button";
@@ -783,6 +784,42 @@ export function FeasibilityReport({
             </CardContent>
           </Card>
         </motion.div>
+
+        {/* REFERENCES & SOURCES SECTION */}
+        {report.references && report.references.length > 0 && (
+          <motion.section
+            variants={scrollVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportSettings}
+            className="mb-10"
+          >
+            <SectionHeader
+              icon={BookOpen}
+              title={t('report.references.title', 'References & Sources')}
+              subtitle={t('report.references.subtitle', 'Data sources used in this feasibility analysis')}
+            />
+            <Card className="overflow-hidden border-l-4 border-l-blue-500">
+              <CardContent className="p-6">
+                <ul className="space-y-3">
+                  {report.references.map((ref, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="text-muted-foreground">{index + 1}.</span>
+                      <a
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                      >
+                        {ref.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </motion.section>
+        )}
 
         {/* RISKS & NEXT STEPS SECTION */}
         <motion.div

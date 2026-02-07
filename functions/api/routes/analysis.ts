@@ -292,6 +292,8 @@ Use Google Search to find current, real-world data about:
 4. Environmental considerations specific to the location
 5. Economic conditions and budget data for ${country}
 
+IMPORTANT - For each source you use from Google Search, capture the title and full URL. You will include these in the "references" field of your response to allow users to verify the information.
+
 IMPORTANT - Also analyze and incorporate data from these government/public finance areas:
 
 TREASURY:
@@ -477,6 +479,12 @@ Provide a comprehensive feasibility analysis in the following JSON format:
     "dataConfidence": "<high/medium/low>",
     "keyDataPoints": ["<data point 1>", "<data point 2>"]
   },
+  "references": [
+    {
+      "title": "<Source title from Google Search result>",
+      "url": "<https://full-url-to-source.com>"
+    }
+  ],
   "disclaimer": "<standard disclaimer about this being an AI analysis>",
   "dataQualityNote": "<note about data quality and limitations>"
 }
@@ -489,6 +497,7 @@ IMPORTANT:
 - Provide realistic cost estimates in ${currency}
 - Be balanced - highlight both opportunities and risks
 - If data is limited, note this in the confidence ratings
+- **Populate the "references" array with all sources you found via Google Search that informed your analysis. Include government websites, official reports, databases, and reliable sources with their full URLs.**
 
 Return ONLY the JSON object, no other text.`;
 }

@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "Unbiased",
-    "tagline": "AI-Powered Feasibility Analysis",
+    "tagline": "AI-powered",
     "loading": "Loading...",
     "translating": "Translating report...",
     "error": "Error",
@@ -45,7 +45,7 @@
     "hero": {
       "title": "Unbiased Feasibility Analysis",
       "subtitle": "AI-powered analysis for infrastructure and development projects",
-      "description": "Get comprehensive, data-driven feasibility reports for government projects, infrastructure initiatives, and policy proposals.",
+      "description": "AI Powered, data-driven feasibility reports for government projects, infrastructure initiatives, and policy proposals.",
       "cta": "Start Analysis",
       "learnMore": "Learn More"
     },
@@ -219,6 +219,11 @@
     "recommendations": "Recommendations",
     "dataQuality": "Data Quality Note",
     "disclaimer": "Disclaimer",
+    "references": {
+      "title": "References & Sources",
+      "subtitle": "Data sources used in this feasibility analysis",
+      "noSources": "No external sources were referenced in this analysis."
+    },
     "share": "Share Report",
     "download": "Download PDF",
     "newAnalysis": "New Analysis",
@@ -318,7 +323,7 @@
     "ta": "Tamil"
   },
   "footer": {
-    "description": "AI-powered feasibility analysis for transparent governance",
+    "description": "AI-powered",
     "madeWith": "Made with",
     "forThe": "for the people of",
     "copyright": "All rights reserved",

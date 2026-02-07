@@ -18,6 +18,7 @@ export function Navbar() {
   const { t, i18n } = useTranslation();
   const currentCountry = country || defaultCountry;
   const currentLanguage = i18n.language as LanguageCode;
+  const currentLangName = languages.find(l => l.code === currentLanguage)?.nativeName || 'English';
 
   const handleLanguageChange = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -45,7 +46,7 @@ export function Navbar() {
             <SelectTrigger className="w-auto min-w-[44px] sm:min-w-[100px]">
               <Globe className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">
-                <SelectValue />
+                {currentLangName}
               </span>
             </SelectTrigger>
             <SelectContent>
