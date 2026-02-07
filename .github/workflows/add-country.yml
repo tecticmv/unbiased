@@ -199,9 +199,9 @@ jobs:
             # Write prompt to file to avoid argument list too long error
             echo "$PROMPT" > /tmp/prompt.txt
 
-            # Build JSON payload using jq to avoid YAML parsing issues
+            # Build JSON payload using jq with --rawfile to avoid argument list too long
             jq -n \
-              --arg prompt "$(cat /tmp/prompt.txt)" \
+              --rawfile prompt /tmp/prompt.txt \
               '{
                 contents: [{
                   parts: [{
