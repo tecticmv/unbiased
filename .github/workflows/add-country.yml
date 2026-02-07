@@ -210,7 +210,7 @@ jobs:
                 }],
                 generationConfig: {
                   temperature: 0.2,
-                  maxOutputTokens: 8000,
+                  maxOutputTokens: 65536,
                   responseMimeType: "application/json"
                 }
               }' > /tmp/payload.json
