@@ -15,9 +15,9 @@ const getScoreColor = (score: number) => {
 };
 
 const getScoreBg = (score: number) => {
-  if (score >= 70) return "bg-green-100 dark:bg-green-950/50 border-green-200 dark:border-green-900";
-  if (score >= 50) return "bg-yellow-100 dark:bg-yellow-950/50 border-yellow-200 dark:border-yellow-900";
-  return "bg-red-100 dark:bg-red-950/50 border-red-200 dark:border-red-900";
+  if (score >= 70) return "bg-transparent border-green-200 dark:border-green-900";
+  if (score >= 50) return "bg-transparent border-yellow-200 dark:border-yellow-900";
+  return "bg-transparent border-red-200 dark:border-red-900";
 };
 
 export function CategoryCard({ category }: CategoryCardProps) {
@@ -50,9 +50,9 @@ export function CategoryCard({ category }: CategoryCardProps) {
       <div className="grid gap-4 sm:grid-cols-2">
         {/* Pros */}
         {pros.length > 0 && (
-          <div className="rounded-lg border bg-muted/30 p-4">
+          <div className="rounded-lg border bg-transparent p-4">
             <h4 className="mb-3 flex items-center gap-2 text-sm font-medium">
-              <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-500" />
+              <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
               {t('report.pros')}
             </h4>
             <ul className="space-y-2.5">
@@ -61,7 +61,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
                   key={index}
                   className="flex items-start gap-2.5 text-sm"
                 >
-                  <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-[10px] font-medium text-green-700 dark:text-green-400">
+                  <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-transparent border text-[10px] font-medium">
                     {index + 1}
                   </span>
                   <span className="leading-relaxed text-muted-foreground"><Markdown>{pro ?? ''}</Markdown></span>
@@ -73,9 +73,9 @@ export function CategoryCard({ category }: CategoryCardProps) {
 
         {/* Cons */}
         {cons.length > 0 && (
-          <div className="rounded-lg border bg-muted/30 p-4">
+          <div className="rounded-lg border bg-transparent p-4">
             <h4 className="mb-3 flex items-center gap-2 text-sm font-medium">
-              <XCircle className="h-4 w-4 text-red-600 dark:text-red-500" />
+              <XCircle className="h-4 w-4 text-muted-foreground" />
               {t('report.cons')}
             </h4>
             <ul className="space-y-2.5">
@@ -84,7 +84,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
                   key={index}
                   className="flex items-start gap-2.5 text-sm"
                 >
-                  <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-[10px] font-medium text-red-700 dark:text-red-400">
+                  <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-transparent border text-[10px] font-medium">
                     {index + 1}
                   </span>
                   <span className="leading-relaxed text-muted-foreground"><Markdown>{con ?? ''}</Markdown></span>
@@ -97,9 +97,9 @@ export function CategoryCard({ category }: CategoryCardProps) {
 
       {/* Recommendations */}
       {category?.recommendations && category.recommendations.length > 0 && (
-        <div className="rounded-lg border bg-muted/30 p-4">
+        <div className="rounded-lg border bg-transparent p-4">
           <h4 className="mb-3 flex items-center gap-2 text-sm font-medium">
-            <Lightbulb className="h-4 w-4 text-amber-600 dark:text-amber-500" />
+            <Lightbulb className="h-4 w-4 text-muted-foreground" />
             {t('report.recommendations')}
           </h4>
           <ul className="space-y-2.5">
@@ -108,7 +108,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
                 key={index}
                 className="flex items-start gap-2.5 text-sm"
               >
-                <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30 text-[10px] font-medium text-amber-700 dark:text-amber-400">
+                <span className="mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-transparent border text-[10px] font-medium">
                   {index + 1}
                 </span>
                 <span className="leading-relaxed text-muted-foreground"><Markdown>{rec ?? ''}</Markdown></span>

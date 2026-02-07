@@ -271,7 +271,7 @@ export function AnalysisForm({ country }: AnalysisFormProps) {
               <p className="text-sm text-muted-foreground">{rejection.reason}</p>
             </div>
 
-            <div className="rounded-md bg-primary/5 border border-primary/20 p-4">
+            <div className="rounded-md bg-transparent border border-primary/20 p-4">
               <div className="flex items-start gap-2">
                 <Info className="h-4 w-4 mt-0.5 text-primary shrink-0" />
                 <div>
@@ -305,7 +305,7 @@ export function AnalysisForm({ country }: AnalysisFormProps) {
         </CardHeader>
         <CardContent>
           {/* Helper note about allowed projects */}
-          <div className="mb-4 rounded-md bg-muted/50 border border-muted p-3 sm:p-4">
+          <div className="mb-4 rounded-md bg-transparent border border-muted p-3 sm:p-4">
             <div className="flex items-start gap-2">
               <Info className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />
               <div className="text-xs sm:text-sm text-muted-foreground">

@@ -51,6 +51,7 @@
     },
     "features": {
       "title": "Why Use Unbiased?",
+      "subtitle": "Data-driven insights to help you make informed decisions",
       "realData": {
         "title": "Real-Time Data",
         "description": "Analysis powered by current census, budget, and economic data"
@@ -71,6 +72,15 @@
     "countries": {
       "title": "Available Countries",
       "description": "Select a country to start analyzing projects"
+    },
+    "recentAnalyses": {
+      "title": "Recent Feasibility Analyses",
+      "description": "Explore the latest project analyses from our community",
+      "viewAll": "View All Reports"
+    },
+    "categories": {
+      "title": "Comprehensive Analysis Across 6 Categories",
+      "description": "Every project is evaluated across multiple dimensions to provide you with a complete feasibility assessment"
     }
   },
   "analysis": {

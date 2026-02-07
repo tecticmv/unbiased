@@ -33,13 +33,11 @@ export function DiscussionSummary({
       animate={{ opacity: 1, y: 0 }}
       className={cn("relative", className)}
     >
-      {/* Success gradient background */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-green-500/10 via-emerald-500/5 to-transparent" />
 
-      <div className="relative rounded-2xl border border-green-200 dark:border-green-800/50 bg-card/80 backdrop-blur-sm overflow-hidden">
+      <div className="relative rounded-2xl border border-green-200 dark:border-green-800/50 bg-transparent overflow-hidden">
         {/* Header */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-green-100 dark:border-green-800/30">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100 dark:bg-green-900/30">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-transparent border border-green-600">
             <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
           </div>
           <div className="flex-1">
@@ -56,7 +54,7 @@ export function DiscussionSummary({
         {/* Summary content */}
         <div className="p-5">
           <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted/50 flex-shrink-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-transparent border border-border flex-shrink-0">
               <FileText className="h-4 w-4 text-muted-foreground" />
             </div>
             <div className="flex-1 min-w-0">

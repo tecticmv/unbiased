@@ -225,7 +225,7 @@ export function MessageBubble({
           {/* Reply context - shows quoted message being replied to */}
           {replyToMessage && (
             <div className="flex items-center justify-end gap-1.5 mb-1.5">
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-400/20 dark:bg-gray-500/20 border-e-2 border-gray-400">
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-transparent border border-gray-400">
                 <Reply className="h-3 w-3 text-gray-600 dark:text-gray-400" />
                 <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
                   {replyToMessage.participantName}
@@ -302,7 +302,7 @@ export function MessageBubble({
           {/* Reply context - shows quoted message being replied to */}
           {replyToMessage && (
             <div className="flex items-center gap-1.5 mb-2">
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-muted/80 border-s-2 border-slate-400">
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-transparent border border-border border-s-2 border-slate-400">
                 <Reply className="h-3 w-3 text-muted-foreground" />
                 <span className="text-xs text-foreground/80 font-medium">
                   {replyToMessage.participantName}
@@ -407,7 +407,7 @@ export function MessageBubble({
         {/* Reply context - shows quoted message being replied to */}
         {replyToMessage && (
           <div className="flex items-center gap-1.5 mb-2">
-            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-muted/80 border-s-2 border-primary/50">
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-transparent border border-border border-s-2 border-primary/50">
               <Reply className="h-3 w-3 text-muted-foreground" />
               <span className="text-xs text-foreground/80 font-medium">
                 {replyToMessage.participantName}
@@ -709,7 +709,7 @@ export function SplitMessageBubble({
       {/* Reply context only shown once at the top */}
       {replyToMessage && (
         <div className="flex items-center gap-1.5 mb-2 ms-12">
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-muted/80 border-s-2 border-primary/50">
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-transparent border border-border border-s-2 border-primary/50">
             <Reply className="h-3 w-3 text-muted-foreground" />
             <span className="text-xs text-foreground/80 font-medium">
               {replyToMessage.participantName}

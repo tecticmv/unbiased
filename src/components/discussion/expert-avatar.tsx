@@ -70,7 +70,7 @@ export function ExpertAvatar({
       <div
         className={cn(
           "flex items-center justify-center rounded-full",
-          "bg-gradient-to-br from-primary/20 to-primary/5",
+          "bg-transparent border border-border",
           sizeClasses[size],
           className
         )}

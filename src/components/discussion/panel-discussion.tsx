@@ -347,13 +347,13 @@ export function PanelDiscussion({
           )}
           {/* Connection status indicator */}
           {connectionState === "reconnecting" && (
-            <Badge variant="secondary" className="text-xs gap-1 bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
+            <Badge variant="secondary" className="text-xs gap-1 bg-transparent border border-yellow-600 text-yellow-700 dark:text-yellow-400">
               <Loader2 className="h-3 w-3 animate-spin" />
               {t('report.discussion.reconnecting', 'Reconnecting...')}
             </Badge>
           )}
           {connectionState === "disconnected" && (
-            <Badge variant="secondary" className="text-xs gap-1 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+            <Badge variant="secondary" className="text-xs gap-1 bg-transparent border border-red-600 text-red-700 dark:text-red-400">
               <WifiOff className="h-3 w-3" />
               {t('report.discussion.disconnected', 'Offline')}
             </Badge>
@@ -585,7 +585,7 @@ export function PanelDiscussion({
                       key={index}
                       onClick={() => handleSendMessage(question)}
                       disabled={isSending}
-                      className="text-start px-4 py-3 rounded-xl border border-border/50 bg-card/50 hover:bg-muted/50 hover:border-primary/30 transition-all text-sm text-muted-foreground hover:text-foreground disabled:opacity-50"
+                      className="text-start px-4 py-3 rounded-xl border border-border/50 bg-transparent hover:bg-muted/50 hover:border-primary/30 transition-all text-sm text-muted-foreground hover:text-foreground disabled:opacity-50"
                     >
                       {question}
                     </button>
@@ -649,7 +649,7 @@ export function PanelDiscussion({
               />
             </div>
           ) : (
-            <div className="flex-shrink-0 border-t bg-muted/30 p-3 text-center">
+            <div className="flex-shrink-0 border-t bg-transparent p-3 text-center">
               <p className="text-sm text-muted-foreground">
                 {t('report.discussion.concludedMessage')}{" "}
                 <Link to={`/${country.slug}/report/${reportSlug}`} className="text-primary hover:underline">

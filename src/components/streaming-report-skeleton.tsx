@@ -77,7 +77,7 @@ export function StreamingReportSkeleton({ country, projectDescription, onRetry }
           <Card className={isReconnecting ? "border-amber-500/30" : "border-destructive/30"}>
             <CardContent className="py-10">
               <div className="flex flex-col items-center text-center space-y-4">
-                <div className={`rounded-full p-4 ${isReconnecting ? "bg-amber-500/10" : "bg-destructive/10"}`}>
+                <div className={`rounded-full p-4 ${isReconnecting ? "bg-transparent border border-amber-500" : "bg-transparent border border-destructive"}`}>
                   {isReconnecting ? (
                     <RefreshCw className="h-10 w-10 text-amber-500 animate-spin" />
                   ) : (
@@ -99,7 +99,7 @@ export function StreamingReportSkeleton({ country, projectDescription, onRetry }
 
                 {/* Show partial data if available */}
                 {report && Object.keys(report).length > 0 && (
-                  <div className="w-full mt-4 p-4 rounded-lg bg-muted/50 text-left">
+                  <div className="w-full mt-4 p-4 rounded-lg bg-transparent border border-border text-left">
                     <p className="text-sm font-medium mb-2">{t('analysis.reconnecting.partialData')}</p>
                     {report.detectedProjectType && (
                       <p className="text-sm text-muted-foreground">
@@ -282,7 +282,7 @@ export function StreamingReportSkeleton({ country, projectDescription, onRetry }
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
           >
-            <div className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3">
+            <div className="rounded-lg border border-primary/30 bg-transparent px-4 py-3">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Loader2 className="h-5 w-5 animate-spin text-primary" />
@@ -320,7 +320,7 @@ export function StreamingReportSkeleton({ country, projectDescription, onRetry }
             animate={{ opacity: 1 }}
             transition={{ delay: 0.12 }}
           >
-            <div className="rounded-lg border border-muted bg-muted/30 px-4 py-3">
+            <div className="rounded-lg border border-muted bg-transparent px-4 py-3">
               <p className="text-xs text-muted-foreground mb-1 font-medium">
                 {t('report.analyzedRequest')}
               </p>
@@ -376,8 +376,8 @@ export function StreamingReportSkeleton({ country, projectDescription, onRetry }
                           variant="outline"
                           className={`text-sm font-bold px-3 py-1 ${
                             verdict?.recommendation === "yes"
-                              ? "border-green-500 bg-green-50 text-green-700 dark:bg-green-950/50 dark:text-green-400"
-                              : "border-red-500 bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-400"
+                              ? "border-green-500 bg-transparent text-green-700 dark:text-green-400"
+                              : "border-red-500 bg-transparent text-red-700 dark:text-red-400"
                           }`}
                         >
                           {verdict?.recommendation === "yes" ? (
@@ -590,8 +590,8 @@ export function StreamingReportSkeleton({ country, projectDescription, onRetry }
                     {timeframe?.canCurrentAdminComplete !== undefined && (
                       <div className={`rounded-lg p-3 ${
                         timeframe.canCurrentAdminComplete
-                          ? "bg-green-50/50 dark:bg-green-950/20 border border-green-500/30"
-                          : "bg-amber-50/50 dark:bg-amber-950/20 border border-amber-500/30"
+                          ? "bg-transparent border border-green-500/30"
+                          : "bg-transparent border border-amber-500/30"
                       }`}>
                         <div className="flex items-center gap-2">
                           {timeframe.canCurrentAdminComplete ? (
@@ -830,7 +830,7 @@ export function StreamingReportSkeleton({ country, projectDescription, onRetry }
           animate={{ opacity: 1 }}
           transition={{ delay: 0.55 }}
         >
-          <Card className="bg-muted/30">
+          <Card className="bg-transparent">
             <CardContent className="py-4">
               <div className="flex gap-3">
                 <Skeleton className="h-4 w-4 shrink-0" />

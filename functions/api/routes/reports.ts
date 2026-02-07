@@ -134,4 +134,30 @@ reportRoutes.get("/report/:slug", async (c) => {
   });
 });
 
+// Get recent reports across all countries
+reportRoutes.get("/reports", async (c) => {
+  const limit = parseInt(c.req.query("limit") || "4", 10);
+  const db = drizzle(c.env.DB);
+
+  const result = await db
+    .select()
+    .from(reports)
+    .orderBy(desc(reports.createdAt))
+    .limit(limit);
+
+  return c.json({
+    reports: result.map((r) => ({
+      id: r.slug,
+      slug: r.slug,
+      country: r.country,
+      projectDescription: r.projectDescription,
+      projectType: r.projectType,
+      location: r.location,
+      estimatedCost: r.estimatedCost,
+      report: r.report,
+      createdAt: r.createdAt,
+    })),
+  });
+});
+
 export { reportRoutes };

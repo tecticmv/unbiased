@@ -20,7 +20,7 @@ export function ReportsEmptyState({
 
   if (hasFilters) {
     return (
-      <ScrollReveal className="flex flex-col items-center justify-center rounded-xl border border-dashed border-muted-foreground/25 bg-muted/20 py-16 px-4">
+      <ScrollReveal className="flex flex-col items-center justify-center rounded-xl border border-dashed border-muted-foreground/25 bg-transparent py-16 px-4">
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted mb-4">
           <Search className="h-7 w-7 text-muted-foreground" />
         </div>
@@ -40,7 +40,7 @@ export function ReportsEmptyState({
   }
 
   return (
-    <ScrollReveal className="flex flex-col items-center justify-center rounded-xl border border-dashed border-muted-foreground/25 bg-muted/20 py-16 px-4">
+    <ScrollReveal className="flex flex-col items-center justify-center rounded-xl border border-dashed border-muted-foreground/25 bg-transparent py-16 px-4">
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 mb-4">
         <FileText className="h-7 w-7 text-primary" />
       </div>

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 import {
   Scale,
   ArrowRight,
@@ -18,9 +19,43 @@ import {
   StaggerContainer,
   StaggerItem,
 } from "@/components/ui/scroll-reveal";
+import { ReportCard } from "@/components/report-card";
+import type { FeasibilityReport } from "@/types";
+
+interface RecentReport {
+  id: string;
+  slug: string;
+  country: string;
+  projectDescription: string;
+  projectType: string;
+  location: string | null;
+  estimatedCost: number | null;
+  report: FeasibilityReport;
+  createdAt: string;
+}
 
 export function HomePage() {
   const { t } = useTranslation();
+  const [recentReports, setRecentReports] = useState<RecentReport[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecentReports = async () => {
+      try {
+        const response = await fetch("/api/reports?limit=4");
+        if (response.ok) {
+          const data = await response.json();
+          setRecentReports(data.reports);
+        }
+      } catch (error) {
+        console.error("Failed to fetch recent reports:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentReports();
+  }, []);
 
   const features = [
     {
@@ -48,30 +83,30 @@ export function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-ocean-50 to-background dark:from-ocean-950 dark:to-background">
+      <section className="relative overflow-hidden bg-gradient-to-b from-muted/50 to-background">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-        <div className="container relative py-24 md:py-32">
+        <div className="container relative py-20 md:py-28 lg:py-36">
           <motion.div
-            className="mx-auto max-w-3xl text-center"
+            className="mx-auto max-w-4xl text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm text-primary">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2.5 text-sm font-medium text-primary ring-1 ring-primary/20">
               <Scale className="h-4 w-4" />
               <span>{t('common.tagline')}</span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl">
+            <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl xl:text-7xl">
               {t('home.hero.title')}
             </h1>
 
-            <p className="mb-8 text-lg text-muted-foreground md:text-xl">
+            <p className="mb-10 text-base text-muted-foreground md:text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed">
               {t('home.hero.description')}
             </p>
 
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <Button asChild size="xl">
+              <Button asChild size="xl" className="min-w-[200px]">
                 <Link to={`/${defaultCountry}`}>
                   {t('home.hero.cta')}
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -80,23 +115,35 @@ export function HomePage() {
             </div>
           </motion.div>
         </div>
+
+        {/* Bottom wave decoration */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </section>
 
       {/* Features Section */}
-      <section className="py-24" id="how-it-works">
+      <section className="py-20 lg:py-28" id="how-it-works">
         <div className="container">
-          <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold mb-3">
+              {t('home.features.title') || 'Why Use Unbiased?'}
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              {t('home.features.subtitle') || 'Data-driven insights to help you make informed decisions'}
+            </p>
+          </div>
+
+          <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
               <StaggerItem key={feature.titleKey}>
-                <Card className="h-full transition-shadow hover:shadow-lg">
+                <Card className="h-full transition-all hover:shadow-lg hover:scale-105 border-muted/40">
                   <CardContent className="pt-6">
-                    <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                      <feature.icon className="h-6 w-6 text-primary" />
+                    <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
+                      <feature.icon className="h-7 w-7 text-primary" />
                     </div>
                     <h3 className="mb-2 text-lg font-semibold">
                       {t(feature.titleKey)}
                     </h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {t(feature.descKey)}
                     </p>
                   </CardContent>
@@ -107,8 +154,64 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Recent Analyses Section */}
+      {!loading && recentReports.length > 0 && (
+        <section className="py-20 lg:py-28 bg-muted/20 border-y">
+          <div className="container">
+            <ScrollReveal>
+              <div className="mb-12 text-center">
+                <h2 className="text-3xl font-bold mb-3">
+                  {t('home.recentAnalyses.title') || 'Recent Feasibility Analyses'}
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  {t('home.recentAnalyses.description') || 'Explore the latest project analyses from our community'}
+                </p>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {recentReports.map((report, index) => (
+                <ReportCard
+                  key={report.slug}
+                  slug={report.slug}
+                  country={report.country}
+                  projectDescription={report.projectDescription}
+                  location={report.location}
+                  projectType={report.projectType}
+                  report={report.report}
+                  createdAt={report.createdAt}
+                  index={index}
+                />
+              ))}
+            </div>
+
+            <div className="mt-10 text-center">
+              <Button asChild variant="outline" size="lg">
+                <Link to={`/${defaultCountry}/reports`}>
+                  {t('home.recentAnalyses.viewAll') || 'View All Reports'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Analysis Categories */}
-      <section className="border-t bg-muted/30 py-16 overflow-hidden relative">
+      <section className="border-t bg-muted/30 py-20 overflow-hidden relative">
+        <div className="container mb-12">
+          <ScrollReveal>
+            <div className="text-center max-w-2xl mx-auto">
+              <h2 className="text-3xl font-bold mb-3">
+                {t('home.categories.title') || 'Comprehensive Analysis Across 6 Categories'}
+              </h2>
+              <p className="text-muted-foreground">
+                {t('home.categories.description') || 'Every project is evaluated across multiple dimensions to provide you with a complete feasibility assessment'}
+              </p>
+            </div>
+          </ScrollReveal>
+        </div>
+
         <style>{`
           @keyframes scroll {
             0% {
@@ -119,7 +222,7 @@ export function HomePage() {
             }
           }
           .animate-scroll {
-            animation: scroll 20s linear infinite;
+            animation: scroll 25s linear infinite;
           }
           .animate-scroll:hover {
             animation-play-state: paused;
@@ -127,8 +230,8 @@ export function HomePage() {
         `}</style>
 
         {/* Fade overlays */}
-        <div className="absolute left-0 top-0 bottom-0 w-96 bg-gradient-to-r from-background via-background/80 via-background/40 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-96 bg-gradient-to-l from-background via-background/80 via-background/40 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 md:w-96 bg-gradient-to-r from-muted/30 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 md:w-96 bg-gradient-to-l from-muted/30 to-transparent z-10 pointer-events-none" />
 
         <div className="flex gap-4 animate-scroll">
           {[...Array(2)].map((_, setIndex) => (
@@ -143,40 +246,16 @@ export function HomePage() {
               ].map((category) => (
                 <div
                   key={`${setIndex}-${category.key}`}
-                  className="flex-shrink-0 w-64 flex items-start gap-3 rounded-lg border bg-background p-4 shadow-sm hover:shadow-md transition-shadow"
+                  className="flex-shrink-0 w-72 flex items-start gap-3 rounded-xl border bg-background p-5 shadow-sm hover:shadow-md transition-all hover:scale-105"
                 >
                   <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary flex-shrink-0" />
                   <div>
-                    <h4 className="font-medium">{t(`report.categories.${category.key}`)}</h4>
+                    <h4 className="font-semibold text-base">{t(`report.categories.${category.key}`)}</h4>
                   </div>
                 </div>
               ))}
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24">
-        <div className="container">
-          <ScrollReveal className="mx-auto max-w-3xl rounded-2xl p-8 text-center md:p-12">
-            <h2 className="mb-4 text-3xl font-bold md:text-4xl">
-              {t('home.hero.title')}
-            </h2>
-            <p className="mb-8 text-lg text-muted-foreground">
-              {t('home.hero.description')}
-            </p>
-            <Button
-              asChild
-              size="xl"
-              variant="secondary"
-            >
-              <Link to={`/${defaultCountry}`}>
-                {t('home.hero.cta')}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          </ScrollReveal>
         </div>
       </section>
     </div>

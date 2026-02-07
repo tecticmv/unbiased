@@ -233,7 +233,7 @@ export function ExpertChips({ className, countrySlug }: ExpertChipsProps) {
             key={expert.id}
             className={cn(
               "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium",
-              "border bg-card/50 backdrop-blur-sm"
+              "border bg-transparent"
             )}
           >
             <span className={cn("h-4 w-4 rounded flex items-center justify-center", badge.bgColor)}>

@@ -60,7 +60,7 @@ export function TypingIndicator({
           </p>
         )}
 
-        <div className="rounded-2xl rounded-ss-sm px-4 py-3 shadow-sm bg-muted/50 dark:bg-muted/30">
+        <div className="rounded-2xl rounded-ss-sm px-4 py-3 shadow-sm bg-transparent border border-border">
           <div className="flex items-center gap-1.5">
             {[0, 1, 2].map((i) => (
               <motion.div

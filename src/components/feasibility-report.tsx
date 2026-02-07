@@ -53,8 +53,8 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-        <Icon className="h-5 w-5 text-primary" />
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-transparent">
+        <Icon className="h-5 w-5 text-muted-foreground" />
       </div>
       <div>
         <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
@@ -91,7 +91,7 @@ function AnimatedProgressBar({ value, index }: { value: number; index: number })
   }, [hasAnimated]);
 
   return (
-    <div ref={ref} className="h-2 w-full overflow-hidden rounded-full bg-muted">
+    <div ref={ref} className="h-2 w-full overflow-hidden rounded-full bg-transparent">
       <motion.div
         className="h-full rounded-full bg-primary"
         initial={{ width: 0 }}
@@ -281,7 +281,7 @@ export function FeasibilityReport({
             viewport={viewportSettings}
             className="mb-8"
           >
-            <div className="relative rounded-xl border bg-gradient-to-br from-muted/50 to-muted/30 px-5 py-4">
+            <div className="relative rounded-xl border bg-transparent px-5 py-4">
               <div className="absolute -top-3 left-4 px-2 bg-background">
                 <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {t('report.analyzedRequest')}
@@ -304,9 +304,9 @@ export function FeasibilityReport({
         >
           <Card className={`overflow-hidden shadow-lg ${
             report.verdict?.recommendation === "yes"
-              ? "border-green-500/40 bg-gradient-to-br from-green-500/5 to-transparent"
+              ? "border-green-500/40"
               : report.verdict?.recommendation === "no"
-                ? "border-red-500/40 bg-gradient-to-br from-red-500/5 to-transparent"
+                ? "border-red-500/40"
                 : ""
           }`}>
             <CardContent className="py-6 px-6">
@@ -327,8 +327,8 @@ export function FeasibilityReport({
                       <Badge
                         className={`text-sm font-bold px-4 py-1.5 ${
                           report.verdict.recommendation === "yes"
-                            ? "border-green-500 bg-green-500/20 text-green-700 dark:text-green-300 hover:bg-green-500/30"
-                            : "border-red-500 bg-red-500/20 text-red-700 dark:text-red-300 hover:bg-red-500/30"
+                            ? "border-green-500 bg-transparent text-green-700 dark:text-green-300"
+                            : "border-red-500 bg-transparent text-red-700 dark:text-red-300"
                         }`}
                       >
                         {report.verdict.recommendation === "yes" ? (
@@ -395,7 +395,7 @@ export function FeasibilityReport({
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="6"
-                            className="text-muted/20"
+                            className="text-neutral-300 dark:text-neutral-700"
                           />
                           <circle
                             cx="50"
@@ -415,19 +415,19 @@ export function FeasibilityReport({
                             }`}
                           />
                         </svg>
-                        <div className="absolute flex flex-col items-center">
-                          <span className="text-xl font-bold">
+                        <div className="absolute flex flex-col items-center justify-center">
+                          <span className="text-base font-bold leading-none">
                             {report.budgetRatio.percentageOfBudget < 0.01
                               ? "<0.01"
                               : report.budgetRatio.percentageOfBudget.toFixed(2)}%
                           </span>
-                          <span className="text-[10px] text-muted-foreground">{t('report.budgetRatio.ofBudget')}</span>
+                          <span className="text-[9px] text-muted-foreground mt-0.5">{t('report.budgetRatio.ofBudget')}</span>
                         </div>
                       </div>
 
                       {/* Budget Details */}
                       <div className="flex-1 space-y-3">
-                        <div className="flex items-center gap-2 rounded-lg bg-primary/5 p-2">
+                        <div className="flex items-center gap-2 rounded-lg bg-transparent p-2">
                           <TrendingUp className="h-4 w-4 text-primary" />
                           <div className="flex-1">
                             <p className="text-xs text-muted-foreground">{t('report.budgetRatio.projectCost')}</p>
@@ -436,7 +436,7 @@ export function FeasibilityReport({
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 rounded-lg bg-muted/50 p-2">
+                        <div className="flex items-center gap-2 rounded-lg bg-transparent p-2">
                           <Banknote className="h-4 w-4 text-muted-foreground" />
                           <div className="flex-1">
                             <p className="text-xs text-muted-foreground">
@@ -455,10 +455,10 @@ export function FeasibilityReport({
 
                     {/* Expenditure Classification (COFOG) */}
                     {report.budgetAlignment?.expenditureClassification && (
-                      <div className="rounded-lg border bg-card p-3">
+                      <div className="rounded-lg border bg-transparent p-3">
                         <div className="flex items-start gap-3">
-                          <div className="rounded-full bg-gray-500/10 p-2">
-                            <Landmark className="h-4 w-4 text-gray-500" />
+                          <div className="rounded-full bg-transparent p-2">
+                            <Landmark className="h-4 w-4 text-muted-foreground" />
                           </div>
                           <div className="flex-1 space-y-2">
                             <div>
@@ -487,7 +487,7 @@ export function FeasibilityReport({
                                         {report.budgetAlignment.expenditureClassification.percentageOfSectorBudget.toFixed(2)}%
                                       </span>
                                     </div>
-                                    <div className="h-1.5 w-full rounded-full bg-muted/50 overflow-hidden">
+                                    <div className="h-1.5 w-full rounded-full bg-transparent overflow-hidden">
                                       <div
                                         className={`h-full rounded-full transition-all ${
                                           report.budgetAlignment.expenditureClassification.percentageOfSectorBudget > 20
@@ -510,16 +510,18 @@ export function FeasibilityReport({
 
                     {/* Entity Budget from Fiscal Policy Framework */}
                     {report.budgetAlignment?.entityBudget?.hasEntityAllocation && (
-                      <div className="rounded-lg border bg-card p-3">
+                      <div className="rounded-lg border bg-transparent p-3">
                         <div className="flex items-start gap-3">
-                          <div className="rounded-full bg-purple-500/10 p-2">
-                            <Building2 className="h-4 w-4 text-purple-500" />
+                          <div className="rounded-full bg-transparent p-2">
+                            <Building2 className="h-4 w-4 text-muted-foreground" />
                           </div>
-                          <div className="flex-1 space-y-1">
-                            <p className="text-xs text-muted-foreground">{t('report.budgetAlignment.entityAllocation', 'Entity Budget Allocation')}</p>
-                            <p className="font-semibold">{report.budgetAlignment.entityBudget.entityName}</p>
-                            {report.budgetAlignment.entityBudget.allocatedBudget && (
-                              <div className="flex items-center justify-between text-sm pt-1">
+                          <div className="flex-1 space-y-2">
+                            <div>
+                              <p className="text-xs text-muted-foreground">{t('report.budgetAlignment.entityAllocation', 'Entity Budget Allocation')}</p>
+                              <p className="font-semibold">{report.budgetAlignment.entityBudget.entityName}</p>
+                            </div>
+                            {typeof report.budgetAlignment.entityBudget.allocatedBudget === 'number' && report.budgetAlignment.entityBudget.allocatedBudget > 0 && (
+                              <div className="flex items-center justify-between text-sm">
                                 <span className="text-muted-foreground">{t('report.budgetAlignment.allocatedBudget', 'Allocated Budget')}</span>
                                 <span className="font-medium">
                                   {formatCost(report.budgetAlignment.entityBudget.allocatedBudget, report.budgetRatio.currencyCode || report.estimatedCost.currency || country.currency)}
@@ -527,9 +529,9 @@ export function FeasibilityReport({
                               </div>
                             )}
                             {report.budgetAlignment.entityBudget.fiscalPolicyReference && (
-                              <p className="text-xs text-muted-foreground italic pt-1 border-t mt-2">
+                              <div className="rounded-md bg-muted/20 px-3 py-2.5 text-xs text-muted-foreground italic leading-relaxed">
                                 {report.budgetAlignment.entityBudget.fiscalPolicyReference}
-                              </p>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -583,7 +585,7 @@ export function FeasibilityReport({
               <CardContent className="p-0">
                 <div className="flex flex-col md:flex-row">
                   {/* Duration Visual - Left Side */}
-                  <div className="flex flex-col items-center justify-center p-6 md:p-8 bg-gradient-to-br from-primary/10 to-primary/5 md:w-48 shrink-0">
+                  <div className="flex flex-col items-center justify-center p-6 md:p-8 bg-transparent md:w-48 shrink-0">
                     <div className="relative">
                       <div className="flex h-24 w-24 items-center justify-center rounded-full bg-background shadow-inner border">
                         <div className="text-center">
@@ -603,21 +605,13 @@ export function FeasibilityReport({
                   {/* Details - Right Side */}
                   <div className="flex-1 p-6 space-y-4">
                     {/* Admin Completion Status */}
-                    <div className={`rounded-xl p-4 ${
-                      report.timeframe.canCurrentAdminComplete
-                        ? "bg-green-500/10 border border-green-500/20"
-                        : "bg-amber-500/10 border border-amber-500/20"
-                    }`}>
+                    <div className="rounded-xl p-4 bg-transparent border">
                       <div className="flex items-center gap-3">
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                          report.timeframe.canCurrentAdminComplete
-                            ? "bg-green-500/20"
-                            : "bg-amber-500/20"
-                        }`}>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-transparent">
                           {report.timeframe.canCurrentAdminComplete ? (
-                            <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                            <CheckCircle2 className="h-5 w-5 text-muted-foreground" />
                           ) : (
-                            <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                            <AlertTriangle className="h-5 w-5 text-muted-foreground" />
                           )}
                         </div>
                         <div>
@@ -640,17 +634,9 @@ export function FeasibilityReport({
                     <div className="flex flex-wrap gap-4">
                       {/* Risk of Delay */}
                       {report.timeframe.riskOfDelay && (
-                        <div className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2">
+                        <div className="flex items-center gap-2 rounded-lg bg-transparent px-3 py-2">
                           <span className="text-xs text-muted-foreground uppercase tracking-wider">{t('report.timeframe.delayRisk')}</span>
-                          <Badge
-                            className={`${
-                              report.timeframe.riskOfDelay === "low"
-                                ? "bg-green-500/20 text-green-700 dark:text-green-300"
-                                : report.timeframe.riskOfDelay === "medium"
-                                  ? "bg-yellow-500/20 text-yellow-700 dark:text-yellow-300"
-                                  : "bg-red-500/20 text-red-700 dark:text-red-300"
-                            }`}
-                          >
+                          <Badge className="bg-transparent">
                             {t(`report.timeframe.risk.${report.timeframe.riskOfDelay}`, { defaultValue: report.timeframe.riskOfDelay })}
                           </Badge>
                         </div>
@@ -738,7 +724,7 @@ export function FeasibilityReport({
 
           {/* Category Details */}
           <Card>
-            <CardHeader className="border-b bg-muted/30">
+            <CardHeader className="border-b bg-transparent">
               <CardTitle className="text-base">{t('analysis.title')}</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
@@ -756,7 +742,7 @@ export function FeasibilityReport({
                       <TabsTrigger
                         key={key}
                         value={key}
-                        className="flex items-center gap-2 rounded-xl border-2 bg-muted/30 px-4 py-2.5 text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md hover:bg-muted/50"
+                        className="flex items-center gap-2 rounded-xl border-2 bg-transparent px-4 py-2.5 text-sm font-medium transition-all data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md hover:bg-transparent"
                       >
                         <span>{(category.name || label).split(" ")[0]}</span>
                         <span className={`font-bold tabular-nums ${scoreColor} data-[state=active]:text-primary-foreground`}>
@@ -801,11 +787,11 @@ export function FeasibilityReport({
           />
           <div className="grid gap-6 md:grid-cols-2">
             {/* Key Risks */}
-            <Card className="h-full border-red-500/20 bg-gradient-to-br from-red-500/5 to-transparent">
+            <Card className="h-full">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-3 text-base sm:text-lg">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-500/10">
-                    <AlertTriangle className="h-5 w-5 text-red-500" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-transparent">
+                    <AlertTriangle className="h-5 w-5 text-muted-foreground" />
                   </div>
                   {t('report.risks.title')}
                 </CardTitle>
@@ -817,7 +803,7 @@ export function FeasibilityReport({
                     : (report.keyRisks ?? []).slice(0, 4)
                   ).map((risk, index) => (
                     <li key={index} className="flex items-start gap-3 text-sm">
-                      <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-red-500" />
+                      <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-muted-foreground" />
                       <span className="text-muted-foreground leading-relaxed">
                         <Markdown>{risk ?? ''}</Markdown>
                       </span>
@@ -848,11 +834,11 @@ export function FeasibilityReport({
             </Card>
 
             {/* Next Steps */}
-            <Card className="h-full border-green-500/20 bg-gradient-to-br from-green-500/5 to-transparent">
+            <Card className="h-full">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-3 text-base sm:text-lg">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/10">
-                    <ArrowRight className="h-5 w-5 text-green-500" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-transparent">
+                    <ArrowRight className="h-5 w-5 text-muted-foreground" />
                   </div>
                   {t('report.nextSteps.title')}
                 </CardTitle>
@@ -861,7 +847,7 @@ export function FeasibilityReport({
                 <ol className="space-y-3">
                   {(report.nextSteps ?? []).map((step, index) => (
                     <li key={index} className="flex items-start gap-3 text-sm">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
                         {index + 1}
                       </span>
                       <span className="text-muted-foreground leading-relaxed pt-0.5">
@@ -889,7 +875,7 @@ export function FeasibilityReport({
               title={t('report.alternative.title')}
               subtitle={t('report.sections.alternativeDesc', 'A suggested alternative approach')}
             />
-            <Card className="overflow-hidden border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent">
+            <Card className="overflow-hidden">
               <CardContent className="p-6">
                 <div className="flex flex-col lg:flex-row gap-6">
                   {/* Main Info */}
@@ -902,10 +888,10 @@ export function FeasibilityReport({
                     </div>
 
                     {/* Estimated Cost Badge */}
-                    <div className="inline-flex items-center gap-2 rounded-lg bg-amber-500/20 px-4 py-2">
-                      <Banknote className="h-4 w-4 text-amber-700 dark:text-amber-300" />
-                      <span className="text-sm text-amber-700 dark:text-amber-300">{t('report.estimatedCost')}:</span>
-                      <span className="font-bold text-amber-800 dark:text-amber-200">
+                    <div className="inline-flex items-center gap-2 rounded-lg bg-transparent px-4 py-2">
+                      <Banknote className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">{t('report.estimatedCost')}:</span>
+                      <span className="font-bold">
                         {(() => {
                           const altCost = report.alternativeProject.estimatedCost;
                           const currency = report.estimatedCost.currency || country.currency;
@@ -927,14 +913,14 @@ export function FeasibilityReport({
                     </div>
 
                     {/* Why Consider Box */}
-                    <div className="rounded-xl bg-amber-500/10 border border-amber-500/20 p-4">
+                    <div className="rounded-xl bg-transparent border p-4">
                       <div className="flex items-start gap-3">
-                        <Lightbulb className="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+                        <Lightbulb className="h-5 w-5 shrink-0 text-muted-foreground mt-0.5" />
                         <div>
-                          <p className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-1">
+                          <p className="text-sm font-semibold mb-1">
                             {t('report.alternative.why')}
                           </p>
-                          <div className="text-sm text-amber-700 dark:text-amber-300">
+                          <div className="text-sm text-muted-foreground">
                             <Markdown>{report.alternativeProject.whySuitable ?? ''}</Markdown>
                           </div>
                         </div>
@@ -945,15 +931,15 @@ export function FeasibilityReport({
                   {/* Benefits Sidebar */}
                   {(report.alternativeProject.potentialBenefits?.length ?? 0) > 0 && (
                     <div className="lg:w-72 shrink-0">
-                      <div className="rounded-xl bg-green-500/10 border border-green-500/20 p-4 h-full">
-                        <p className="text-sm font-semibold text-green-800 dark:text-green-200 mb-3 flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4" />
+                      <div className="rounded-xl bg-transparent border p-4 h-full">
+                        <p className="text-sm font-semibold mb-3 flex items-center gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
                           {t('report.alternative.benefits')}
                         </p>
                         <ul className="space-y-2">
                           {(report.alternativeProject.potentialBenefits ?? []).map((benefit, index) => (
-                            <li key={index} className="flex items-start gap-2 text-sm text-green-700 dark:text-green-300">
-                              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
+                            <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground" />
                               <Markdown>{benefit ?? ''}</Markdown>
                             </li>
                           ))}
@@ -976,15 +962,15 @@ export function FeasibilityReport({
             viewport={viewportSettings}
             className="mb-8"
           >
-            <Card className="overflow-hidden border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
+            <Card className="overflow-hidden border-primary/30">
               <CardContent className="py-8 px-6">
                 <div className="flex flex-col items-center text-center sm:flex-row sm:text-left gap-6">
                   <div className="relative">
                     <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary shadow-lg">
                       <MessageSquare className="h-8 w-8 text-primary-foreground" />
                     </div>
-                    <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-green-500 border-2 border-background flex items-center justify-center">
-                      <span className="text-white text-xs">AI</span>
+                    <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary border-2 border-background flex items-center justify-center">
+                      <span className="text-primary-foreground text-xs">AI</span>
                     </div>
                   </div>
                   <div className="flex-1">
@@ -1013,9 +999,9 @@ export function FeasibilityReport({
           viewport={viewportSettings}
           className="mb-8"
         >
-          <div className="rounded-xl border border-muted bg-muted/20 px-5 py-4">
+          <div className="rounded-xl border border-muted bg-transparent px-5 py-4">
             <div className="flex gap-4">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-transparent">
                 <Info className="h-4 w-4 text-muted-foreground" />
               </div>
               <div>
@@ -1039,9 +1025,9 @@ export function FeasibilityReport({
             viewport={viewportSettings}
             className="mb-8"
           >
-            <div className="rounded-xl border border-muted bg-muted/20 px-5 py-4">
+            <div className="rounded-xl border border-muted bg-transparent px-5 py-4">
               <div className="flex gap-4">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-transparent">
                   <BookOpen className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="flex-1">

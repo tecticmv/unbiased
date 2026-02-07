@@ -198,7 +198,7 @@ export function MessageInput({
     <div className="relative">
       {/* Reply preview - shown when replying to a message */}
       {replyingTo && (
-        <div className="flex items-center gap-2 mb-2 px-3 py-2 rounded-xl bg-muted/50 border border-border/50">
+        <div className="flex items-center gap-2 mb-2 px-3 py-2 rounded-xl bg-transparent border border-border/50">
           <Reply className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-muted-foreground">
@@ -234,7 +234,7 @@ export function MessageInput({
                 "flex items-center gap-3 w-full px-3 py-2 text-sm transition-colors",
                 i === mentionIndex
                   ? "bg-primary/10 text-primary"
-                  : "hover:bg-muted/50"
+                  : "hover:bg-transparent"
               )}
               onClick={() => insertMention(expert.name)}
               onMouseEnter={() => setMentionIndex(i)}
@@ -250,7 +250,7 @@ export function MessageInput({
       )}
 
       {/* Modern input container */}
-      <div className="flex items-end gap-2 p-1 rounded-2xl bg-muted/30 border border-border/50 focus-within:border-primary/30 focus-within:bg-muted/50 transition-all">
+      <div className="flex items-end gap-2 p-1 rounded-2xl bg-transparent border border-border/50 focus-within:border-primary/30 focus-within:bg-transparent transition-all">
         {/* Textarea */}
         <div className="flex-1 relative">
           <Textarea
@@ -278,7 +278,7 @@ export function MessageInput({
             "h-9 w-9 rounded-xl shrink-0 transition-all",
             content.trim() && !disabled
               ? "bg-primary hover:bg-primary/90 shadow-md"
-              : "bg-muted/50 text-muted-foreground hover:bg-muted"
+              : "bg-transparent text-muted-foreground hover:bg-muted"
           )}
           onClick={handleSubmit}
           disabled={!content.trim() || disabled || isSending}
