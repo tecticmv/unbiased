@@ -87,8 +87,7 @@
       "subtitle": "ශක්‍යතා විශ්ලේෂණ සඳහා තත්‍ය කාලීන අවබෝධය",
       "totalReports": "මුළු වාර්තා",
       "activeDiscussions": "ක්‍රියාකාරී සාකච්ඡා",
-      "recentActivity": "මෙම සතියේ",
-      "lastSevenDays": "අවසන් දින 7",
+      "recentActivity": "අවසන් දින 7",
       "avgScore": "සාමාන්‍ය ශක්‍යතාව",
       "overallFeasibility": "සමස්ත ශක්‍යතාව",
       "categoryBreakdown": "කාණ්ඩ අනුව ව්‍යාපෘති",
@@ -101,7 +100,7 @@
     },
     "hotTopics": {
       "title": "ජනප්‍රිය මාතෘකා",
-      "subtitle": "ට්‍රෙන්ඩින් විශ්ලේෂණ සහ ක්‍රියාකාරී සාකච්ඡා",
+      "subtitle": "ට්‍රෙන්ඩින් විශ්ලේෂණ",
       "trending": "ට්‍රෙන්ඩින් වාර්තා",
       "activeDiscussions": "සජීවී සාකච්ඡා",
       "active": "ක්‍රියාකාරී",

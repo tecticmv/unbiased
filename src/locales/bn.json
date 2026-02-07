@@ -87,8 +87,7 @@
       "subtitle": "সম্ভাব্যতা বিশ্লেষণে রিয়েল-টাইম অন্তর্দৃষ্টি",
       "totalReports": "মোট রিপোর্ট",
       "activeDiscussions": "সক্রিয় আলোচনা",
-      "recentActivity": "এই সপ্তাহে",
-      "lastSevenDays": "গত ৭ দিন",
+      "recentActivity": "গত ৭ দিন",
       "avgScore": "গড় সম্ভাব্যতা",
       "overallFeasibility": "সামগ্রিক সম্ভাব্যতা",
       "categoryBreakdown": "বিভাগ অনুযায়ী প্রকল্প",
@@ -101,7 +100,7 @@
     },
     "hotTopics": {
       "title": "হট টপিক্স",
-      "subtitle": "ট্রেন্ডিং বিশ্লেষণ এবং সক্রিয় আলোচনা",
+      "subtitle": "ট্রেন্ডিং বিশ্লেষণ",
       "trending": "ট্রেন্ডিং রিপোর্ট",
       "activeDiscussions": "লাইভ আলোচনা",
       "active": "সক্রিয়",

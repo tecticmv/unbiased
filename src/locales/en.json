@@ -89,8 +89,7 @@
       "subtitle": "Real-time insights into feasibility analyses",
       "totalReports": "Total Reports",
       "activeDiscussions": "Active Discussions",
-      "recentActivity": "This Week",
-      "lastSevenDays": "Last 7 days",
+      "recentActivity": "Past 7 Days",
       "avgScore": "Avg Feasibility",
       "overallFeasibility": "Overall feasibility",
       "categoryBreakdown": "Projects by Category",
@@ -103,7 +102,7 @@
     },
     "hotTopics": {
       "title": "Hot Topics",
-      "subtitle": "Trending analyses and active discussions",
+      "subtitle": "Trending analyses",
       "trending": "Trending Reports",
       "activeDiscussions": "Live Discussions",
       "active": "Active",
@@ -178,11 +177,17 @@
     "categories": {
       "title": "Feasibility Categories",
       "technical": "Technical Feasibility",
+      "technicalDesc": "Engineering requirements, technology stack, and infrastructure needs",
       "economic": "Economic Viability",
+      "economicDesc": "Cost analysis, ROI projections, and financial sustainability",
       "environmental": "Environmental Impact",
+      "environmentalDesc": "Ecological footprint, sustainability, and compliance",
       "social": "Social Impact",
+      "socialDesc": "Community benefit, public sentiment, and cultural factors",
       "legal": "Legal & Political",
-      "operational": "Operational Feasibility"
+      "legalDesc": "Regulatory compliance, permits, and governance framework",
+      "operational": "Operational Feasibility",
+      "operationalDesc": "Implementation logistics, resources, and timeline"
     },
     "sections": {
       "financial": "Financial Analysis",

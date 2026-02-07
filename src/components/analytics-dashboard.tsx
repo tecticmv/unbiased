@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FileText,
@@ -7,7 +6,7 @@ import {
   Target,
 } from "lucide-react";
 import { StatCard } from "@/components/stat-card";
-import { StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 interface StatsOverview {
   totalReports: number;
@@ -16,119 +15,64 @@ interface StatsOverview {
   avgFeasibilityScore: number;
 }
 
-interface CategoryBreakdown {
-  category: string;
-  count: number;
-  percentage: number;
-}
-
-interface ScoreDistribution {
-  range: string;
-  count: number;
-  percentage: number;
-}
-
-interface StatsResponse {
+interface AnalyticsDashboardProps {
   overview: StatsOverview;
-  categoryBreakdown: CategoryBreakdown[];
-  scoreDistribution: ScoreDistribution[];
-  trending: {
-    reports: unknown[];
-    discussions: unknown[];
-  };
 }
 
-export function AnalyticsDashboard() {
+export function AnalyticsDashboard({ overview }: AnalyticsDashboardProps) {
   const { t } = useTranslation();
-  const [stats, setStats] = useState<StatsResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch("/api/stats");
-        if (response.ok) {
-          const data = await response.json();
-          setStats(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStats();
-  }, []);
-
-  // Gracefully hide if loading fails or no data
-  if (loading) {
-    return (
-      <section className="py-16 lg:py-24 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-12">
-            <div className="h-8 bg-muted animate-pulse rounded w-64 mx-auto mb-4" />
-            <div className="h-4 bg-muted animate-pulse rounded w-96 mx-auto" />
-          </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-32 bg-card animate-pulse rounded-lg" />
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (!stats) return null;
 
   return (
-    <section className="py-12 lg:py-16 bg-muted/30">
+    <section className="py-16 lg:py-20">
       <div className="container">
-        {/* Stats Overview Grid */}
-        <StaggerContainer className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <StaggerItem>
-            <StatCard
-              title={t("home.analytics.totalReports")}
-              value={stats.overview.totalReports.toLocaleString()}
-              icon={FileText}
-              iconColor="text-blue-600"
-              iconBgColor="bg-blue-100 dark:bg-blue-950"
-            />
-          </StaggerItem>
+        <ScrollReveal>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl font-bold tracking-tight mb-3">
+              {t("home.analytics.title")}
+            </h2>
+            <p className="text-muted-foreground">
+              {t("home.analytics.subtitle")}
+            </p>
+          </div>
+        </ScrollReveal>
 
-          <StaggerItem>
-            <StatCard
-              title={t("home.analytics.activeDiscussions")}
-              value={stats.overview.activeDiscussions.toLocaleString()}
-              icon={MessagesSquare}
-              iconColor="text-emerald-600"
-              iconBgColor="bg-emerald-100 dark:bg-emerald-950"
-            />
-          </StaggerItem>
-
-          <StaggerItem>
-            <StatCard
-              title={t("home.analytics.recentActivity")}
-              value={stats.overview.recentActivity.toLocaleString()}
-              subtitle={t("home.analytics.lastSevenDays")}
-              icon={TrendingUp}
-              iconColor="text-amber-600"
-              iconBgColor="bg-amber-100 dark:bg-amber-950"
-            />
-          </StaggerItem>
-
-          <StaggerItem>
-            <StatCard
-              title={t("home.analytics.avgScore")}
-              value={`${stats.overview.avgFeasibilityScore}%`}
-              subtitle={t("home.analytics.overallFeasibility")}
-              icon={Target}
-              iconColor="text-purple-600"
-              iconBgColor="bg-purple-100 dark:bg-purple-950"
-            />
-          </StaggerItem>
-        </StaggerContainer>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6">
+          <StatCard
+            title={t("home.analytics.totalReports")}
+            value={overview.totalReports.toLocaleString()}
+            numericValue={overview.totalReports}
+            prefix="+"
+            padZero
+            icon={FileText}
+            iconColor="text-blue-600"
+          />
+          <StatCard
+            title={t("home.analytics.activeDiscussions")}
+            value={overview.activeDiscussions.toLocaleString()}
+            numericValue={overview.activeDiscussions}
+            prefix="+"
+            padZero
+            icon={MessagesSquare}
+            iconColor="text-emerald-600"
+          />
+          <StatCard
+            title={t("home.analytics.recentActivity")}
+            value={overview.recentActivity.toLocaleString()}
+            numericValue={overview.recentActivity}
+            prefix="+"
+            padZero
+            icon={TrendingUp}
+            iconColor="text-amber-600"
+          />
+          <StatCard
+            title={t("home.analytics.overallFeasibility")}
+            value={`${overview.avgFeasibilityScore}%`}
+            numericValue={overview.avgFeasibilityScore}
+            suffix="%"
+            icon={Target}
+            iconColor="text-purple-600"
+          />
+        </div>
       </div>
     </section>
   );

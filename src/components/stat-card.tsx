@@ -1,11 +1,46 @@
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+
+function useCountUp(target: number, duration = 1200, inView: boolean) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+
+    let start = 0;
+    const startTime = performance.now();
+
+    function tick(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(eased * target);
+
+      if (current !== start) {
+        start = current;
+        setValue(current);
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }, [target, duration, inView]);
+
+  return value;
+}
 
 interface StatCardProps {
   title: string;
   value: string | number;
+  numericValue?: number;
+  prefix?: string;
+  suffix?: string;
+  padZero?: boolean;
   subtitle?: string;
   icon: LucideIcon;
   iconColor?: string;
@@ -15,39 +50,45 @@ interface StatCardProps {
 export function StatCard({
   title,
   value,
+  numericValue,
+  prefix = "",
+  suffix = "",
+  padZero = false,
   subtitle,
   icon: Icon,
   iconColor = "text-primary",
-  iconBgColor = "bg-primary/10",
 }: StatCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const animatedValue = useCountUp(numericValue ?? 0, 1200, isInView);
+
+  const formatValue = (n: number) => {
+    if (padZero && n < 10) return `0${n}`;
+    return n.toLocaleString();
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      ref={ref}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      whileHover={{ scale: 1.02 }}
-      className="h-full"
+      className="text-center"
     >
-      <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-shadow duration-300">
-        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-          <h3 className="text-sm font-medium text-muted-foreground">
-            {title}
-          </h3>
-          <div className={cn("rounded-lg p-2", iconBgColor)}>
-            <Icon className={cn("h-4 w-4", iconColor)} />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold tabular-nums">
-            {value}
-          </div>
-          {subtitle && (
-            <p className="text-xs text-muted-foreground mt-1">
-              {subtitle}
-            </p>
-          )}
-        </CardContent>
-      </Card>
+      <div className={cn("inline-flex items-center justify-center h-10 w-10 rounded-full bg-muted mb-3")}>
+        <Icon className={cn("h-5 w-5", iconColor)} />
+      </div>
+      <div className="text-4xl font-bold tabular-nums tracking-tight">
+        {numericValue != null ? (
+          <>{prefix}{formatValue(animatedValue)}{suffix}</>
+        ) : (
+          value
+        )}
+      </div>
+      <p className="text-sm text-muted-foreground mt-1">{title}</p>
+      {subtitle && (
+        <p className="text-xs text-muted-foreground/60 mt-0.5">{subtitle}</p>
+      )}
     </motion.div>
   );
 }

@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import {
   MapPin,
-  Flame,
   Landmark,
   HardHat,
   Train,
@@ -18,7 +17,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import type { FeasibilityReport } from "@/types";
 import { detectProjectCategory, type ProjectCategory } from "@/types";
 
@@ -92,14 +90,15 @@ export function TrendingCard({
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
+      className="h-full"
     >
-      <Link to={`/${country}/report/${slug}`}>
-        <Card className="group relative overflow-hidden transition-all hover:shadow-lg hover:shadow-orange-500/10 hover:border-orange-500/30 hover:-translate-y-1">
+      <Link to={`/${country}/report/${slug}`} className="block h-full">
+        <Card className="group relative overflow-hidden transition-all hover:shadow-lg hover:shadow-orange-500/10 hover:border-orange-500/30 hover:-translate-y-1 h-full">
           {/* Gradient overlay on hover */}
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/0 to-orange-500/0 group-hover:from-orange-500/5 group-hover:via-transparent group-hover:to-orange-500/5 transition-all duration-500" />
 
-          <CardContent className="p-5 relative">
-            <div className="flex items-start gap-4">
+          <CardContent className="p-5 relative h-full">
+            <div className="flex items-start gap-4 h-full">
               {/* Icon with gradient background */}
               <div className="relative flex-shrink-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl blur-sm" />
@@ -109,11 +108,11 @@ export function TrendingCard({
               </div>
 
               {/* Content */}
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 flex flex-col">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <Flame className="h-3.5 w-3.5 text-orange-500 flex-shrink-0" />
+                      <CategoryIcon className="h-3.5 w-3.5 text-primary flex-shrink-0" />
                       <p className="text-sm font-semibold line-clamp-1 group-hover:text-primary transition-colors">
                         {displayProjectType}
                       </p>
@@ -127,16 +126,14 @@ export function TrendingCard({
                   </div>
                 </div>
 
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-3 leading-relaxed">
+                <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed flex-1">
                   {truncatedDescription}
                 </p>
 
-                {location && (
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
-                    <span className="truncate">{location}</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-2">
+                  <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="truncate">{location || country.toUpperCase()}</span>
+                </div>
               </div>
             </div>
           </CardContent>
