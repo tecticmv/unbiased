@@ -212,7 +212,7 @@ export const demandAnalysisSchema = z.object({
     distance: z.string(),
     canServeNeed: z.boolean(),
   })).optional(), // Existing facilities that could serve the need
-  sourcesUsed: z.array(z.string()).optional(), // Sources used for demand data (from Google Search)
+  sourcesUsed: z.array(z.string()).optional(), // Sources used for demand data (from AI research)
 });
 
 /**
@@ -225,7 +225,7 @@ export const budgetAlignmentSchema = z.object({
   suggestedFundingSources: z.array(z.string()).optional(),
   budgetImpact: z.string(), // Summary of impact on budget
   historicalComparison: z.string().optional(), // How this compares to past project spending
-  sourcesUsed: z.array(z.string()).optional(), // Sources used for budget data (from Google Search)
+  sourcesUsed: z.array(z.string()).optional(), // Sources used for budget data (from AI research)
   // Classification of Expenditure by Functions of Government (COFOG)
   expenditureClassification: z.object({
     cofogCategory: z.string(), // Primary COFOG category (Health, Education, Economic Affairs, etc.)
@@ -242,7 +242,7 @@ export const budgetAlignmentSchema = z.object({
 });
 
 /**
- * Data found via Google Search grounding
+ * Data found via AI-powered research
  */
 export const dataFoundViaSearchSchema = z.object({
   population: z.object({
@@ -354,7 +354,7 @@ export const feasibilityReportSchema = z.object({
   timeframe: timeframeSchema.optional(),
   location: locationSchema,
   estimatedCost: costEstimateSchema,
-  // Demand and budget analysis (with Google Search grounding data)
+  // Demand and budget analysis (with AI research data)
   demandAnalysis: demandAnalysisSchema.optional(),
   budgetAlignment: budgetAlignmentSchema.optional(),
   categories: z.object({
@@ -370,8 +370,8 @@ export const feasibilityReportSchema = z.object({
   disclaimer: z.string(),
   // Data quality and grounding info
   dataQualityNote: z.string().optional(), // Note about data availability/reliability
-  dataFoundViaSearch: dataFoundViaSearchSchema.optional(), // Summary of data found via Google Search
-  // References - sources with URLs from Google Search
+  dataFoundViaSearch: dataFoundViaSearchSchema.optional(), // Summary of data found via AI research
+  // References - sources with URLs from AI research
   references: z.array(referenceSchema).optional().default([]),
 });
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronDown, Plus, Check } from "lucide-react";
+import { ChevronDown, Check, Plus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -70,13 +70,17 @@ export function CountrySelector({ currentCountry }: CountrySelectorProps) {
             </DropdownMenuItem>
           ))}
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => setRequestModalOpen(true)}
-            className="flex items-center gap-2 text-primary"
-          >
-            <Plus className="h-4 w-4" />
-            {t("countryRequest.requestNew", "Request a country")}
-          </DropdownMenuItem>
+          <div className="p-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setRequestModalOpen(true)}
+              className="w-full justify-start gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              {t("countryRequest.requestNew", "Request a country")}
+            </Button>
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
 

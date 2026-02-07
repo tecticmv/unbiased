@@ -13,6 +13,7 @@ import "@/index.css";
 // Lazy load pages for code splitting
 const HomePage = lazy(() => import("@/pages/home").then(m => ({ default: m.HomePage })));
 const CountryPage = lazy(() => import("@/pages/country").then(m => ({ default: m.CountryPage })));
+const NewAnalysisPage = lazy(() => import("@/pages/new-analysis").then(m => ({ default: m.NewAnalysisPage })));
 const ReportPage = lazy(() => import("@/pages/report").then(m => ({ default: m.ReportPage })));
 const DiscussionPage = lazy(() => import("@/pages/discussion").then(m => ({ default: m.DiscussionPage })));
 
@@ -40,6 +41,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   <Route path="/" element={<Layout />}>
                     <Route index element={<HomePage />} />
                     <Route path=":country" element={<CountryPage />} />
+                    <Route path=":country/new" element={<NewAnalysisPage />} />
                     <Route path=":country/report/:slug" element={<ReportPage />} />
                     <Route path="*" element={<Navigate to={`/${defaultCountry}`} replace />} />
                   </Route>

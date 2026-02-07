@@ -16,7 +16,7 @@ interface ActiveGuest {
 // Generate consistent color from name
 function getColorFromName(name: string): string {
   const colors = [
-    "bg-blue-500",
+    "bg-gray-500",
     "bg-green-500",
     "bg-purple-500",
     "bg-orange-500",
@@ -29,7 +29,7 @@ function getColorFromName(name: string): string {
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return colors[Math.abs(hash) % colors.length] || "bg-blue-500";
+  return colors[Math.abs(hash) % colors.length] || "bg-gray-500";
 }
 
 function getInitials(name: string): string {

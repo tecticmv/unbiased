@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useParams, Navigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { useParams, Navigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Plus, ArrowLeft } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Hero } from "@/components/hero";
-import { AnalysisForm } from "@/components/analysis-form";
 import { Button } from "@/components/ui/button";
 import { getCountry, defaultCountry } from "@/lib/countries";
 import { ReportsFilters, ReportsList, ReportsEmptyState } from "@/components/reports";
@@ -39,13 +38,10 @@ interface ReportsResponse {
   pagination: PaginationInfo;
 }
 
-type ViewMode = "list" | "form";
-
 export function CountryPage() {
   const { country } = useParams();
   const { t, i18n } = useTranslation();
   const countryConfig = getCountry(country || defaultCountry);
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [reports, setReports] = useState<SavedReportData[]>([]);
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -150,105 +146,71 @@ export function CountryPage() {
     return <Navigate to={`/${defaultCountry}`} replace />;
   }
 
-  const handleBackToList = () => {
-    setViewMode("list");
-  };
-
   const hasFilters = searchQuery.trim() !== "" || selectedCategory !== null;
   const hasMore = pagination?.hasNextPage ?? false;
   const totalCount = pagination?.totalCount ?? 0;
 
   return (
     <div className="flex flex-col">
-      <AnimatePresence mode="wait">
-        {viewMode === "list" && (
-          <motion.div
-            key="list"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Hero country={countryConfig} />
-            <section className="py-12 md:py-16">
-              <div className="container">
-                {/* Header */}
-                <div className="mb-8 flex flex-col gap-6">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <h2 className="text-2xl font-bold md:text-3xl">
-                        {t('nav.reports')}
-                      </h2>
-                      <p className="text-muted-foreground">
-                        {totalCount === 0 && !hasFilters
-                          ? t('home.countries.description')
-                          : `${totalCount} ${t('analysis.title').toLowerCase()}`}
-                      </p>
-                    </div>
-                    <Button
-                      size="lg"
-                      onClick={() => setViewMode("form")}
-                      className="gap-2"
-                    >
-                      <Plus className="h-5 w-5" />
-                      {t('report.newAnalysis')}
-                    </Button>
-                  </div>
-
-                  {/* Filters */}
-                  <ReportsFilters
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    selectedCategory={selectedCategory}
-                    onCategoryChange={handleCategoryChange}
-                  />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Hero country={countryConfig} />
+        <section className="py-12 md:py-16">
+          <div className="container">
+            {/* Header */}
+            <div className="mb-8 flex flex-col gap-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold md:text-3xl">
+                    {t('nav.reports')}
+                  </h2>
+                  <p className="text-muted-foreground">
+                    {totalCount === 0 && !hasFilters
+                      ? t('home.countries.description')
+                      : `${totalCount} ${t('analysis.title').toLowerCase()}`}
+                  </p>
                 </div>
-
-                {/* Content */}
-                {reports.length === 0 && !isLoading ? (
-                  <ReportsEmptyState
-                    hasFilters={hasFilters}
-                    onNewAnalysis={() => setViewMode("form")}
-                    onClearFilters={hasFilters ? handleClearFilters : undefined}
-                  />
-                ) : (
-                  <ReportsList
-                    reports={reports}
-                    isLoading={isLoading}
-                    hasMore={hasMore}
-                    onLoadMore={handleLoadMore}
-                  />
-                )}
-              </div>
-            </section>
-          </motion.div>
-        )}
-
-        {viewMode === "form" && (
-          <motion.div
-            key="form"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Hero country={countryConfig} />
-            <section className="py-12 md:py-16">
-              <div className="container max-w-3xl">
                 <Button
-                  variant="ghost"
-                  onClick={handleBackToList}
-                  className="mb-6 gap-2"
+                  size="lg"
+                  asChild
+                  className="gap-2"
                 >
-                  <ArrowLeft className="h-4 w-4" />
-                  {t('common.back')}
+                  <Link to={`/${countryConfig.slug}/new`}>
+                    <Plus className="h-5 w-5" />
+                    {t('report.newAnalysis')}
+                  </Link>
                 </Button>
-                <AnalysisForm country={countryConfig} />
               </div>
-            </section>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+              {/* Filters */}
+              <ReportsFilters
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                selectedCategory={selectedCategory}
+                onCategoryChange={handleCategoryChange}
+              />
+            </div>
+
+            {/* Content */}
+            {reports.length === 0 && !isLoading ? (
+              <ReportsEmptyState
+                hasFilters={hasFilters}
+                onClearFilters={hasFilters ? handleClearFilters : undefined}
+              />
+            ) : (
+              <ReportsList
+                reports={reports}
+                isLoading={isLoading}
+                hasMore={hasMore}
+                onLoadMore={handleLoadMore}
+              />
+            )}
+          </div>
+        </section>
+      </motion.div>
     </div>
   );
 }

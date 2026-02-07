@@ -38,13 +38,13 @@ const verifiedSizes = {
 
 // High-contrast avatar background colors for each expert
 const avatarBgColors: Record<ExpertType, string> = {
-  ai_economist: "bg-blue-600",
+  ai_economist: "bg-gray-600",
   ai_engineer: "bg-orange-500",
   ai_legal: "bg-purple-600",
   ai_environmental: "bg-emerald-600",
   ai_social: "bg-pink-500",
   ai_operations: "bg-slate-600",
-  ai_moderator: "bg-cyan-600",
+  ai_moderator: "bg-gray-600",
 };
 
 // Get initials from expert name (e.g., "Dr. Economist" -> "DE", "Chief Engineer" -> "CE")
@@ -103,7 +103,7 @@ export function ExpertAvatar({
       {/* Verified badge - bottom right */}
       {showVerified && (
         <div className={cn("absolute", verifiedSizes[size])}>
-          <BadgeCheck className="h-full w-full text-blue-500 fill-white" />
+          <BadgeCheck className="h-full w-full text-gray-500 fill-white" />
         </div>
       )}
     </div>

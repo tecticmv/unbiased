@@ -457,8 +457,8 @@ export function FeasibilityReport({
                     {report.budgetAlignment?.expenditureClassification && (
                       <div className="rounded-lg border bg-card p-3">
                         <div className="flex items-start gap-3">
-                          <div className="rounded-full bg-blue-500/10 p-2">
-                            <Landmark className="h-4 w-4 text-blue-500" />
+                          <div className="rounded-full bg-gray-500/10 p-2">
+                            <Landmark className="h-4 w-4 text-gray-500" />
                           </div>
                           <div className="flex-1 space-y-2">
                             <div>
@@ -1059,7 +1059,7 @@ export function FeasibilityReport({
                           href={ref.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline leading-relaxed"
+                          className="flex-1 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300 underline leading-relaxed"
                         >
                           {ref.title}
                         </a>

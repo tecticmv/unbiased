@@ -285,14 +285,14 @@ ${contextSection}
 
 IMPORTANT: Today's date is ${currentDate}. Always search for and use the most recent data available (${currentYear} or ${currentYear - 1} fiscal year data). Do NOT use outdated data from previous years if more recent data is available.
 
-Use Google Search to find current, real-world data about:
+Research and find current, real-world data about:
 1. Similar projects in ${country} or the region
 2. Current costs for this type of project
 3. Local regulations and requirements
 4. Environmental considerations specific to the location
 5. Economic conditions and budget data for ${country}
 
-IMPORTANT - For each source you use from Google Search, capture the title and full URL. You will include these in the "references" field of your response to allow users to verify the information.
+IMPORTANT - For each source you use from your research, capture the title and full URL. You will include these in the "references" field of your response to allow users to verify the information.
 
 IMPORTANT - Also analyze and incorporate data from these government/public finance areas:
 
@@ -481,7 +481,7 @@ Provide a comprehensive feasibility analysis in the following JSON format:
   },
   "references": [
     {
-      "title": "<Source title from Google Search result>",
+      "title": "<Source title from research>",
       "url": "<https://full-url-to-source.com>"
     }
   ],
@@ -497,7 +497,7 @@ IMPORTANT:
 - Provide realistic cost estimates in ${currency}
 - Be balanced - highlight both opportunities and risks
 - If data is limited, note this in the confidence ratings
-- **Populate the "references" array with all sources you found via Google Search that informed your analysis. Include government websites, official reports, databases, and reliable sources with their full URLs.**
+- **Populate the "references" array with all sources you found via AI research that informed your analysis. Include government websites, official reports, databases, and reliable sources with their full URLs.**
 
 Return ONLY the JSON object, no other text.`;
 }
@@ -890,7 +890,7 @@ analysisRoutes.post("/analyze/stream", zValidator("json", analysisSchema), async
         .set({ progress: 10, partialResult: { projectType } })
         .where(eq(jobs.id, jobId));
 
-      // Step 2: Full analysis with Google Search grounding
+      // Step 2: Full analysis with AI-powered research
       const analysisModel = genAI.getGenerativeModel({
         model: modelName,
         tools: [{ googleSearch: {} }] as unknown as undefined,

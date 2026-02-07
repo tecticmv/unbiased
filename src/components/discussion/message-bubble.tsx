@@ -121,7 +121,7 @@ const affiliationBadges: Record<ExpertType, { icon: LucideIcon; bgColor: string 
 // Generate consistent color from name
 function getColorFromName(name: string): string {
   const colors = [
-    "bg-blue-500",
+    "bg-gray-500",
     "bg-green-500",
     "bg-purple-500",
     "bg-orange-500",
@@ -134,7 +134,7 @@ function getColorFromName(name: string): string {
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return colors[Math.abs(hash) % colors.length] || "bg-blue-500";
+  return colors[Math.abs(hash) % colors.length] || "bg-gray-500";
 }
 
 function getInitials(name: string): string {
@@ -225,23 +225,23 @@ export function MessageBubble({
           {/* Reply context - shows quoted message being replied to */}
           {replyToMessage && (
             <div className="flex items-center justify-end gap-1.5 mb-1.5">
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-400/20 dark:bg-blue-500/20 border-e-2 border-blue-400">
-                <Reply className="h-3 w-3 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-400/20 dark:bg-gray-500/20 border-e-2 border-gray-400">
+                <Reply className="h-3 w-3 text-gray-600 dark:text-gray-400" />
+                <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
                   {replyToMessage.participantName}
                 </span>
-                <span className="text-xs text-blue-600/70 dark:text-blue-400/70 truncate max-w-[150px]">
+                <span className="text-xs text-gray-600/70 dark:text-gray-400/70 truncate max-w-[150px]">
                   {replyToMessage.content}
                 </span>
               </div>
             </div>
           )}
           <div className={cn(
-            "rounded-2xl rounded-ee-sm bg-blue-500 dark:bg-blue-600 px-4 py-3 text-white shadow-sm",
-            replyToMessage && "border-s-2 border-blue-300"
+            "rounded-2xl rounded-ee-sm bg-gray-500 dark:bg-gray-600 px-4 py-3 text-white shadow-sm",
+            replyToMessage && "border-s-2 border-gray-300"
           )}>
             <div dir="auto" className="text-sm leading-relaxed">
-              <MarkdownBlock className="text-white [&_a]:text-blue-200 [&_a:hover]:text-blue-100">{message.content}</MarkdownBlock>
+              <MarkdownBlock className="text-white [&_a]:text-gray-200 [&_a:hover]:text-gray-100">{message.content}</MarkdownBlock>
             </div>
           </div>
           <div className="flex items-center gap-2 mt-1.5 justify-end">

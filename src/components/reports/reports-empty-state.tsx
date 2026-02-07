@@ -1,20 +1,22 @@
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FileText, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { defaultCountry } from "@/lib/countries";
 
 interface ReportsEmptyStateProps {
   hasFilters: boolean;
-  onNewAnalysis: () => void;
   onClearFilters?: () => void;
 }
 
 export function ReportsEmptyState({
   hasFilters,
-  onNewAnalysis,
   onClearFilters,
 }: ReportsEmptyStateProps) {
   const { t } = useTranslation();
+  const { country } = useParams();
+  const countrySlug = country || defaultCountry;
 
   if (hasFilters) {
     return (
@@ -48,9 +50,11 @@ export function ReportsEmptyState({
       <p className="text-muted-foreground text-center max-w-md mb-6">
         {t('analysis.form.description')}
       </p>
-      <Button onClick={onNewAnalysis} className="gap-2">
-        <Plus className="h-4 w-4" />
-        {t('report.newAnalysis')}
+      <Button asChild className="gap-2">
+        <Link to={`/${countrySlug}/new`}>
+          <Plus className="h-4 w-4" />
+          {t('report.newAnalysis')}
+        </Link>
       </Button>
     </ScrollReveal>
   );
