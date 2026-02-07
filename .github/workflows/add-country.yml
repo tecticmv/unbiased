@@ -186,16 +186,13 @@ jobs:
             echo "$GENERATED_TS" | jq -r '.types_ts' > src/types/index.ts
             echo "$GENERATED_TS" | jq -r '.personas_ts' > functions/api/experts/personas.ts
 
-            # ===== STEP 2: Generate locale JSON files =====
-            echo "Step 2: Generating locale files..."
+            # ===== STEP 2: Generate first batch of locale files =====
+            echo "Step 2: Generating locale files (en, dv, hi)..."
             EN_JSON=$(cat src/locales/en.json)
             DV_JSON=$(cat src/locales/dv.json)
             HI_JSON=$(cat src/locales/hi.json)
-            BN_JSON=$(cat src/locales/bn.json)
-            SI_JSON=$(cat src/locales/si.json)
-            TA_JSON=$(cat src/locales/ta.json)
 
-            PROMPT_LOCALE="Add country translations to locale files. Generate COMPLETE updated file contents.
+            PROMPT_LOCALE1="Add country translations to locale files. Generate COMPLETE updated file contents.
 
             VALIDATED COUNTRY DATA - $VALIDATED_DATA
 
@@ -210,6 +207,56 @@ jobs:
             FILE src/locales/hi.json
             $HI_JSON
 
+            REQUIREMENT - Add country name to 'countries' section using translations from validated data
+
+            Return JSON: {en_json: complete file, dv_json: complete file, hi_json: complete file}
+            Return ONLY valid JSON."
+
+            echo "$PROMPT_LOCALE1" > /tmp/prompt_locale1.txt
+
+            jq -n --rawfile prompt /tmp/prompt_locale1.txt \
+              '{contents: [{parts: [{text: $prompt}]}], generationConfig: {temperature: 0.2, maxOutputTokens: 32768, responseMimeType: "application/json"}}' \
+              > /tmp/payload_locale1.json
+
+            RESPONSE_LOCALE1=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
+              -H "Content-Type: application/json" -d @/tmp/payload_locale1.json)
+
+            ERROR_MSG=$(echo "$RESPONSE_LOCALE1" | jq -r '.error.message // empty')
+            if [ -n "$ERROR_MSG" ]; then
+              echo "Gemini API error (Locale 1): $ERROR_MSG"
+              echo "$ERROR_MSG" > /tmp/build_errors.txt
+              continue
+            fi
+
+            GENERATED_LOCALE1=$(echo "$RESPONSE_LOCALE1" | jq -r '.candidates[0].content.parts[0].text // empty')
+            if [ -z "$GENERATED_LOCALE1" ] || [ "$GENERATED_LOCALE1" = "null" ]; then
+              echo "Empty response from Gemini (Locale 1)"
+              echo "$RESPONSE_LOCALE1" > /tmp/build_errors.txt
+              continue
+            fi
+
+            if ! echo "$GENERATED_LOCALE1" | jq -e . > /dev/null 2>&1; then
+              echo "Invalid JSON from Gemini (Locale 1)"
+              echo "$GENERATED_LOCALE1" > /tmp/build_errors.txt
+              continue
+            fi
+
+            echo "$GENERATED_LOCALE1" | jq -r '.en_json' > src/locales/en.json
+            echo "$GENERATED_LOCALE1" | jq -r '.dv_json' > src/locales/dv.json
+            echo "$GENERATED_LOCALE1" | jq -r '.hi_json' > src/locales/hi.json
+
+            # ===== STEP 3: Generate second batch of locale files =====
+            echo "Step 3: Generating locale files (bn, si, ta)..."
+            BN_JSON=$(cat src/locales/bn.json)
+            SI_JSON=$(cat src/locales/si.json)
+            TA_JSON=$(cat src/locales/ta.json)
+
+            PROMPT_LOCALE2="Add country translations to locale files. Generate COMPLETE updated file contents.
+
+            VALIDATED COUNTRY DATA - $VALIDATED_DATA
+
+            FILES TO MODIFY
+
             FILE src/locales/bn.json
             $BN_JSON
 
@@ -221,44 +268,41 @@ jobs:
 
             REQUIREMENT - Add country name to 'countries' section using translations from validated data
 
-            Return JSON: {en_json: complete file, dv_json: complete file, hi_json: complete file, bn_json: complete file, si_json: complete file, ta_json: complete file}
+            Return JSON: {bn_json: complete file, si_json: complete file, ta_json: complete file}
             Return ONLY valid JSON."
 
-            echo "$PROMPT_LOCALE" > /tmp/prompt_locale.txt
+            echo "$PROMPT_LOCALE2" > /tmp/prompt_locale2.txt
 
-            jq -n --rawfile prompt /tmp/prompt_locale.txt \
+            jq -n --rawfile prompt /tmp/prompt_locale2.txt \
               '{contents: [{parts: [{text: $prompt}]}], generationConfig: {temperature: 0.2, maxOutputTokens: 32768, responseMimeType: "application/json"}}' \
-              > /tmp/payload_locale.json
+              > /tmp/payload_locale2.json
 
-            RESPONSE_LOCALE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
-              -H "Content-Type: application/json" -d @/tmp/payload_locale.json)
+            RESPONSE_LOCALE2=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}" \
+              -H "Content-Type: application/json" -d @/tmp/payload_locale2.json)
 
-            ERROR_MSG=$(echo "$RESPONSE_LOCALE" | jq -r '.error.message // empty')
+            ERROR_MSG=$(echo "$RESPONSE_LOCALE2" | jq -r '.error.message // empty')
             if [ -n "$ERROR_MSG" ]; then
-              echo "Gemini API error (Locale): $ERROR_MSG"
+              echo "Gemini API error (Locale 2): $ERROR_MSG"
               echo "$ERROR_MSG" > /tmp/build_errors.txt
               continue
             fi
 
-            GENERATED_LOCALE=$(echo "$RESPONSE_LOCALE" | jq -r '.candidates[0].content.parts[0].text // empty')
-            if [ -z "$GENERATED_LOCALE" ] || [ "$GENERATED_LOCALE" = "null" ]; then
-              echo "Empty response from Gemini (Locale)"
-              echo "$RESPONSE_LOCALE" > /tmp/build_errors.txt
+            GENERATED_LOCALE2=$(echo "$RESPONSE_LOCALE2" | jq -r '.candidates[0].content.parts[0].text // empty')
+            if [ -z "$GENERATED_LOCALE2" ] || [ "$GENERATED_LOCALE2" = "null" ]; then
+              echo "Empty response from Gemini (Locale 2)"
+              echo "$RESPONSE_LOCALE2" > /tmp/build_errors.txt
               continue
             fi
 
-            if ! echo "$GENERATED_LOCALE" | jq -e . > /dev/null 2>&1; then
-              echo "Invalid JSON from Gemini (Locale)"
-              echo "$GENERATED_LOCALE" > /tmp/build_errors.txt
+            if ! echo "$GENERATED_LOCALE2" | jq -e . > /dev/null 2>&1; then
+              echo "Invalid JSON from Gemini (Locale 2)"
+              echo "$GENERATED_LOCALE2" > /tmp/build_errors.txt
               continue
             fi
 
-            echo "$GENERATED_LOCALE" | jq -r '.en_json' > src/locales/en.json
-            echo "$GENERATED_LOCALE" | jq -r '.dv_json' > src/locales/dv.json
-            echo "$GENERATED_LOCALE" | jq -r '.hi_json' > src/locales/hi.json
-            echo "$GENERATED_LOCALE" | jq -r '.bn_json' > src/locales/bn.json
-            echo "$GENERATED_LOCALE" | jq -r '.si_json' > src/locales/si.json
-            echo "$GENERATED_LOCALE" | jq -r '.ta_json' > src/locales/ta.json
+            echo "$GENERATED_LOCALE2" | jq -r '.bn_json' > src/locales/bn.json
+            echo "$GENERATED_LOCALE2" | jq -r '.si_json' > src/locales/si.json
+            echo "$GENERATED_LOCALE2" | jq -r '.ta_json' > src/locales/ta.json
 
             # Verify
             echo "Running TypeScript check..."
