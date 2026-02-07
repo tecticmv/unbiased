@@ -92,8 +92,7 @@
       "subtitle": "व्यवहार्यता विश्लेषण में रीयल-टाइम अंतर्दृष्टि",
       "totalReports": "कुल रिपोर्ट",
       "activeDiscussions": "सक्रिय चर्चाएँ",
-      "recentActivity": "इस सप्ताह",
-      "lastSevenDays": "पिछले 7 दिन",
+      "recentActivity": "पिछले 7 दिन",
       "avgScore": "औसत व्यवहार्यता",
       "overallFeasibility": "समग्र व्यवहार्यता",
       "categoryBreakdown": "श्रेणी के अनुसार परियोजनाएं",
@@ -106,7 +105,7 @@
     },
     "hotTopics": {
       "title": "हॉट टॉपिक्स",
-      "subtitle": "ट्रेंडिंग विश्लेषण और सक्रिय चर्चाएँ",
+      "subtitle": "ट्रेंडिंग विश्लेषण",
       "trending": "ट्रेंडिंग रिपोर्ट",
       "activeDiscussions": "लाइव चर्चाएँ",
       "active": "सक्रिय",
