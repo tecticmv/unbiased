@@ -116,7 +116,7 @@ export function HomePage() {
                 </Link>
               </Button>
               <Button asChild size="xl" variant="outline" className="min-w-[200px]">
-                <Link to={`/${defaultCountry}/reports`}>
+                <Link to={`/${defaultCountry}`}>
                   {t('home.hero.viewReports') || 'View Reports'}
                 </Link>
               </Button>
@@ -214,7 +214,7 @@ export function HomePage() {
                     </Link>
                   </Button>
                   <Button asChild size="lg" variant="ghost">
-                    <Link to={`/${defaultCountry}/reports`}>
+                    <Link to={`/${defaultCountry}`}>
                       {t('home.hero.viewReports') || 'View Reports'}
                     </Link>
                   </Button>

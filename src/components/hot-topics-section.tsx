@@ -122,7 +122,7 @@ export function HotTopicsSection({ data }: HotTopicsSectionProps) {
       <div className="container mt-10">
         <div className="flex justify-center">
           <Button asChild variant="outline" size="lg" className="group">
-            <Link to={`/${defaultCountry}/reports`}>
+            <Link to={`/${defaultCountry}`}>
               <span>{t("home.recentAnalyses.viewAll") || "View All Reports"}</span>
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
