@@ -349,7 +349,9 @@
     "maldives": "Maldives",
     "india": "India",
     "bangladesh": "Bangladesh",
-    "srilanka": "Sri Lanka"
+    "srilanka": "Sri Lanka",
+    "new-country": "New Country",
+    "bhutan": "Bhutan"
   },
   "countryRequest": {
     "title": "Request a New Country",

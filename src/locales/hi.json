@@ -314,7 +314,9 @@
     "maldives": "मालदीव",
     "india": "भारत",
     "bangladesh": "बांग्लादेश",
-    "srilanka": "श्रीलंका"
+    "srilanka": "श्रीलंका",
+    "new-country": "नया देश",
+    "bhutan": "भूटान"
   },
   "countryRequest": {
     "title": "नया देश अनुरोध करें",

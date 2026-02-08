@@ -131,6 +131,24 @@ const expertNamesByRegion: Record<string, Record<ExpertType, string>> = {
     ai_operations: "Kasun Bandara",
     ai_moderator: "Tharindu Senanayake",
   },
+  nepal: {
+    ai_economist: "Dr. Anjali Thapa",
+    ai_engineer: "Bikram Gurung",
+    ai_legal: "Sita Devi",
+    ai_environmental: "Dr. Ramesh Karki",
+    ai_social: "Pooja Rai",
+    ai_operations: "Suresh Limbu",
+    ai_moderator: "Devendra Sharma",
+  },
+  bhutan: {
+    ai_economist: "Dr. Tashi Wangchuk",
+    ai_engineer: "Karma Dorji",
+    ai_legal: "Sonam Choden",
+    ai_environmental: "Dr. Pema Lhamo",
+    ai_social: "Deki Yangzom",
+    ai_operations: "Jigme Thinley",
+    ai_moderator: "Ugyen Tenzin",
+  },
   default: {
     ai_economist: "Dr. Sarah Chen",
     ai_engineer: "Marcus Thompson",
@@ -386,3 +404,4 @@ export function getProjectTypeIcon(projectType: string | null | undefined): stri
   const category = detectProjectCategory(projectType);
   return projectCategoryIcons[category];
 }
+

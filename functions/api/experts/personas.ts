@@ -40,6 +40,24 @@ export const expertNamesByRegion: Record<string, Record<string, string>> = {
     ai_operations: "Kasun Bandara",
     ai_moderator: "Tharindu Senanayake",
   },
+  nepal: {
+    ai_economist: "Dr. Anjali Thapa",
+    ai_engineer: "Bikram Gurung",
+    ai_legal: "Sita Devi",
+    ai_environmental: "Dr. Ramesh Karki",
+    ai_social: "Pooja Rai",
+    ai_operations: "Suresh Limbu",
+    ai_moderator: "Devendra Sharma",
+  },
+  bhutan: {
+    ai_economist: "Dr. Tashi Wangchuk",
+    ai_engineer: "Karma Dorji",
+    ai_legal: "Sonam Choden",
+    ai_environmental: "Dr. Pema Lhamo",
+    ai_social: "Deki Yangzom",
+    ai_operations: "Jigme Thinley",
+    ai_moderator: "Ugyen Tenzin",
+  },
   default: {
     ai_economist: "Dr. Sarah Chen",
     ai_engineer: "Marcus Thompson",
@@ -110,7 +128,7 @@ export const baseExpertPersonas = {
   ai_moderator: {
     id: "ai_moderator",
     role: "Discussion Moderator",
-    categoryKey: "general",
+        categoryKey: "general",
     focusAreas: ["Summary", "Clarification", "Key takeaways", "Next steps", "Cross-domain insights"],
     personalityTraits: ["Neutral", "Synthesizing", "Clear communicator", "Facilitative"],
     speakingStyle: "Neutral and synthesizing. Uses phrases like 'to summarize', 'the key points are', 'bringing it together'. Helps clarify and connect different perspectives.",
@@ -148,3 +166,4 @@ export const expertPersonas: Record<ExpertType, ExpertPersonaWithName> = {
   ai_operations: { ...baseExpertPersonas.ai_operations, name: defaultNames.ai_operations! },
   ai_moderator: { ...baseExpertPersonas.ai_moderator, name: defaultNames.ai_moderator! },
 };
+

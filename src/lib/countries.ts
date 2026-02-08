@@ -199,6 +199,73 @@ export const countries: Record<string, CountryConfig> = {
     description:
       "Evaluate development and reconstruction projects across Sri Lanka.",
   },
+  nepal: {
+    slug: "nepal",
+    code: "NP",
+    name: "Nepal",
+    currency: "NPR",
+    currencySymbol: "रू",
+    flag: "🇳🇵",
+    regions: [
+      "Kathmandu",
+      "Pokhara",
+      "Lalitpur",
+      "Bharatpur",
+      "Biratnagar",
+      "Birgunj",
+      "Janakpur",
+      "Butwal",
+      "Dharan",
+      "Hetauda",
+      "Nepalgunj",
+    ],
+    projectTypes: [
+      "Infrastructure",
+      "Hydropower",
+      "Tourism",
+      "Housing",
+      "Energy",
+      "Transportation",
+      "Healthcare",
+      "Education",
+      "Agriculture",
+      "Water & Sanitation",
+      "Rural Development",
+      "Heritage Conservation",
+    ],
+    description:
+      "Analyze development projects focusing on hydropower, tourism, and infrastructure in Nepal.",
+  },
+  bhutan: {
+    slug: "bhutan",
+    code: "BT",
+    name: "Bhutan",
+    currency: "BTN",
+    currencySymbol: "Nu.",
+    flag: "🇧🇹",
+    regions: [
+      "Thimphu",
+      "Paro",
+      "Punakha",
+      "Wangdue Phodrang",
+      "Bumthang",
+      "Trongsa",
+      "Gelephu",
+      "Phuntsholing",
+    ],
+    projectTypes: [
+      "Hydropower",
+      "Tourism",
+      "Infrastructure",
+      "Rural Development",
+      "Education",
+      "Healthcare",
+      "Cultural Heritage",
+      "Sustainable Development",
+    ],
+    description:
+      "Focus on sustainable development, hydropower, and tourism projects in Bhutan.",
+  },
 };
 
 export const defaultCountry = "maldives";
@@ -214,3 +281,4 @@ export function getAllCountries(): CountryConfig[] {
 export function getCountryCodes(): string[] {
   return Object.keys(countries);
 }
+

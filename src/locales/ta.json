@@ -314,7 +314,9 @@
     "maldives": "மாலத்தீவு",
     "india": "இந்தியா",
     "bangladesh": "வங்கதேசம்",
-    "srilanka": "இலங்கை"
+    "srilanka": "இலங்கை",
+    "new-country": "புதிய நாடு",
+    "bhutan": "பூட்டான்"
   },
   "countryRequest": {
     "title": "புதிய நாட்டைக் கோரவும்",
