@@ -155,44 +155,120 @@ Switch to any of 6 languages - reports and discussions translate instantly.
 
 ---
 
-## 🏗️ Technical Architecture
+## 🛠️ Tech Stack & Dependencies
 
-### Analytics System
+### Languages
+- **TypeScript** - Primary language for both frontend and backend
+- **SQL** - Database schema and migrations (via Drizzle ORM)
+- **HTML/CSS** - Markup and styling (via JSX + Tailwind CSS)
 
-The analytics dashboard features a robust, performant architecture:
+### Frontend
+- **React 19** - UI framework
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** + **shadcn/ui** - Styling and component library
+- **React Router v7** - Client-side routing
+- **Framer Motion** - Animations
+- **Recharts** - Data visualization (charts)
+- **i18next** - Internationalization (6 languages)
+- **Radix UI** - Accessible UI primitives
 
-- **Backend API** (`/api/stats`)
-  - Aggregates data from D1 database (reports, discussions, messages)
-  - Calculates metrics: total reports, active discussions, weekly activity
-  - Computes averages, distributions, and category breakdowns
-  - 5-minute Cloudflare edge caching for optimal performance
+### Backend
+- **Hono** - Lightweight API framework (Cloudflare Workers)
+- **Cloudflare Workers** - Serverless edge compute
+- **Cloudflare D1** (SQLite) - Database
+- **Drizzle ORM** - Type-safe database queries and migrations
+- **Cloudflare Durable Objects** - Real-time WebSocket connections
+- **Google Gemini API** - AI analysis, translation, and code generation
+- **Zod** - Runtime schema validation
 
-- **Frontend Components**
-  - `AnalyticsDashboard` - Main container with stat cards and charts
-  - `StatCard` - Reusable metric display with icons and animations
-  - `CategoryBreakdownChart` - Recharts PieChart for project categories
-  - `ScoreDistributionChart` - Recharts BarChart with color-coded ranges
-  - `TrendingCard` - Compact report cards with flame icons
-  - `DiscussionPreviewCard` - Active discussion previews with pulse animations
-
-- **Features**
-  - Graceful degradation (hides if API fails)
-  - Loading skeletons (no layout shift)
-  - Framer Motion animations (stagger effects, scroll reveals)
-  - Full RTL support for Dhivehi
-  - Responsive design (mobile-first)
-  - Dark mode compatible
+### DevOps & Tooling
+- **pnpm** - Package manager
+- **Wrangler** - Cloudflare CLI for local dev and deployment
+- **ESLint** - Code linting
+- **GitHub Actions** - CI/CD and automated country addition
 
 ---
 
-## 🛠️ For Developers
+## 🤖 AI Tools Used
 
-Want to contribute or self-host? See **[DEVELOPMENT.md](DEVELOPMENT.md)** for:
-- Installation & setup
-- Development commands
-- Architecture overview
-- API documentation
-- Deployment guide
+### AI-Powered Coding
+- **Claude Code** (Anthropic) - AI coding assistant used throughout development for writing features, debugging, refactoring, and generating documentation
+
+### AI in the Product
+- **Google Gemini** (`gemini-2.5-flash`) - Powers all in-app AI features:
+  - Feasibility report generation
+  - Expert panel discussion responses
+  - On-demand translation across 6 languages
+  - Country addition validation and code generation
+
+---
+
+## 🚀 Setup Instructions
+
+### Prerequisites
+
+- **Node.js** 18+ ([Download](https://nodejs.org/))
+- **pnpm** ([Install](https://pnpm.io/installation))
+- **Cloudflare Account** ([Sign up](https://dash.cloudflare.com/sign-up))
+- **Google Gemini API Key** ([Get key](https://aistudio.google.com/app/apikey))
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/tecticmv/unbiased.git
+cd unbiased
+
+# Install dependencies
+pnpm install
+
+# Set up environment variables
+cp .dev.vars.example .dev.vars
+# Edit .dev.vars and add your GEMINI_API_KEY
+```
+
+### Running Locally
+
+Run **two terminals** for full local development:
+
+```bash
+# Terminal 1: Frontend (Vite dev server with hot reload)
+pnpm dev
+# → http://localhost:5173
+
+# Terminal 2: Backend (API + WebSocket + Durable Objects)
+pnpm dev:worker
+# → http://localhost:8787
+```
+
+### Database Setup
+
+```bash
+# Apply migrations to local D1 database
+pnpm db:migrate:local
+
+# (Optional) Open Drizzle Studio to view/edit data
+pnpm db:studio
+```
+
+### Deploying to Production
+
+```bash
+# 1. Set production secrets
+wrangler secret put GEMINI_API_KEY
+
+# 2. Create production D1 database
+wrangler d1 create unbiased-db
+# Copy the database_id to wrangler.toml
+
+# 3. Apply migrations to production
+pnpm db:migrate
+
+# 4. Build and deploy
+pnpm deploy
+```
+
+For detailed developer documentation (architecture, API docs, automated country addition, troubleshooting), see **[DEVELOPMENT.md](DEVELOPMENT.md)**.
 
 ---
 
