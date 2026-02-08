@@ -118,36 +118,91 @@ jobs:
             TYPES_TS=$(cat src/types/index.ts)
             PERSONAS_TS=$(cat functions/api/experts/personas.ts)
 
-            PROMPT_TS="Add a new country. Generate COMPLETE updated TypeScript files.
+            PROMPT_TS="You are a senior TypeScript developer. Add a new country to the codebase by updating 4 TypeScript files.
 
-            VALIDATED DATA: $VALIDATED_DATA"
+            VALIDATED COUNTRY DATA:
+            $VALIDATED_DATA
+
+            CRITICAL INSTRUCTIONS:
+            1. Return COMPLETE files (not snippets or diffs)
+            2. Preserve ALL existing countries and their data EXACTLY as-is
+            3. Add the new country following the EXACT patterns and conventions of existing entries
+            4. Use proper TypeScript syntax with correct types
+            5. Maintain alphabetical ordering where applicable
+            6. Use lowercase slug format (e.g., 'srilanka' not 'sri-lanka' or 'Sri Lanka')
+            7. Generate realistic, culturally appropriate expert names for the country
+            8. Ensure all arrays end with commas, all objects follow existing formatting
+            9. Do NOT modify imports, exports, or type definitions
+            10. Match indentation and code style exactly
+
+            FILE 1: src/lib/countries.ts
+            - Add new entry to 'countries' object
+            - Use validated data for: slug, code, name, currency, currencySymbol, flag
+            - Generate comprehensive regions list (major cities, provinces, states, or districts)
+            - Include diverse projectTypes covering all sectors
+            - Write informative description about the country
+            - PRESERVE all existing entries unchanged
+
+            FILE 2: functions/api/lib/constants.ts
+            - Add currency mapping to 'countryCurrencies' object
+            - Add country to 'supportedCountries' array with: code, name, flag, currency
+            - Do NOT modify languageNames or other constants
+            - PRESERVE all existing entries unchanged
+
+            FILE 3: src/types/index.ts
+            - NO CHANGES unless new types are required
+            - Return the file exactly as-is
+            - This file contains shared type definitions that should not change
+
+            FILE 4: functions/api/experts/personas.ts
+            - Add expert names for the new country to 'expertNamesByRegion' object
+            - Generate 7 culturally appropriate names (one per expert role):
+              * ai_economist (Dr. title preferred)
+              * ai_engineer
+              * ai_legal
+              * ai_environmental (Dr. title preferred)
+              * ai_social
+              * ai_operations
+              * ai_moderator
+            - Use authentic names from that country's naming conventions
+            - Mix genders appropriately for the region
+            - Do NOT modify 'baseExpertPersonas' object
+            - PRESERVE all existing entries unchanged"
             if [ -n "$FIX_FEEDBACK" ]; then
               PROMPT_TS="$PROMPT_TS
 
-            FEEDBACK: $FIX_FEEDBACK"
+            OWNER FEEDBACK TO ADDRESS:
+            $FIX_FEEDBACK"
             fi
             if [ -n "$PREV_ERRORS" ]; then
               PROMPT_TS="$PROMPT_TS
 
-            FIX ERRORS: $PREV_ERRORS"
+            FIX THESE BUILD ERRORS:
+            $PREV_ERRORS"
             fi
             PROMPT_TS="$PROMPT_TS
 
-            CURRENT FILES:
+            CURRENT FILE CONTENTS:
 
-            src/lib/countries.ts:
+            === src/lib/countries.ts ===
             $COUNTRIES_TS
 
-            functions/api/lib/constants.ts:
+            === functions/api/lib/constants.ts ===
             $CONSTANTS_TS
 
-            src/types/index.ts:
+            === src/types/index.ts ===
             $TYPES_TS
 
-            functions/api/experts/personas.ts:
+            === functions/api/experts/personas.ts ===
             $PERSONAS_TS
 
-            Return JSON: {\"countries_ts\": \"complete file\", \"constants_ts\": \"complete file\", \"types_ts\": \"complete file\", \"personas_ts\": \"complete file\"}"
+            Return valid JSON with this exact structure:
+            {
+              \"countries_ts\": \"<complete file content>\",
+              \"constants_ts\": \"<complete file content>\",
+              \"types_ts\": \"<complete file content>\",
+              \"personas_ts\": \"<complete file content>\"
+            }"
 
             echo "$PROMPT_TS" > /tmp/prompt_ts.txt
             jq -n --rawfile prompt /tmp/prompt_ts.txt \
@@ -178,20 +233,36 @@ jobs:
             # ===== Generate locale translations (snippets only) =====
             echo "Generating locale translations..."
 
-            PROMPT_LOCALE="Generate ONLY the new country translation for locale files.
+            PROMPT_LOCALE="Generate accurate translations of the country name for 6 locales.
 
-            VALIDATED DATA: $VALIDATED_DATA
+            COUNTRY DATA: $VALIDATED_DATA
 
-            Return JSON with country slug and translations for each locale:
+            REQUIREMENTS:
+            1. Use the lowercase slug format from the validated data
+            2. Provide native, culturally accurate translations (not transliterations)
+            3. Use official country names in each language
+            4. Ensure correct script/alphabet for each language:
+               - dv: Dhivehi (Thaana script)
+               - hi: Hindi (Devanagari script)
+               - bn: Bengali (Bengali script)
+               - si: Sinhala (Sinhala script)
+               - ta: Tamil (Tamil script)
+            5. For English, use the official short name
+
+            EXAMPLES:
+            - India → dv: \"އިންޑިޔާ\", hi: \"भारत\", bn: \"ভারত\", si: \"ඉන්දියාව\", ta: \"இந்தியா\"
+            - Sri Lanka → dv: \"ސްރީލަންކާ\", hi: \"श्रीलंका\", bn: \"শ্রীলঙ্কা\", si: \"ශ්‍රී ලංකාව\", ta: \"இலங்கை\"
+
+            Return JSON with this exact structure:
             {
-              \"slug\": \"country-slug\",
+              \"slug\": \"countryslug\",
               \"translations\": {
-                \"en\": \"English Name\",
-                \"dv\": \"Dhivehi Name\",
-                \"hi\": \"Hindi Name\",
-                \"bn\": \"Bengali Name\",
-                \"si\": \"Sinhala Name\",
-                \"ta\": \"Tamil Name\"
+                \"en\": \"Country Name\",
+                \"dv\": \"ދިވެހި\",
+                \"hi\": \"हिन्दी\",
+                \"bn\": \"বাংলা\",
+                \"si\": \"සිංහල\",
+                \"ta\": \"தமிழ்\"
               }
             }"
 
