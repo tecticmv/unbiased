@@ -280,7 +280,7 @@ countryRequestRoutes.post("/country-request/webhook/telegram", async (c) => {
       // Send email to requester that country is live
       if (request.requesterEmail && c.env.RESEND_API_KEY && c.env.FROM_EMAIL) {
         const slug = request.countryName.toLowerCase().replace(/\s+/g, "-");
-        const siteUrl = `https://unbiased.mv/${slug}`;
+        const siteUrl = `https://unbiased.talk/${slug}`;
         await sendCountryLiveEmail(
           c.env.RESEND_API_KEY,
           c.env.FROM_EMAIL,
@@ -344,7 +344,7 @@ countryRequestRoutes.post("/country-request/webhook/telegram", async (c) => {
         // Send email to requester that country is live
         if (request.requesterEmail && c.env.RESEND_API_KEY && c.env.FROM_EMAIL) {
           const slug = request.countryName.toLowerCase().replace(/\s+/g, "-");
-          const siteUrl = `https://unbiased.mv/${slug}`;
+          const siteUrl = `https://unbiased.talk/${slug}`;
           await sendCountryLiveEmail(
             c.env.RESEND_API_KEY,
             c.env.FROM_EMAIL,
