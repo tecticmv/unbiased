@@ -234,28 +234,9 @@ export function FeasibilityReport({
     ? `${window.location.origin}/${country.slug}/report/${reportId}`
     : null;
 
-  const handleShare = async () => {
-    if (!shareUrl) return;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: t('report.title'),
-          text: `${t('report.analyzedRequest')}: ${displayReport.overallSummary}`,
-          url: shareUrl,
-        });
-      } catch {
-        copyToClipboard();
-      }
-    } else {
-      copyToClipboard();
-    }
-  };
-
-  const copyToClipboard = () => {
+  const handleShare = () => {
     if (!shareUrl) return;
     navigator.clipboard.writeText(shareUrl);
-    alert(t('ui.linkCopied'));
   };
 
   const categoryKeys = Object.keys(displayReport.categories) as (keyof typeof displayReport.categories)[];
