@@ -73,22 +73,21 @@ Currently supporting:
 
 **Want your country?** Request it - AI adds it automatically!
 
-### 🚀 **Autonomous Country Addition** (Revolutionary!)
+### 🚀 **AI-Assisted Country Addition**
 
-Don't see your country? **Request it and AI builds it for you:**
+Don't see your country? **Request it and we'll add it:**
 
-1. **Submit Request** - Enter country name, optional email
-2. **AI Validates** - Gemini confirms it's a real country
-3. **AI Generates Code** - Claude writes all necessary files:
-   - Country configuration
-   - Currency & regions
-   - Expert names (culturally appropriate)
+1. **Submit Request** - Enter country name, optional email for updates
+2. **AI Validates** - Gemini confirms it's a real country and generates:
+   - Country configuration (code, currency, flag)
+   - Comprehensive regions list
+   - Culturally appropriate expert names
    - Translations in 6 languages
-4. **Auto-Deploy Preview** - Live preview in minutes
-5. **Owner Approves** - One-click merge or request improvements
-6. **Goes Live** - You get an email notification!
+3. **Team Notified** - Our team receives the validated data
+4. **Manual Implementation** - We add your country to the platform
+5. **Goes Live** - You get an email when it's ready!
 
-**No coding required. Fully automated. Goes live in minutes.** 🤯
+**No coding required. Get notified when your country is live.** ✨
 
 ---
 
@@ -150,8 +149,9 @@ Switch to any of 6 languages - reports and discussions translate instantly.
 1. Click **"Request a country"** in the country selector
 2. Enter the country name
 3. Optionally provide your email for updates
-4. Submit - AI validates and generates code automatically
-5. Receive email when your country goes live!
+4. Submit - AI validates your request and prepares the data
+5. Our team adds your country to the platform
+6. Receive email notification when it's live!
 
 ---
 
@@ -212,8 +212,7 @@ Want to contribute or self-host? See **[DEVELOPMENT.md](DEVELOPMENT.md)** for:
 ## 🙏 Acknowledgments
 
 Powered by:
-- **Google Gemini** - AI analysis & translation
-- **Anthropic Claude** - Autonomous code generation
+- **Google Gemini** - AI analysis, validation & translation
 - **Cloudflare** - Edge computing & real-time infrastructure
 
 ---
