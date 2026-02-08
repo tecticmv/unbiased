@@ -199,6 +199,42 @@ export const countries: Record<string, CountryConfig> = {
     description:
       "Evaluate development and reconstruction projects across Sri Lanka.",
   },
+  nepal: {
+    slug: "nepal",
+    code: "NP",
+    name: "Nepal",
+    currency: "NPR",
+    currencySymbol: "रू",
+    flag: "🇳🇵",
+    regions: [
+      "Kathmandu",
+      "Pokhara",
+      "Lalitpur",
+      "Bharatpur",
+      "Biratnagar",
+      "Birgunj",
+      "Janakpur",
+      "Butwal",
+      "Dharan",
+      "Hetauda",
+    ],
+    projectTypes: [
+      "Infrastructure",
+      "Hydropower",
+      "Tourism",
+      "Housing",
+      "Energy",
+      "Transportation",
+      "Healthcare",
+      "Education",
+      "Rural Development",
+      "Water & Sanitation",
+      "Heritage Conservation",
+      "Mountain Tourism",
+    ],
+    description:
+      "Analyze development projects focusing on infrastructure, hydropower, and tourism in Nepal.",
+  },
 };
 
 export const defaultCountry = "maldives";
@@ -214,3 +250,4 @@ export function getAllCountries(): CountryConfig[] {
 export function getCountryCodes(): string[] {
   return Object.keys(countries);
 }
+

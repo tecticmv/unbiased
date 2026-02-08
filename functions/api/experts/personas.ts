@@ -40,6 +40,15 @@ export const expertNamesByRegion: Record<string, Record<string, string>> = {
     ai_operations: "Kasun Bandara",
     ai_moderator: "Tharindu Senanayake",
   },
+  nepal: {
+    ai_economist: "Dr. Anjali Thapa",
+    ai_engineer: "Suresh Rai",
+    ai_legal: "Pooja Gurung",
+    ai_environmental: "Dr. Bikram Sherpa",
+    ai_social: "Maya Devi",
+    ai_operations: "Ramesh Karki",
+    ai_moderator: "Dipak Lama",
+  },
   default: {
     ai_economist: "Dr. Sarah Chen",
     ai_engineer: "Marcus Thompson",
@@ -148,3 +157,4 @@ export const expertPersonas: Record<ExpertType, ExpertPersonaWithName> = {
   ai_operations: { ...baseExpertPersonas.ai_operations, name: defaultNames.ai_operations! },
   ai_moderator: { ...baseExpertPersonas.ai_moderator, name: defaultNames.ai_moderator! },
 };
+
