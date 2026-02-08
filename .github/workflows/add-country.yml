@@ -300,24 +300,23 @@ jobs:
           PR_NUMBER=$(echo "$PR_URL" | grep -oP '/pull/\K[0-9]+')
           echo "pr_number=${PR_NUMBER}" >> $GITHUB_OUTPUT
 
-  deploy-preview:
+  notify-ready:
     needs: generate-and-review
     runs-on: ubuntu-latest
 
     steps:
-      - name: Generate preview URL and update status
+      - name: Notify PR ready for review
         run: |
-          BRANCH="${{ needs.generate-and-review.outputs.branch_name }}"
-          PREVIEW_URL="https://${BRANCH//\//-}.unbiased.pages.dev"
+          PR_URL="https://github.com/${{ github.repository }}/pull/${{ needs.generate-and-review.outputs.pr_number }}"
 
-          echo "Preview URL: $PREVIEW_URL"
+          echo "PR created: $PR_URL"
 
           curl -X POST "${{ env.WORKER_URL }}/api/country-request/webhook/github" \
             -H "Content-Type: application/json" \
             -d "{
               \"requestId\": ${{ inputs.request_id }},
-              \"status\": \"preview\",
-              \"previewUrl\": \"$PREVIEW_URL\",
+              \"status\": \"pending_review\",
+              \"prUrl\": \"$PR_URL\",
               \"branchName\": \"${{ needs.generate-and-review.outputs.branch_name }}\",
               \"prNumber\": ${{ needs.generate-and-review.outputs.pr_number }}
             }"
@@ -327,4 +326,4 @@ jobs:
         run: |
           curl -X POST "${{ env.WORKER_URL }}/api/country-request/webhook/github" \
             -H "Content-Type: application/json" \
-            -d '{"requestId": ${{ inputs.request_id }}, "status": "failed", "error": "Webhook update failed"}'
+            -d '{"requestId": ${{ inputs.request_id }}, "status": "failed", "error": "Webhook notification failed"}'

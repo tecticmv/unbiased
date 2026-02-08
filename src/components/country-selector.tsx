@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronDown, Check, Plus } from "lucide-react";
 import {
@@ -15,6 +16,7 @@ import { useCountry } from "@/contexts/country-context";
 
 export function CountrySelector() {
   const { selectedCountry, setSelectedCountry } = useCountry();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [requestModalOpen, setRequestModalOpen] = useState(false);
 
@@ -46,7 +48,10 @@ export function CountrySelector() {
           {Object.entries(countries).map(([code, config]) => (
             <DropdownMenuItem
               key={code}
-              onClick={() => setSelectedCountry(code)}
+              onClick={() => {
+                setSelectedCountry(code);
+                navigate(`/${code}`);
+              }}
               className="flex items-center justify-between"
             >
               <span className="flex items-center gap-2">
