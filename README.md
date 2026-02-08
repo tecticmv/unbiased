@@ -43,12 +43,12 @@ Discover what's trending on the platform:
 
 Discuss your project with 6 specialized AI experts + a moderator:
 
-- **Dr. [Name] - Economist**: Budget analysis, ROI, market dynamics
-- **[Name] - Lead Engineer**: Technical feasibility, implementation
-- **[Name] - Legal Counsel**: Regulations, compliance, liability
-- **Dr. [Name] - Environmental Specialist**: Sustainability, climate impact
-- **[Name] - Community Relations**: Social equity, public benefit
-- **[Name] - Operations Director**: Logistics, execution, scalability
+- **Economist**: Budget analysis, ROI, market dynamics
+- **Lead Engineer**: Technical feasibility, implementation
+- **Legal Counsel**: Regulations, compliance, liability
+- **Environmental Specialist**: Sustainability, climate impact
+- **Community Relations**: Social equity, public benefit
+- **Operations Director**: Logistics, execution, scalability
 
 Each expert has a **unique personality, speaking style, and culturally appropriate name** for your region.
 
