@@ -1,4 +1,8 @@
-name: Add Country Automation
+name: Add Country Automation (DISABLED - Manual Process)
+
+# WORKFLOW DISABLED: Country additions are now handled manually
+# The API validates country data and sends notifications to Telegram
+# Owner manually adds the country and clicks "Done" button when deployed
 
 on:
   workflow_dispatch:
@@ -29,6 +33,7 @@ permissions:
 
 jobs:
   generate-and-review:
+    if: false  # DISABLED - Manual process only
     runs-on: ubuntu-latest
     outputs:
       branch_name: ${{ steps.branch.outputs.branch_name }}

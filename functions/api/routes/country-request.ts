@@ -84,7 +84,7 @@ countryRequestRoutes.post(
         countryName: validationResult.name || countryName, // Use official name from Gemini
         requesterName,
         requesterEmail,
-        status: COUNTRY_REQUEST_STATUS.GENERATING, // Skip validation, go straight to generating
+        status: COUNTRY_REQUEST_STATUS.PENDING, // Manual review
         validatedData: JSON.stringify(validationResult),
       })
       .returning({ id: countryRequests.id });
@@ -94,21 +94,6 @@ countryRequestRoutes.post(
       return c.json({ error: "Failed to create request" }, 500);
     }
     const requestId = insertedRow.id;
-
-    // Trigger GitHub Actions workflow with pre-validated data
-    if (c.env.GITHUB_TOKEN && c.env.GITHUB_REPO) {
-      try {
-        await triggerGitHubWorkflowWithValidatedData(
-          c.env.GITHUB_TOKEN,
-          c.env.GITHUB_REPO,
-          validationResult.name || countryName,
-          requestId,
-          JSON.stringify(validationResult)
-        );
-      } catch (error) {
-        console.error("Failed to trigger GitHub workflow:", error);
-      }
-    }
 
     // Send confirmation email to requester
     if (requesterEmail && c.env.RESEND_API_KEY && c.env.FROM_EMAIL) {
@@ -121,12 +106,24 @@ countryRequestRoutes.post(
       );
     }
 
+    // Send Telegram notification to owner for manual processing
+    if (c.env.TELEGRAM_BOT_TOKEN && c.env.TELEGRAM_OWNER_CHAT_ID) {
+      await sendTelegramManualRequestNotification(
+        c.env.TELEGRAM_BOT_TOKEN,
+        c.env.TELEGRAM_OWNER_CHAT_ID,
+        validationResult.name || countryName,
+        requestId,
+        validationResult,
+        requesterEmail
+      );
+    }
+
     return c.json({
       success: true,
       requestId,
       message: "Country request submitted successfully",
       countryName: validationResult.name,
-      status: COUNTRY_REQUEST_STATUS.GENERATING,
+      status: COUNTRY_REQUEST_STATUS.PENDING,
     });
   }
 );
@@ -261,8 +258,55 @@ countryRequestRoutes.post("/country-request/webhook/telegram", async (c) => {
       return c.json({ error: "Request not found" }, 404);
     }
 
-    if (action === "approve") {
-      // Update status and trigger merge
+    if (action === "done") {
+      // Owner clicked "Done" - country has been manually added and deployed
+      await db
+        .update(countryRequests)
+        .set({
+          status: COUNTRY_REQUEST_STATUS.LIVE,
+          liveAt: new Date().toISOString(),
+        })
+        .where(eq(countryRequests.id, requestId));
+
+      // Send confirmation to owner
+      if (c.env.TELEGRAM_BOT_TOKEN) {
+        await sendTelegramMessage(
+          c.env.TELEGRAM_BOT_TOKEN,
+          chatId.toString(),
+          `✅ *${request.countryName} marked as Live!*\n\nThe requester has been notified.`
+        );
+      }
+
+      // Send email to requester that country is live
+      if (request.requesterEmail && c.env.RESEND_API_KEY && c.env.FROM_EMAIL) {
+        const slug = request.countryName.toLowerCase().replace(/\s+/g, "-");
+        const siteUrl = `https://unbiased.mv/${slug}`;
+        await sendCountryLiveEmail(
+          c.env.RESEND_API_KEY,
+          c.env.FROM_EMAIL,
+          request.requesterEmail,
+          request.countryName,
+          siteUrl
+        );
+      }
+    } else if (action === "cancel") {
+      // Owner rejected the request
+      await db
+        .update(countryRequests)
+        .set({
+          status: COUNTRY_REQUEST_STATUS.REJECTED,
+        })
+        .where(eq(countryRequests.id, requestId));
+
+      if (c.env.TELEGRAM_BOT_TOKEN) {
+        await sendTelegramMessage(
+          c.env.TELEGRAM_BOT_TOKEN,
+          chatId.toString(),
+          `❌ *${request.countryName} request rejected*`
+        );
+      }
+    } else if (action === "approve") {
+      // Legacy approval flow (for automated workflow)
       await db
         .update(countryRequests)
         .set({
@@ -608,6 +652,52 @@ async function triggerGitHubWorkflowWithFeedback(
   }
 }
 
+async function sendTelegramManualRequestNotification(
+  botToken: string,
+  chatId: string,
+  countryName: string,
+  requestId: number,
+  validatedData: GeminiValidationResult,
+  requesterEmail?: string
+) {
+  const message = `🌍 *New Country Request*
+
+*Country:* ${countryName}
+*Code:* ${validatedData.code || 'N/A'}
+*Currency:* ${validatedData.currency || 'N/A'} (${validatedData.currencySymbol || 'N/A'})
+*Flag:* ${validatedData.flag || 'N/A'}
+
+*Requester:* ${requesterEmail || 'Anonymous'}
+*Request ID:* #${requestId}
+
+📋 *Validated Data Available*
+The system has validated this country and prepared all necessary data. Click "View Data" to see the full validation result, then manually add the country to the codebase.
+
+When you're done adding the country and deploying, click the ✅ *Done* button below.`;
+
+  const keyboard = {
+    inline_keyboard: [
+      [
+        { text: "✅ Done (Deployed)", callback_data: `done:${requestId}` },
+      ],
+      [
+        { text: "❌ Reject Request", callback_data: `cancel:${requestId}` },
+      ],
+    ],
+  };
+
+  await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message,
+      parse_mode: "Markdown",
+      reply_markup: keyboard,
+    }),
+  });
+}
+
 async function sendTelegramPreviewNotification(
   botToken: string,
   chatId: string,
@@ -745,15 +835,15 @@ async function sendRequestConfirmationEmail(
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #1a1a1a;">Your Country Request Has Been Received</h2>
         <p>Thank you for requesting <strong>${countryName}</strong> to be added to Unbiased.</p>
-        <p>Our system is now validating and processing your request. Here's what happens next:</p>
+        <p>Your request has been validated and submitted to our team for implementation. Here's what happens next:</p>
         <ol>
-          <li>We validate that this is a real country</li>
-          <li>Our AI generates the necessary code and translations</li>
-          <li>Our team reviews the changes</li>
-          <li>Once approved, the country goes live!</li>
+          <li>✅ Country validated successfully</li>
+          <li>⏳ Our team prepares the necessary code and translations</li>
+          <li>🚀 Once ready, the country goes live</li>
+          <li>📧 You'll receive a notification when it's available</li>
         </ol>
         <p style="color: #666;">Request ID: #${requestId}</p>
-        <p>We'll notify you when your country is live on the platform.</p>
+        <p>We'll notify you when <strong>${countryName}</strong> is live on the platform.</p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
         <p style="color: #999; font-size: 12px;">This is an automated message from Unbiased.</p>
       </div>
