@@ -81,7 +81,8 @@ export function HomePage() {
             >
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
                 <Sparkles className="h-3.5 w-3.5" />
-                {t('home.hero.subtitle')}
+                <span className="sm:hidden">{t('common.tagline')}</span>
+                <span className="hidden sm:inline">{t('home.hero.subtitle')}</span>
               </span>
             </motion.div>
 
@@ -193,37 +194,6 @@ export function HomePage() {
         <HotTopicsSection data={stats.trending} />
       )}
 
-      {/* Closing CTA */}
-      <section className="py-16 lg:py-24">
-        <div className="container">
-          <ScrollReveal>
-            <div className="relative rounded-2xl border bg-gradient-to-br from-muted/50 via-background to-muted/50 p-8 md:p-12 lg:p-16 text-center overflow-hidden">
-              <div className="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none" />
-              <div className="relative">
-                <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
-                  {t('home.features.title')}
-                </h2>
-                <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-                  {t('home.features.subtitle')}
-                </p>
-                <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                  <Button asChild size="lg">
-                    <Link to={`/${defaultCountry}/new`}>
-                      {t('home.hero.cta')}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button asChild size="lg" variant="ghost">
-                    <Link to={`/${defaultCountry}`}>
-                      {t('home.hero.viewReports') || 'View Reports'}
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
     </div>
   );
 }

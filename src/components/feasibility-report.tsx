@@ -306,8 +306,8 @@ export function FeasibilityReport({
         >
           {/* Meta badges */}
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-4">
-            <span className="inline-flex items-center gap-1.5 uppercase tracking-widest font-medium">
-              <FileText className="h-3.5 w-3.5" />
+            <span className="inline-flex items-center gap-1">
+              <FileText className="h-3 w-3" />
               {t('report.title')}
             </span>
             <span className="hidden sm:inline text-border">|</span>
@@ -330,7 +330,7 @@ export function FeasibilityReport({
           {/* Actions */}
           <div className="flex flex-wrap gap-2 mt-5">
             {reportId && (
-              <Button variant="outline" size="sm" className="gap-2 rounded-lg" asChild>
+              <Button size="sm" className="gap-2 rounded-lg" asChild>
                 <Link to={`/${country.slug}/report/${reportId}/discussion`}>
                   <MessageSquare className="h-3.5 w-3.5" />
                   <span className="sm:inline">{t('report.discussion.discuss')}</span>
@@ -338,13 +338,13 @@ export function FeasibilityReport({
               </Button>
             )}
             {shareUrl && (
-              <Button variant="outline" size="sm" className="gap-2 rounded-lg" onClick={handleShare}>
+              <Button variant="ghost" size="sm" className="gap-2 rounded-lg text-muted-foreground" onClick={handleShare}>
                 <Share2 className="h-3.5 w-3.5" />
                 <span className="sm:inline">{t('report.share')}</span>
               </Button>
             )}
             {!isSharedView && (
-              <Button variant="outline" size="sm" className="gap-2 rounded-lg" onClick={onReset}>
+              <Button variant="ghost" size="sm" className="gap-2 rounded-lg text-muted-foreground" onClick={onReset}>
                 <RotateCcw className="h-3.5 w-3.5" />
                 <span className="sm:inline">{t('report.newAnalysis')}</span>
               </Button>
@@ -367,15 +367,58 @@ export function FeasibilityReport({
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 {t('report.analyzedRequest')}
               </p>
-              <p className="text-[15px] text-foreground/80 leading-[1.75] italic">
-                &ldquo;{projectDescription}&rdquo;
+              <p className="text-[15px] text-foreground/80 leading-[1.75]">
+                {projectDescription}
               </p>
             </div>
           </motion.div>
         )}
 
         {/* ============================================================== */}
-        {/*  VERDICT & OVERALL SCORE                                       */}
+        {/*  VERDICT — Should the country proceed?                         */}
+        {/* ============================================================== */}
+        {displayReport.verdict && (
+          <motion.div
+            variants={scrollVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportSettings}
+            className="mb-4"
+          >
+            <div className={`rounded-2xl border-2 overflow-hidden ${
+              displayReport.verdict.recommendation === "yes"
+                ? "border-emerald-500/30 bg-gradient-to-br from-emerald-50/50 to-transparent dark:from-emerald-950/20"
+                : "border-red-500/30 bg-gradient-to-br from-red-50/50 to-transparent dark:from-red-950/20"
+            }`}>
+              <div className="px-5 py-3.5">
+                <div className="flex items-center justify-between gap-4 flex-wrap">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+                    {t('report.verdict.title')}
+                  </span>
+                  <Badge
+                    className={`text-xs font-bold px-3 py-1 rounded-full ${
+                      displayReport.verdict.recommendation === "yes"
+                        ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20"
+                        : "border-red-500/50 bg-red-500/15 text-red-700 dark:text-red-300 hover:bg-red-500/20"
+                    }`}
+                  >
+                    {displayReport.verdict.recommendation === "yes" ? (
+                      <CheckCircle2 className="h-3.5 w-3.5 me-1.5" />
+                    ) : (
+                      <XCircle className="h-3.5 w-3.5 me-1.5" />
+                    )}
+                    {displayReport.verdict.recommendation === "yes"
+                      ? t('common.yes').toUpperCase()
+                      : t('common.no').toUpperCase()}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ============================================================== */}
+        {/*  OVERALL SCORE                                                 */}
         {/* ============================================================== */}
         <motion.div
           variants={scrollVariants}
@@ -384,13 +427,7 @@ export function FeasibilityReport({
           viewport={viewportSettings}
           className="mb-6"
         >
-          <div className={`rounded-2xl border-2 overflow-hidden ${
-            displayReport.verdict?.recommendation === "yes"
-              ? "border-emerald-500/30 bg-gradient-to-br from-emerald-50/50 to-transparent dark:from-emerald-950/20"
-              : displayReport.verdict?.recommendation === "no"
-                ? "border-red-500/30 bg-gradient-to-br from-red-50/50 to-transparent dark:from-red-950/20"
-                : "border-border"
-          }`}>
+          <div className="rounded-2xl border overflow-hidden">
             <div className="p-6 md:p-8">
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
                 {/* Score Gauge */}
@@ -398,32 +435,8 @@ export function FeasibilityReport({
                   <ScoreGauge score={displayReport.overallScore} size={130} />
                 </div>
 
-                {/* Verdict Details */}
+                {/* Score Details */}
                 <div className="flex-1 text-center sm:text-left space-y-3">
-                  {displayReport.verdict && (
-                    <div className="flex flex-wrap items-center gap-3 justify-center sm:justify-start">
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">
-                        {t('report.verdict.title')}
-                      </span>
-                      <Badge
-                        className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                          displayReport.verdict.recommendation === "yes"
-                            ? "border-emerald-500/50 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20"
-                            : "border-red-500/50 bg-red-500/15 text-red-700 dark:text-red-300 hover:bg-red-500/20"
-                        }`}
-                      >
-                        {displayReport.verdict.recommendation === "yes" ? (
-                          <CheckCircle2 className="h-3.5 w-3.5 me-1.5" />
-                        ) : (
-                          <XCircle className="h-3.5 w-3.5 me-1.5" />
-                        )}
-                        {displayReport.verdict.recommendation === "yes"
-                          ? t('common.yes').toUpperCase()
-                          : t('common.no').toUpperCase()}
-                      </Badge>
-                    </div>
-                  )}
-
                   <div className={`text-2xl sm:text-3xl font-bold tracking-tight ${getScoreColor(displayReport.overallScore)}`}>
                     {getScoreLabel(displayReport.overallScore)}
                   </div>
