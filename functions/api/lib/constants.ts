@@ -8,6 +8,7 @@ export const countryCurrencies: Record<string, string> = {
   india: "INR",
   bangladesh: "BDT",
   srilanka: "LKR",
+  nepal: "NPR",
 };
 
 // Supported countries list
@@ -36,6 +37,12 @@ export const supportedCountries = [
     flag: "🇱🇰",
     currency: "LKR",
   },
+  {
+    code: "nepal",
+    name: "Nepal",
+    flag: "🇳🇵",
+    currency: "NPR",
+  },
 ];
 
 // Language names for translation prompts
@@ -45,7 +52,9 @@ export const languageNames: Record<string, string> = {
   bn: "Bengali",
   si: "Sinhala",
   ta: "Tamil",
+  ne: "Nepali"
 };
 
 // Heartbeat timeout for presence tracking
 export const HEARTBEAT_TIMEOUT_MS = 30000; // 30 seconds
+
