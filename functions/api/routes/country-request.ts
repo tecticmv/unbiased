@@ -584,7 +584,7 @@ Respond with ONLY the JSON, no markdown or explanation.`;
   }
 }
 
-async function triggerGitHubWorkflowWithValidatedData(
+export async function triggerGitHubWorkflowWithValidatedData(
   token: string,
   repo: string,
   countryName: string,
