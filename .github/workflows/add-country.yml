@@ -305,44 +305,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for deployment
-        id: wait_deploy
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate preview URL and update status
         run: |
           BRANCH="${{ needs.generate-and-review.outputs.branch_name }}"
-          sleep 30
+          PREVIEW_URL="https://${BRANCH//\//-}.unbiased.pages.dev"
 
-          for i in $(seq 1 30); do
-            DEPLOY_ID=$(gh api repos/${{ github.repository }}/deployments --jq ".[] | select(.ref == \"${BRANCH}\") | .id" 2>/dev/null | head -1)
-            if [ -n "$DEPLOY_ID" ]; then
-              STATUS=$(gh api repos/${{ github.repository }}/deployments/${DEPLOY_ID}/statuses --jq '.[0].state' 2>/dev/null)
-              if [ "$STATUS" == "success" ]; then
-                PREVIEW_URL=$(gh api repos/${{ github.repository }}/deployments/${DEPLOY_ID}/statuses --jq '.[0].environment_url' 2>/dev/null)
-                break
-              fi
-            fi
-            sleep 20
-          done
+          echo "Preview URL: $PREVIEW_URL"
 
-          [ -z "$PREVIEW_URL" ] && PREVIEW_URL="https://${BRANCH//\//-}.unbiased.pages.dev"
-          echo "preview_url=${PREVIEW_URL}" >> $GITHUB_OUTPUT
-
-      - name: Update status
-        run: |
           curl -X POST "${{ env.WORKER_URL }}/api/country-request/webhook/github" \
             -H "Content-Type: application/json" \
-            -d '{
-              "requestId": ${{ inputs.request_id }},
-              "status": "preview",
-              "previewUrl": "${{ steps.wait_deploy.outputs.preview_url }}",
-              "branchName": "${{ needs.generate-and-review.outputs.branch_name }}",
-              "prNumber": ${{ needs.generate-and-review.outputs.pr_number }}
-            }'
+            -d "{
+              \"requestId\": ${{ inputs.request_id }},
+              \"status\": \"preview\",
+              \"previewUrl\": \"$PREVIEW_URL\",
+              \"branchName\": \"${{ needs.generate-and-review.outputs.branch_name }}\",
+              \"prNumber\": ${{ needs.generate-and-review.outputs.pr_number }}
+            }"
 
       - name: Handle failure
         if: failure()
         run: |
           curl -X POST "${{ env.WORKER_URL }}/api/country-request/webhook/github" \
             -H "Content-Type: application/json" \
-            -d '{"requestId": ${{ inputs.request_id }}, "status": "failed", "error": "Deployment failed"}'
+            -d '{"requestId": ${{ inputs.request_id }}, "status": "failed", "error": "Webhook update failed"}'
