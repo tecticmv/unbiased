@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Scale, Globe } from "lucide-react";
+import { Globe } from "lucide-react";
+import { LogoIcon } from "@/components/logo";
 import { useTranslation } from "react-i18next";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { CountrySelector } from "@/components/country-selector";
@@ -24,10 +25,8 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-primary">
-            <Scale className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
-          </div>
-          <span className="text-sm font-bold sm:text-xl">{t('common.appName')}</span>
+          <LogoIcon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+          <span className="text-sm font-light sm:text-xl">{t('common.appName')}</span>
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-4">
