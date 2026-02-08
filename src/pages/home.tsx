@@ -66,7 +66,7 @@ export function HomePage() {
         {/* Map background */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-full max-w-6xl px-8 md:px-16 opacity-30 dark:opacity-30">
-            <DottedMap markers={countryMarkers} markerColor="hsl(var(--primary))" />
+            <DottedMap markers={countryMarkers} markerColor="var(--primary)" />
           </div>
         </div>
 
