@@ -26,6 +26,7 @@ import {
   BookOpen,
   List,
   ExternalLink,
+  Check,
 } from "lucide-react";
 import { useState, useMemo, useRef, useEffect, useCallback, type ElementType } from "react";
 import { Button } from "@/components/ui/button";
@@ -181,6 +182,7 @@ export function FeasibilityReport({
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [showToc, setShowToc] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -237,6 +239,8 @@ export function FeasibilityReport({
   const handleShare = () => {
     if (!shareUrl) return;
     navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const categoryKeys = Object.keys(displayReport.categories) as (keyof typeof displayReport.categories)[];
@@ -320,8 +324,8 @@ export function FeasibilityReport({
             )}
             {shareUrl && (
               <Button variant="ghost" size="sm" className="gap-2 rounded-lg text-muted-foreground" onClick={handleShare}>
-                <Share2 className="h-3.5 w-3.5" />
-                <span className="sm:inline">{t('report.share')}</span>
+                {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Share2 className="h-3.5 w-3.5" />}
+                <span className="sm:inline">{copied ? t('ui.linkCopied') : t('report.share')}</span>
               </Button>
             )}
             {!isSharedView && (
@@ -1195,8 +1199,8 @@ export function FeasibilityReport({
             </Button>
             {shareUrl && (
               <Button variant="outline" onClick={handleShare} className="rounded-xl gap-2">
-                <Share2 className="h-4 w-4" />
-                {t('report.share')}
+                {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Share2 className="h-4 w-4" />}
+                {copied ? t('ui.linkCopied') : t('report.share')}
               </Button>
             )}
           </motion.div>
