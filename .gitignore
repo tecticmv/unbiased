@@ -34,3 +34,6 @@ coverage/
 *.tsbuildinfo
 .eslintcache
 .claude/
+
+# Local wrangler config
+wrangler.local.toml
