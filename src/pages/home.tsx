@@ -65,7 +65,7 @@ export function HomePage() {
       <section className="relative overflow-hidden bg-gradient-to-b from-muted/50 to-background min-h-[calc(100svh-4rem)] flex items-center">
         {/* Map background */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-full max-w-6xl px-8 md:px-16 opacity-30 dark:opacity-20">
+          <div className="w-full max-w-6xl px-8 md:px-16 opacity-30 dark:opacity-30">
             <DottedMap markers={countryMarkers} markerColor="hsl(var(--primary))" />
           </div>
         </div>

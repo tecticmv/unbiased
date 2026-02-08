@@ -50,7 +50,7 @@ export function BreakdownChart({ categories }: BreakdownChartProps) {
       const label = categoryLabels[key as CategoryKey] || key;
       return {
         key,
-        name: label.split(" ")[0],
+        name: (category.name || label).split(" ")[0],
         fullName: category.name || label,
         score: category.score ?? 0,
       };
@@ -133,28 +133,45 @@ export function BreakdownChart({ categories }: BreakdownChartProps) {
         <div className="h-[300px] w-full" style={{ direction: isRTL ? "rtl" : "ltr" }}>
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart data={data} cx="50%" cy="50%" outerRadius="70%">
-              <PolarGrid stroke="hsl(var(--border))" strokeOpacity={0.5} />
+              <PolarGrid className="stroke-border/50" />
               <PolarAngleAxis
                 dataKey="name"
-                tick={{
-                  fill: "hsl(var(--muted-foreground))",
-                  fontSize: isRTL ? 12 : 11,
-                  fontFamily: isRTL ? "'MV Faseyha', sans-serif" : "inherit",
-                }}
+                tick={({ x, y, payload, textAnchor }) => (
+                  <text
+                    x={x}
+                    y={y}
+                    textAnchor={textAnchor}
+                    dominantBaseline="central"
+                    className="fill-muted-foreground"
+                    style={{
+                      fontSize: isRTL ? 12 : 11,
+                      fontFamily: isRTL ? "'MV Faseyha', sans-serif" : "inherit",
+                    }}
+                  >
+                    {payload.value}
+                  </text>
+                )}
               />
               <PolarRadiusAxis
                 angle={90}
                 domain={[0, 100]}
-                tick={{
-                  fill: "hsl(var(--muted-foreground))",
-                  fontSize: 10,
-                }}
+                tick={({ x, y, payload }) => (
+                  <text
+                    x={x}
+                    y={y}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    className="fill-muted-foreground"
+                    style={{ fontSize: 10 }}
+                  >
+                    {payload.value}
+                  </text>
+                )}
               />
               <Radar
                 name="Score"
                 dataKey="score"
-                stroke="hsl(var(--primary))"
-                fill="hsl(var(--primary))"
+                className="stroke-primary fill-primary"
                 fillOpacity={0.15}
                 strokeWidth={2}
               />
