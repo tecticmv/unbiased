@@ -275,7 +275,7 @@ jobs:
       - name: Create Pull Request
         id: create_pr
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           PR_URL=$(gh pr create \
             --title "feat: Add ${{ inputs.country_name }} country support" \
