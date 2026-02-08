@@ -10,15 +10,37 @@ import { Layout } from "@/components/layout";
 import "@/i18n"; // Initialize i18n
 import "@/index.css";
 
-// Lazy load pages for code splitting
-const HomePage = lazy(() => import("@/pages/home").then(m => ({ default: m.HomePage })));
-const CountryPage = lazy(() => import("@/pages/country").then(m => ({ default: m.CountryPage })));
-const NewAnalysisPage = lazy(() => import("@/pages/new-analysis").then(m => ({ default: m.NewAnalysisPage })));
-const ReportPage = lazy(() => import("@/pages/report").then(m => ({ default: m.ReportPage })));
-const DiscussionPage = lazy(() => import("@/pages/discussion").then(m => ({ default: m.DiscussionPage })));
-const PrivacyPage = lazy(() => import("@/pages/privacy").then(m => ({ default: m.PrivacyPage })));
-const TermsPage = lazy(() => import("@/pages/terms").then(m => ({ default: m.TermsPage })));
-const LearnMorePage = lazy(() => import("@/pages/learn-more").then(m => ({ default: m.LearnMorePage })));
+// Helper to retry lazy imports on chunk load failures (new deployment)
+const lazyRetry = (componentImport: () => Promise<any>) =>
+  lazy(() =>
+    componentImport().catch((error) => {
+      // Check if it's a chunk load error (new deployment)
+      const isChunkLoadError =
+        error?.name === "ChunkLoadError" ||
+        error?.message?.includes("Failed to fetch dynamically imported module") ||
+        error?.message?.includes("Importing a module script failed");
+
+      if (isChunkLoadError) {
+        // New deployment detected, reload page to get new chunks
+        console.log("New deployment detected, reloading page...");
+        window.location.reload();
+        // Return a promise that never resolves to prevent error boundary
+        return new Promise(() => {});
+      }
+      // Re-throw other errors
+      throw error;
+    })
+  );
+
+// Lazy load pages for code splitting with auto-reload on new deployment
+const HomePage = lazyRetry(() => import("@/pages/home").then(m => ({ default: m.HomePage })));
+const CountryPage = lazyRetry(() => import("@/pages/country").then(m => ({ default: m.CountryPage })));
+const NewAnalysisPage = lazyRetry(() => import("@/pages/new-analysis").then(m => ({ default: m.NewAnalysisPage })));
+const ReportPage = lazyRetry(() => import("@/pages/report").then(m => ({ default: m.ReportPage })));
+const DiscussionPage = lazyRetry(() => import("@/pages/discussion").then(m => ({ default: m.DiscussionPage })));
+const PrivacyPage = lazyRetry(() => import("@/pages/privacy").then(m => ({ default: m.PrivacyPage })));
+const TermsPage = lazyRetry(() => import("@/pages/terms").then(m => ({ default: m.TermsPage })));
+const LearnMorePage = lazyRetry(() => import("@/pages/learn-more").then(m => ({ default: m.LearnMorePage })));
 
 function PageLoader() {
   return (
