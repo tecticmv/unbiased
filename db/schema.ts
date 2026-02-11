@@ -111,6 +111,7 @@ export const JOB_TYPES = {
   ANALYSIS: "analysis",
   REPORT_TRANSLATION: "report_translation",
   DISCUSSION_TRANSLATION: "discussion_translation",
+  REPORT_REPAIR: "report_repair",
 } as const;
 
 export type JobType = (typeof JOB_TYPES)[keyof typeof JOB_TYPES];

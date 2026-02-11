@@ -230,16 +230,21 @@ Determine if this is a valid project request. Return a JSON response:
 }
 
 A project is VALID if it:
-1. Describes infrastructure, development, public service projects, or government initiatives
-2. Is relevant to the specified country/region
-3. Is something that could be analyzed (feasibility, impact, budget, policy implications)
-4. Includes policy directives, budget allocations, or strategic government plans
-5. Even high-level or abstract initiatives are valid if they relate to public sector activities
+1. Describes a SPECIFIC infrastructure, development, public service, or government project with clear scope
+2. Has enough detail to analyze feasibility (e.g., what is being built/implemented, approximate scale, purpose)
+3. Is relevant to the specified country/region
+4. Describes government policies, policy directives, budget allocations, strategic plans, or public sector initiatives — even high-level or abstract ones are valid if they relate to governance or public sector activities
 
 A project is INVALID if it:
-1. Is clearly not related to public sector, development, or governance (e.g., personal questions, coding requests, private business plans)
-2. Contains harmful or inappropriate content
-3. Is completely nonsensical or gibberish
+1. Is a PERSONAL or PRIVATE small-scale project (e.g., "I want to build a guest house", "building a 10 bed hotel", "I want to open a restaurant"). This tool is for large-scale development, infrastructure, and public sector projects only — NOT personal business ventures or individual property development
+2. Is just a TOPIC or INDUSTRY name without a specific project (e.g., "Maldives fishing industry", "tourism sector", "agriculture"). A topic is not a project
+3. Is a QUESTION asking for information rather than describing a project to analyze (e.g., "what projects is the government doing?", "what are the trends in construction?")
+4. Is a SOFTWARE, APP, or WEBSITE idea (e.g., "a website that analyzes reports", "an app for tracking expenses"). This tool analyzes physical infrastructure and development projects, not software products
+5. Is TOO VAGUE — just a few words without any specifics about scope, scale, objectives, or implementation details
+6. Contains harmful or inappropriate content
+7. Is completely nonsensical or gibberish
+
+When rejecting, provide a helpful reason explaining what kind of project descriptions are accepted (large-scale infrastructure, public sector development, government initiatives) and suggest how the user could improve their submission.
 
 Respond with ONLY the JSON object, no other text.`;
 }
@@ -500,6 +505,167 @@ IMPORTANT:
 - **Populate the "references" array with all sources you found via AI research that informed your analysis. Include government websites, official reports, databases, and reliable sources with their full URLs.**
 
 Return ONLY the JSON object, no other text.`;
+}
+
+/**
+ * Validate a report for missing or broken fields
+ * Returns the list of field names that need repair
+ */
+function validateReport(report: Record<string, unknown>): { isComplete: boolean; missingFields: string[] } {
+  const missing: string[] = [];
+
+  // Required string fields
+  if (!report.overallSummary) missing.push("overallSummary");
+  if (!report.disclaimer) missing.push("disclaimer");
+  if (!report.detectedProjectType) missing.push("detectedProjectType");
+  if (!report.confidence) missing.push("confidence");
+  if (!report.dataQualityNote) missing.push("dataQualityNote");
+
+  // Required number
+  if (report.overallScore === undefined || report.overallScore === null) missing.push("overallScore");
+
+  // Required objects
+  if (!report.verdict) missing.push("verdict");
+  if (!report.location) missing.push("location");
+  if (!report.estimatedCost) missing.push("estimatedCost");
+
+  // Categories - check all 6 exist and have content
+  const categories = report.categories as Record<string, Record<string, unknown>> | undefined;
+  if (!categories) {
+    missing.push("categories");
+  } else {
+    const requiredCategories = ["technical", "economic", "environmental", "social", "legal", "operational"];
+    for (const cat of requiredCategories) {
+      if (!categories[cat]) {
+        missing.push(`categories.${cat}`);
+      } else {
+        const c = categories[cat];
+        if (c.score === undefined) missing.push(`categories.${cat}.score`);
+        if (!c.summary) missing.push(`categories.${cat}.summary`);
+        if (!Array.isArray(c.pros) || c.pros.length === 0) missing.push(`categories.${cat}.pros`);
+        if (!Array.isArray(c.cons) || c.cons.length === 0) missing.push(`categories.${cat}.cons`);
+        if (!Array.isArray(c.recommendations) || c.recommendations.length === 0) missing.push(`categories.${cat}.recommendations`);
+      }
+    }
+  }
+
+  // Required arrays
+  if (!Array.isArray(report.keyRisks) || report.keyRisks.length === 0) missing.push("keyRisks");
+  if (!Array.isArray(report.nextSteps) || report.nextSteps.length === 0) missing.push("nextSteps");
+
+  // Optional but valuable fields
+  const refs = report.references as unknown[] | undefined;
+  if (!refs || refs.length === 0) missing.push("references");
+  if (!report.dataFoundViaSearch) missing.push("dataFoundViaSearch");
+  if (!report.demandAnalysis) missing.push("demandAnalysis");
+  if (!report.budgetAlignment) missing.push("budgetAlignment");
+  if (!report.timeframe) missing.push("timeframe");
+  if (!report.budgetRatio) missing.push("budgetRatio");
+
+  return { isComplete: missing.length === 0, missingFields: missing };
+}
+
+/**
+ * Build a focused repair prompt for generating missing report fields
+ */
+function buildRepairPrompt(
+  report: Record<string, unknown>,
+  missingFields: string[],
+  country: string,
+  projectType: string,
+  currency: string
+): string {
+  // Build schema snippets only for missing fields
+  const fieldSchemas: Record<string, string> = {
+    overallSummary: `"overallSummary": "<2-3 sentence summary of the feasibility>"`,
+    overallScore: `"overallScore": <number 0-100>`,
+    disclaimer: `"disclaimer": "<standard disclaimer about this being an AI analysis>"`,
+    confidence: `"confidence": "<low/medium/high>"`,
+    dataQualityNote: `"dataQualityNote": "<note about data quality and limitations>"`,
+    detectedProjectType: `"detectedProjectType": "${projectType}"`,
+    verdict: `"verdict": { "recommendation": "<yes/no>", "reason": "<1 sentence key reason>", "confidenceInVerdict": "<high/medium/low>" }`,
+    location: `"location": { "specified": "<location>", "suitability": "<brief assessment>" }`,
+    estimatedCost: `"estimatedCost": { "low": <number in ${currency}>, "high": <number in ${currency}>, "currency": "${currency}", "breakdown": [{"item": "Construction", "percentage": <num>}, {"item": "Equipment", "percentage": <num>}, {"item": "Other", "percentage": <num>}], "confidenceLevel": "<high/medium/low>" }`,
+    keyRisks: `"keyRisks": ["<risk 1>", "<risk 2>", "<risk 3>"]`,
+    nextSteps: `"nextSteps": ["<step 1>", "<step 2>", "<step 3>"]`,
+    references: `"references": [{ "title": "<Source title>", "url": "<https://full-url>" }]`,
+    dataFoundViaSearch: `"dataFoundViaSearch": { "sourcesUsed": ["<source 1>", "<source 2>"], "dataConfidence": "<high/medium/low>", "keyDataPoints": ["<data point 1>", "<data point 2>"] }`,
+    demandAnalysis: `"demandAnalysis": { "targetPopulation": <number>, "capacityGap": "<description>", "utilizationForecast": <percentage>, "demandScore": <0-100>, "demandSummary": "<1-2 sentences>", "scalingRecommendation": "<appropriate/scale_up/scale_down/reconsider>", "sourcesUsed": ["<source>"] }`,
+    budgetAlignment: `"budgetAlignment": { "estimatedCostVsBudget": "<comparison>", "affordabilityScore": <0-100>, "budgetImpact": "<minimal/moderate/significant>", "fundingGap": <number>, "suggestedFundingSources": ["<source>"], "expenditureClassification": { "cofogCategory": "<category>", "sectorBudget": <number>, "percentageOfSectorBudget": <number> } }`,
+    timeframe: `"timeframe": { "estimatedDuration": { "minimum": <months>, "maximum": <months>, "mostLikely": <months> }, "phases": ["<phase 1>", "<phase 2>"], "canCurrentAdminComplete": <true/false>, "riskOfDelay": "<low/medium/high>", "delayFactors": ["<factor>"] }`,
+    budgetRatio: `"budgetRatio": { "projectCostMidpoint": <number>, "countryTotalBudget": <number>, "percentageOfBudget": <number>, "currencyCode": "${currency}", "fiscalYear": "<year>", "interpretation": "<brief interpretation>" }`,
+  };
+
+  // Handle category sub-fields
+  const categorySchema = `{
+      "score": <0-100>,
+      "summary": "<key considerations>",
+      "pros": ["<strength 1>", "<strength 2>"],
+      "cons": ["<concern 1>", "<concern 2>"],
+      "recommendations": ["<recommendation 1>"]
+    }`;
+
+  // Collect schemas for missing fields
+  const schemasNeeded: string[] = [];
+  const missingCategoryParts: string[] = [];
+
+  for (const field of missingFields) {
+    if (field.startsWith("categories.")) {
+      missingCategoryParts.push(field);
+    } else if (fieldSchemas[field]) {
+      schemasNeeded.push(fieldSchemas[field]);
+    }
+  }
+
+  // If any category parts are missing, add them
+  if (missingCategoryParts.length > 0) {
+    // Check if entire categories object is missing
+    if (missingFields.includes("categories")) {
+      schemasNeeded.push(`"categories": {
+    "technical": ${categorySchema},
+    "economic": ${categorySchema},
+    "environmental": ${categorySchema},
+    "social": ${categorySchema},
+    "legal": ${categorySchema},
+    "operational": ${categorySchema}
+  }`);
+    } else {
+      // Individual category fields missing - group by category
+      const affectedCategories = new Set(missingCategoryParts.map(f => f.split(".")[1]));
+      for (const cat of affectedCategories) {
+        schemasNeeded.push(`"categories.${cat}": ${categorySchema}`);
+      }
+    }
+  }
+
+  const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  return `You are an expert feasibility analyst. A report for a ${projectType} project in ${country} was generated but is INCOMPLETE. The following fields are missing or empty and need to be generated.
+
+CURRENT DATE: ${currentDate}
+PROJECT TYPE: ${projectType}
+COUNTRY: ${country}
+CURRENCY: ${currency}
+
+EXISTING REPORT (for context):
+${JSON.stringify(report, null, 2)}
+
+MISSING FIELDS TO GENERATE:
+${missingFields.join(", ")}
+
+Generate ONLY the missing fields listed above. Use the existing report data as context. For references, search for real sources with actual URLs.
+
+Return a JSON object containing ONLY the missing fields:
+{
+  ${schemasNeeded.join(",\n  ")}
+}
+
+IMPORTANT:
+- Use real, current data from your research
+- Be specific to ${country}
+- For references, include government websites, official reports, databases with REAL URLs
+- For cost estimates, use ${currency}
+- Return ONLY the JSON object, no other text`;
 }
 
 /**
@@ -813,9 +979,14 @@ analysisRoutes.post("/analyze/stream", zValidator("json", analysisSchema), async
   // Use Hono's streamSSE for proper streaming support
   return streamSSE(c, async (stream) => {
     const sendEvent = async (eventData: Record<string, unknown>) => {
-      await stream.writeSSE({ data: JSON.stringify(eventData) });
-      // Force flush by yielding control - helps with Wrangler buffering
-      await stream.sleep(0);
+      try {
+        await stream.writeSSE({ data: JSON.stringify(eventData) });
+        // Force flush by yielding control - helps with Wrangler buffering
+        await stream.sleep(0);
+      } catch {
+        // Client disconnected — swallow write error.
+        // Critical work (DB save, repair, translation) continues via waitUntil.
+      }
     };
 
     const jobId = existingJob.id;
@@ -989,7 +1160,7 @@ analysisRoutes.post("/analyze/stream", zValidator("json", analysisSchema), async
             (attempt, error, delay) => {
               console.log(`Analysis retry ${attempt}, waiting ${delay}ms:`, error);
               // Note: Can't await here since onRetry is sync, but the retry logic handles it
-              stream.writeSSE({ data: JSON.stringify({ type: "retry", attempt, delay }) });
+              stream.writeSSE({ data: JSON.stringify({ type: "retry", attempt, delay }) }).catch(() => {});
               // Reset for retry
               analysisText = "";
               lastProgressUpdate = Date.now();
@@ -1106,48 +1277,72 @@ analysisRoutes.post("/analyze/stream", zValidator("json", analysisSchema), async
         return;
       }
 
-      await db
-        .update(jobs)
-        .set({ progress: 80, partialResult: { projectType, hasReport: true } })
-        .where(eq(jobs.id, jobId));
+      // Ensure critical fields exist (Gemini may truncate long responses)
+      if (!report.disclaimer) {
+        report.disclaimer = "This feasibility analysis is generated by AI and is intended for informational purposes only. It should not be considered as professional advice. Always consult qualified professionals before making investment or development decisions.";
+      }
+      if (!report.references) {
+        report.references = [];
+      }
+      if (!report.dataQualityNote) {
+        report.dataQualityNote = "Some data points may be estimated or based on limited available information.";
+      }
 
-      // Use the slug generated earlier (after validation)
-      const estimatedCost = report.estimatedCost as { low?: number; high?: number } | undefined;
+      // Wrap critical DB work in waitUntil so it completes even if client disconnects
+      const criticalWork = (async () => {
+        await db
+          .update(jobs)
+          .set({ progress: 80, partialResult: { projectType, hasReport: true } })
+          .where(eq(jobs.id, jobId));
 
-      await db.insert(reports).values({
-        slug,
-        country,
-        projectDescription: sanitizedDescription,
-        location,
-        projectType,
-        estimatedCost: estimatedCost ? Math.round((estimatedCost.low || 0 + (estimatedCost.high || 0)) / 2) : null,
-        report,
-      });
+        // Use the slug generated earlier (after validation)
+        const estimatedCost = report!.estimatedCost as { low?: number; high?: number } | undefined;
 
-      // Mark job as completed
-      await db
-        .update(jobs)
-        .set({
-          status: "completed",
-          progress: 100,
-          resultSlug: slug,
-          completedAt: new Date().toISOString(),
-        })
-        .where(eq(jobs.id, jobId));
+        await db.insert(reports).values({
+          slug,
+          country,
+          projectDescription: sanitizedDescription,
+          location,
+          projectType,
+          estimatedCost: estimatedCost ? Math.round((estimatedCost.low || 0 + (estimatedCost.high || 0)) / 2) : null,
+          report: report!,
+        });
 
-      // Send completion with full report
+        // Mark job as completed
+        await db
+          .update(jobs)
+          .set({
+            status: "completed",
+            progress: 100,
+            resultSlug: slug,
+            completedAt: new Date().toISOString(),
+          })
+          .where(eq(jobs.id, jobId));
+
+        // Background translation for Dhivehi
+        if (languageNames["dv"]) {
+          triggerBackgroundTranslation(slug, c.env.GEMINI_API_KEY, modelName, db).catch((err) => {
+            console.error("Background translation error:", err);
+          });
+        }
+
+        // Background repair if report has missing fields
+        const { isComplete } = validateReport(report!);
+        if (!isComplete) {
+          triggerBackgroundRepair(slug, country, projectType, c.env.GEMINI_API_KEY, modelName, db).catch((err) => {
+            console.error("Background repair error:", err);
+          });
+        }
+      })();
+
+      c.executionCtx.waitUntil(criticalWork);
+
+      // Best-effort: send completion to client (may fail if disconnected)
       await sendEvent({
         type: "complete",
         slug,
         report,
       });
-
-      // Trigger background translation for Dhivehi
-      if (languageNames["dv"]) {
-        triggerBackgroundTranslation(slug, c.env.GEMINI_API_KEY, modelName, db).catch((err) => {
-          console.error("Background translation error:", err);
-        });
-      }
     } catch (error) {
       console.error("Streaming analysis error:", error);
       const userMessage = getUserFriendlyError(error);
@@ -1158,15 +1353,60 @@ analysisRoutes.post("/analyze/stream", zValidator("json", analysisSchema), async
         technicalError: error instanceof Error ? error.message : "Unknown error",
       });
 
-      await db
-        .update(jobs)
-        .set({
-          status: "failed",
-          error: error instanceof Error ? error.message : "Unknown error",
-          completedAt: new Date().toISOString(),
-        })
-        .where(eq(jobs.id, existingJob.id));
+      // Ensure job failure is recorded even on disconnect
+      c.executionCtx.waitUntil(
+        db
+          .update(jobs)
+          .set({
+            status: "failed",
+            error: error instanceof Error ? error.message : "Unknown error",
+            completedAt: new Date().toISOString(),
+          })
+          .where(eq(jobs.id, existingJob.id))
+      );
     }
+  });
+});
+
+// Admin: trigger repair for all incomplete reports
+analysisRoutes.post("/admin/repair-reports", async (c) => {
+  const db = drizzle(c.env.DB);
+  const modelName = c.env.GEMINI_MODEL || "gemini-2.5-flash";
+
+  // Fetch all reports
+  const allReports = await db.select().from(reports);
+  const repairQueue: Array<{ slug: string; country: string; projectType: string; missing: string[] }> = [];
+
+  for (const r of allReports) {
+    const reportData = r.report as Record<string, unknown>;
+    const { isComplete, missingFields } = validateReport(reportData);
+    if (!isComplete) {
+      repairQueue.push({
+        slug: r.slug,
+        country: r.country,
+        projectType: r.projectType || "Development Project",
+        missing: missingFields,
+      });
+    }
+  }
+
+  if (repairQueue.length === 0) {
+    return c.json({ message: "All reports are complete", total: allReports.length });
+  }
+
+  // Trigger repairs in background
+  for (const item of repairQueue) {
+    c.executionCtx.waitUntil(
+      triggerBackgroundRepair(item.slug, item.country, item.projectType, c.env.GEMINI_API_KEY, modelName, db).catch((err) => {
+        console.error(`Repair failed for ${item.slug}:`, err);
+      })
+    );
+  }
+
+  return c.json({
+    message: `Triggered repair for ${repairQueue.length} reports`,
+    total: allReports.length,
+    repairing: repairQueue.map(r => ({ slug: r.slug, missingFields: r.missing })),
   });
 });
 
@@ -1242,6 +1482,17 @@ analysisRoutes.post("/analyze", zValidator("json", analysisSchema), async (c) =>
       return c.json({ error: "Failed to parse analysis response" }, 500);
     }
 
+    // Ensure critical fields exist (Gemini may truncate long responses)
+    if (!report.disclaimer) {
+      report.disclaimer = "This feasibility analysis is generated by AI and is intended for informational purposes only. It should not be considered as professional advice. Always consult qualified professionals before making investment or development decisions.";
+    }
+    if (!report.references) {
+      report.references = [];
+    }
+    if (!report.dataQualityNote) {
+      report.dataQualityNote = "Some data points may be estimated or based on limited available information.";
+    }
+
     // Save to database
     const slug = generateSlug(projectType, location);
     const estimatedCost = report.estimatedCost as { low?: number; high?: number } | undefined;
@@ -1255,6 +1506,16 @@ analysisRoutes.post("/analyze", zValidator("json", analysisSchema), async (c) =>
       estimatedCost: estimatedCost ? Math.round((estimatedCost.low || 0 + (estimatedCost.high || 0)) / 2) : null,
       report,
     });
+
+    // Background repair if report has missing fields
+    const { isComplete } = validateReport(report);
+    if (!isComplete) {
+      c.executionCtx.waitUntil(
+        triggerBackgroundRepair(slug, country, projectType, c.env.GEMINI_API_KEY, modelName, db).catch((err) => {
+          console.error("Background repair error:", err);
+        })
+      );
+    }
 
     return c.json({
       slug,
@@ -1350,6 +1611,7 @@ IMPORTANT TRANSLATION RULES:
    - detectedProjectType (keep original English value, but ADD translatedProjectType with translation)
    - Location names
    - Source names in dataFoundViaSearch
+   - The "references" array - keep it EXACTLY as-is (titles and URLs must not be translated)
 5. Maintain the same professional but accessible tone
 6. For Dhivehi, use Thaana script (ދިވެހި)
 7. Ensure the translation sounds natural in ${targetLanguage}, not like a literal translation
@@ -1365,6 +1627,14 @@ Respond with ONLY the translated JSON object. No markdown code blocks, no explan
     );
     const text = aiResult.response.text();
     const translatedReport = parseTranslationResponse(text);
+
+    // Ensure references and disclaimer are preserved from the original report
+    if (!translatedReport.references && originalReport.references) {
+      translatedReport.references = originalReport.references;
+    }
+    if (!translatedReport.disclaimer && originalReport.disclaimer) {
+      translatedReport.disclaimer = originalReport.disclaimer;
+    }
 
     // Save translation to database
     const updatedTranslations = {
@@ -1387,6 +1657,175 @@ Respond with ONLY the translated JSON object. No markdown code blocks, no explan
   } catch (error) {
     console.error(`Background translation error for ${slug}:`, error);
     // Don't throw - this is background work, failures shouldn't affect the main flow
+  }
+}
+
+/**
+ * Background repair trigger - fixes missing/incomplete report fields
+ * Runs after report creation if Gemini truncated the response
+ */
+async function triggerBackgroundRepair(
+  slug: string,
+  country: string,
+  projectType: string,
+  apiKey: string,
+  modelName: string,
+  db: ReturnType<typeof drizzle>
+): Promise<void> {
+  try {
+    // Fetch the report
+    const reportResult = await db
+      .select()
+      .from(reports)
+      .where(eq(reports.slug, slug))
+      .limit(1);
+
+    if (!reportResult[0]) {
+      console.log(`Background repair: Report ${slug} not found`);
+      return;
+    }
+
+    const reportRow = reportResult[0];
+    const reportData = reportRow.report as Record<string, unknown>;
+
+    // Validate - check what's actually missing
+    const { isComplete, missingFields } = validateReport(reportData);
+    if (isComplete) {
+      console.log(`Background repair: Report ${slug} is already complete`);
+      return;
+    }
+
+    // Create repair job (deduplication via job key)
+    const jobKey = generateJobKey(JOB_TYPES.REPORT_REPAIR, slug);
+    const { job: repairJob, isNew } = await createJobSafely(db, jobKey, JOB_TYPES.REPORT_REPAIR, {
+      slug,
+      missingFields,
+    });
+
+    if (!isNew && (repairJob.status === "in_progress" || repairJob.status === "completed")) {
+      console.log(`Background repair: Job for ${slug} already exists (${repairJob.status})`);
+      return;
+    }
+
+    const jobId = repairJob.id;
+    const currency = countryCurrencies[country] || "USD";
+
+    console.log(`Background repair: Starting for ${slug} — missing ${missingFields.length} fields: ${missingFields.join(", ")}`);
+
+    // Build focused repair prompt
+    const repairPrompt = buildRepairPrompt(reportData, missingFields, country, projectType, currency);
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+      model: modelName,
+      tools: [{ googleSearch: {} }] as unknown as undefined,
+      generationConfig: {
+        maxOutputTokens: 8192,
+      },
+    });
+
+    const result = await withGeminiRetry(
+      () => model.generateContent(repairPrompt),
+      { maxRetries: 2 }
+    );
+
+    const responseText = result.response.text();
+
+    // Parse the repair response
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      throw new Error("No JSON found in repair response");
+    }
+
+    let repairData: Record<string, unknown>;
+    try {
+      repairData = JSON.parse(jsonMatch[0]);
+    } catch {
+      // Try cleaning the JSON
+      let cleaned = jsonMatch[0]
+        .replace(/,(\s*[}\]])/g, '$1')
+        .replace(/[\x00-\x1F\x7F]/g, (ch) => (ch === '\n' || ch === '\r' || ch === '\t') ? ch : '');
+      repairData = JSON.parse(cleaned);
+    }
+
+    // Merge repair data into existing report - only fill missing fields, never overwrite existing
+    const updatedReport = { ...reportData };
+    let repairCount = 0;
+
+    for (const field of missingFields) {
+      // Handle nested category fields (e.g., "categories.technical.pros")
+      if (field.startsWith("categories.")) {
+        const parts = field.split(".");
+        const catName = parts[1] as string; // e.g., "technical"
+        if (!catName) continue;
+
+        // Check if repair data has this category
+        const repairCategories = repairData.categories as Record<string, unknown> | undefined;
+        const repairCatField = repairData[`categories.${catName}`] as Record<string, unknown> | undefined;
+        const repairCat = repairCategories?.[catName] ?? repairCatField;
+
+        if (repairCat && typeof repairCat === "object") {
+          // Ensure categories object exists in updated report
+          if (!updatedReport.categories) updatedReport.categories = {};
+          const cats = updatedReport.categories as Record<string, Record<string, unknown>>;
+
+          if (!cats[catName]) {
+            cats[catName] = repairCat as Record<string, unknown>;
+            repairCount++;
+          } else if (parts.length === 3 && parts[2]) {
+            // Specific sub-field missing (e.g., "categories.technical.pros")
+            const subField = parts[2];
+            if (!cats[catName]![subField] && (repairCat as Record<string, unknown>)[subField]) {
+              cats[catName]![subField] = (repairCat as Record<string, unknown>)[subField];
+              repairCount++;
+            }
+          }
+        }
+      } else if (!updatedReport[field] && repairData[field] !== undefined) {
+        // Top-level field
+        updatedReport[field] = repairData[field];
+        repairCount++;
+      } else if (field === "references") {
+        // Special case: references might be empty array (not falsy)
+        const existingRefs = updatedReport.references as unknown[] | undefined;
+        const repairRefs = repairData.references as unknown[] | undefined;
+        if ((!existingRefs || existingRefs.length === 0) && repairRefs && repairRefs.length > 0) {
+          updatedReport.references = repairRefs;
+          repairCount++;
+        }
+      } else if (field === "keyRisks" || field === "nextSteps") {
+        // Special case: arrays might be empty
+        const existingArr = updatedReport[field] as unknown[] | undefined;
+        const repairArr = repairData[field] as unknown[] | undefined;
+        if ((!existingArr || existingArr.length === 0) && repairArr && repairArr.length > 0) {
+          updatedReport[field] = repairArr;
+          repairCount++;
+        }
+      }
+    }
+
+    if (repairCount > 0) {
+      // Update the report in DB
+      await db
+        .update(reports)
+        .set({ report: updatedReport })
+        .where(eq(reports.slug, slug));
+
+      console.log(`Background repair: Repaired ${repairCount} fields for ${slug}`);
+    } else {
+      console.log(`Background repair: No fields could be repaired for ${slug}`);
+    }
+
+    // Mark job as completed
+    await db
+      .update(jobs)
+      .set({ status: "completed", completedAt: new Date().toISOString(), progress: 100 })
+      .where(eq(jobs.id, jobId));
+
+    console.log(`Background repair: Completed for ${slug}`);
+  } catch (error) {
+    console.error(`Background repair error for ${slug}:`, error);
+    // Don't throw — this is background work
   }
 }
 

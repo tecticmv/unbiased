@@ -547,9 +547,9 @@ export function FeasibilityReport({
                           }`}>
                             {displayReport.budgetRatio.percentageOfBudget == null
                               ? "N/A"
-                              : displayReport.budgetRatio.percentageOfBudget < 0.01
+                              : Number(displayReport.budgetRatio.percentageOfBudget) < 0.01
                               ? "<0.01"
-                              : displayReport.budgetRatio.percentageOfBudget.toFixed(2)}%
+                              : Number(displayReport.budgetRatio.percentageOfBudget).toFixed(2)}%
                           </p>
                         </div>
                       </div>
@@ -604,7 +604,7 @@ export function FeasibilityReport({
                                     : (displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget ?? 0) > 10 ? "text-amber-500"
                                     : "text-emerald-600 dark:text-emerald-400"
                                 }`}>
-                                  {displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget?.toFixed(2) ?? 'N/A'}%
+                                  {displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget != null ? Number(displayReport.budgetAlignment.expenditureClassification.percentageOfSectorBudget).toFixed(2) : 'N/A'}%
                                 </span>
                               </div>
                               <AnimatedProgressBar
@@ -1100,26 +1100,28 @@ export function FeasibilityReport({
         {/*  DISCLAIMER                                                    */}
         {/* ============================================================== */}
         <div className="mt-10 md:mt-14 space-y-4">
-          <motion.div
-            variants={scrollVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportSettings}
-          >
-            <div className="rounded-xl bg-muted/30 border border-border/50 px-5 py-4">
-              <div className="flex gap-3">
-                <Info className="h-4 w-4 shrink-0 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5">
-                    {t('report.disclaimer')}
-                  </p>
-                  <div className="text-sm text-muted-foreground leading-relaxed">
-                    <Markdown>{displayReport.disclaimer ?? ''}</Markdown>
+          {displayReport.disclaimer && (
+            <motion.div
+              variants={scrollVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportSettings}
+            >
+              <div className="rounded-xl bg-muted/30 border border-border/50 px-5 py-4">
+                <div className="flex gap-3">
+                  <Info className="h-4 w-4 shrink-0 text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5">
+                      {t('report.disclaimer')}
+                    </p>
+                    <div className="text-sm text-muted-foreground leading-relaxed">
+                      <Markdown>{displayReport.disclaimer}</Markdown>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
 
           {/* References */}
           {displayReport.references && displayReport.references.length > 0 && (

@@ -128,6 +128,7 @@ IMPORTANT TRANSLATION RULES:
    - detectedProjectType (keep original English value, but ADD translatedProjectType with translation)
    - Location names
    - Source names in dataFoundViaSearch
+   - The "references" array - keep it EXACTLY as-is (titles and URLs must not be translated)
 6. Maintain the same professional but accessible tone
 7. For ${lang === "dv" ? "Dhivehi, use Thaana script (ދިވެހި)" : targetLanguage + ", use native script"}
 8. Ensure the translation sounds natural in ${targetLanguage}, not like a literal translation
@@ -172,6 +173,15 @@ Return the translated JSON:`;
       );
       const retryText = retryResult.response.text();
       translatedReport = parseTranslationResponse(retryText);
+    }
+
+    // Ensure references and disclaimer are preserved from the original report
+    // (AI translation may omit these fields)
+    if (!translatedReport.references && originalReport.references) {
+      translatedReport.references = originalReport.references;
+    }
+    if (!translatedReport.disclaimer && originalReport.disclaimer) {
+      translatedReport.disclaimer = originalReport.disclaimer;
     }
 
     // Save translation to database

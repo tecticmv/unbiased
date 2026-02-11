@@ -210,9 +210,11 @@ export function ReportPage() {
     // Show full report when complete
     if (isComplete && streamingReport) {
       // Use translated report if available, otherwise use original
+      // Merge translated report with original so missing fields (references, disclaimer) fall back
+      const baseStreamingReport = streamingReport as FeasibilityReportType;
       const displayReport = (needsTranslation && translatedReport)
-        ? translatedReport
-        : streamingReport as FeasibilityReportType;
+        ? { ...baseStreamingReport, ...translatedReport }
+        : baseStreamingReport;
 
       // Get translated project description if available
       const translatedDesc = (translatedReport as Record<string, unknown>)?.translatedProjectDescription as string | undefined;
@@ -301,8 +303,9 @@ export function ReportPage() {
   const baseReport = (isComplete && streamingReport)
     ? streamingReport as FeasibilityReportType
     : report?.report as FeasibilityReportType;
+  // Merge translated report with original so missing fields (references, disclaimer) fall back
   const displayReport = (needsTranslation && translatedReport)
-    ? translatedReport
+    ? { ...baseReport, ...translatedReport }
     : baseReport;
 
   // Get translated project description if available
