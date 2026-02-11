@@ -8,6 +8,7 @@ export const countryCurrencies: Record<string, string> = {
   india: "INR",
   bangladesh: "BDT",
   srilanka: "LKR",
+  malaysia: "MYR",
 };
 
 // Supported countries list
@@ -36,6 +37,12 @@ export const supportedCountries = [
     flag: "🇱🇰",
     currency: "LKR",
   },
+  {
+    code: "malaysia",
+    name: "Malaysia",
+    flag: "🇲🇾",
+    currency: "MYR",
+  },
 ];
 
 // Language names for translation prompts
@@ -45,6 +52,7 @@ export const languageNames: Record<string, string> = {
   bn: "Bengali",
   si: "Sinhala",
   ta: "Tamil",
+  ms: "Malay (Bahasa Melayu)",
 };
 
 // Heartbeat timeout for presence tracking

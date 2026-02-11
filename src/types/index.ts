@@ -131,6 +131,15 @@ const expertNamesByRegion: Record<string, Record<ExpertType, string>> = {
     ai_operations: "Kasun Bandara",
     ai_moderator: "Tharindu Senanayake",
   },
+  malaysia: {
+    ai_economist: "Dr. Nurul Aisyah",
+    ai_engineer: "Ahmad Faizal",
+    ai_legal: "Siti Zulaikha",
+    ai_environmental: "Dr. Rizal Hakim",
+    ai_social: "Noraini Yusof",
+    ai_operations: "Hafiz Rahman",
+    ai_moderator: "Zainab Kamaruddin",
+  },
   default: {
     ai_economist: "Dr. Sarah Chen",
     ai_engineer: "Marcus Thompson",

@@ -1,0 +1,558 @@
+{
+  "common": {
+    "appName": "unbiased",
+    "tagline": "Dikuasakan AI",
+    "loading": "Memuatkan...",
+    "loadingMore": "Memuatkan lagi...",
+    "noMoreReports": "Tiada lagi laporan untuk dimuatkan",
+    "translating": "Menterjemahkan laporan...",
+    "error": "Ralat",
+    "success": "Berjaya",
+    "submit": "Hantar",
+    "cancel": "Batal",
+    "back": "Kembali",
+    "next": "Seterusnya",
+    "previous": "Sebelumnya",
+    "save": "Simpan",
+    "delete": "Padam",
+    "edit": "Sunting",
+    "view": "Lihat",
+    "close": "Tutup",
+    "search": "Cari laporan...",
+    "filter": "Tapis",
+    "sort": "Susun",
+    "all": "Semua",
+    "allCategories": "Semua Kategori",
+    "noResults": "Tiada hasil ditemui",
+    "noResultsDescription": "Cuba laraskan carian atau tapisan anda untuk mencari apa yang anda cari.",
+    "clearFilters": "Kosongkan tapisan",
+    "noReportsYet": "Belum ada laporan",
+    "none": "Tiada",
+    "yes": "Ya",
+    "no": "Tidak",
+    "or": "atau",
+    "and": "dan",
+    "english": "EN",
+    "optional": "pilihan",
+    "project": "Projek",
+    "project_one": "{{count}} projek",
+    "project_other": "{{count}} projek",
+    "retry": "Cuba Semula"
+  },
+  "nav": {
+    "home": "Laman Utama",
+    "about": "Mengenai",
+    "analyze": "Analisis",
+    "reports": "Laporan",
+    "selectCountry": "Pilih Negara",
+    "selectLanguage": "Bahasa"
+  },
+  "home": {
+    "hero": {
+      "title": "Analisis Kebolehlaksanaan Unbiased",
+      "subtitle": "Analisis dikuasakan AI untuk projek infrastruktur dan pembangunan",
+      "description": "Laporan kebolehlaksanaan dikuasakan AI, berasaskan data untuk projek kerajaan, inisiatif infrastruktur, dan cadangan dasar.",
+      "cta": "Mulakan Analisis",
+      "viewReports": "Lihat Laporan",
+      "learnMore": "Ketahui Lebih Lanjut"
+    },
+    "features": {
+      "title": "Mengapa Gunakan Unbiased?",
+      "subtitle": "Pandangan berasaskan data untuk membantu anda membuat keputusan yang bermaklumat",
+      "realData": {
+        "title": "Data Masa Nyata",
+        "description": "Analisis dikuasakan oleh data banci, belanjawan, dan ekonomi terkini"
+      },
+      "demandAnalysis": {
+        "title": "Analisis Permintaan",
+        "description": "Menilai sama ada skala projek sepadan dengan keperluan sebenar penduduk"
+      },
+      "budgetAlignment": {
+        "title": "Penjajaran Belanjawan",
+        "description": "Semak kemampuan berbanding belanjawan kerajaan"
+      },
+      "transparent": {
+        "title": "Pemarkahan Telus",
+        "description": "Pemarkahan yang jelas merentas 6 kategori kebolehlaksanaan"
+      }
+    },
+    "countries": {
+      "title": "Negara Yang Tersedia",
+      "description": "Pilih negara untuk mula menganalisis projek"
+    },
+    "recentAnalyses": {
+      "title": "Analisis Kebolehlaksanaan Terkini",
+      "description": "Terokai analisis projek terkini daripada komuniti kami",
+      "viewAll": "Lihat Semua Laporan"
+    },
+    "categories": {
+      "title": "Analisis Menyeluruh Merentas 6 Kategori",
+      "description": "Setiap projek dinilai merentas pelbagai dimensi untuk memberikan anda penilaian kebolehlaksanaan yang lengkap"
+    },
+    "analytics": {
+      "title": "Analitik Platform",
+      "subtitle": "Pandangan masa nyata mengenai analisis kebolehlaksanaan",
+      "totalReports": "Jumlah Laporan",
+      "activeDiscussions": "Perbincangan Aktif",
+      "recentActivity": "7 Hari Lepas",
+      "avgScore": "Purata Kebolehlaksanaan",
+      "overallFeasibility": "Kebolehlaksanaan keseluruhan",
+      "categoryBreakdown": "Projek Mengikut Kategori",
+      "categoryBreakdownDescription": "Taburan projek yang dianalisis merentas kategori yang berbeza",
+      "scoreDistribution": "Taburan Skor Kebolehlaksanaan",
+      "scoreDistributionDescription": "Bagaimana projek mendapat skor merentas semua analisis",
+      "scoreRange": "Julat Skor",
+      "numberOfProjects": "Bilangan Projek",
+      "feasibilityScore": "Skor Kebolehlaksanaan"
+    },
+    "hotTopics": {
+      "title": "Topik Hangat",
+      "subtitle": "Analisis yang sedang trending",
+      "trending": "Laporan Trending",
+      "activeDiscussions": "Perbincangan Langsung",
+      "active": "Aktif",
+      "messages": "{{count}} mesej",
+      "messages_one": "{{count}} mesej",
+      "messages_other": "{{count}} mesej",
+      "viewDiscussion": "Sertai Perbincangan"
+    }
+  },
+  "analysis": {
+    "title": "Analisis Projek",
+    "form": {
+      "title": "Huraikan Projek Anda",
+      "description": "Beritahu kami tentang projek atau dasar yang ingin anda analisis",
+      "projectDescription": {
+        "label": "Huraian Projek",
+        "placeholder": "Huraikan projek anda secara terperinci. Contohnya: 'Membina hospital 100 katil di wilayah utara' atau 'Melaksanakan dasar tenaga boleh baharu'",
+        "hint": "Minimum 20 aksara. Nyatakan dengan jelas skop, saiz, dan objektif."
+      },
+      "location": {
+        "label": "Lokasi (Pilihan)",
+        "placeholder": "Pilih atau masukkan lokasi",
+        "hint": "Biarkan kosong untuk AI mencadangkan lokasi terbaik"
+      },
+      "submit": "Analisis Kebolehlaksanaan",
+      "analyzing": "Menganalisis...",
+      "validating": "Mengesahkan...",
+      "allowedProjects": {
+        "title": "Apa yang boleh dianalisis?",
+        "description": "Projek kerajaan, infrastruktur awam, inisiatif pembangunan, dan cadangan dasar. Pembelian peribadi, perniagaan swasta, dan kempen politik tidak boleh dianalisis."
+      }
+    },
+    "rejection": {
+      "title": "Permintaan Tidak Sesuai",
+      "suggestion": "Cuba sesuatu seperti:",
+      "tryAgain": "Cuba Semula"
+    },
+    "streaming": {
+      "searching": "Mencari data dunia sebenar...",
+      "analyzing": "Menganalisis kebolehlaksanaan...",
+      "generating": "Menjana laporan...",
+      "thinking": "Sedang berfikir...",
+      "researching": "Menyelidik data...",
+      "evaluating": "Menilai faktor...",
+      "calculating": "Mengira skor...",
+      "generatingReport": "Menjana laporan anda",
+      "projectType": "Jenis Projek",
+      "score": "Skor"
+    },
+    "reconnecting": {
+      "title": "Menyambung semula...",
+      "description": "Sambungan terputus. Sedang cuba menyambung semula (percubaan {{attempt}}).",
+      "attempt": "Percubaan {{current}} daripada {{max}}",
+      "partialData": "Data yang diterima setakat ini:"
+    },
+    "disconnected": {
+      "title": "Sambungan Terputus",
+      "description": "Tidak dapat menyambung semula kepada analisis. Keputusan separa anda telah disimpan."
+    }
+  },
+  "report": {
+    "title": "Laporan Kebolehlaksanaan",
+    "generatedOn": "Dijana pada",
+    "analyzedRequest": "Permintaan Analisis",
+    "overallScore": "Skor Kebolehlaksanaan Keseluruhan",
+    "confidence": "Tahap Keyakinan",
+    "projectType": "Jenis Projek",
+    "location": "Lokasi",
+    "suggestedLocations": "Lokasi Dicadangkan",
+    "estimatedCost": "Anggaran Kos",
+    "costBreakdown": "Pecahan Kos",
+    "categories": {
+      "title": "Kategori Kebolehlaksanaan",
+      "technical": "Kebolehlaksanaan Teknikal",
+      "technicalDesc": "Keperluan kejuruteraan, tindanan teknologi, dan keperluan infrastruktur",
+      "economic": "Daya Maju Ekonomi",
+      "economicDesc": "Analisis kos, unjuran ROI, dan kelestarian kewangan",
+      "environmental": "Kesan Alam Sekitar",
+      "environmentalDesc": "Jejak ekologi, kelestarian, dan pematuhan",
+      "social": "Kesan Sosial",
+      "socialDesc": "Manfaat komuniti, sentimen awam, dan faktor budaya",
+      "legal": "Undang-undang & Politik",
+      "legalDesc": "Pematuhan peraturan, permit, dan rangka kerja tadbir urus",
+      "operational": "Kebolehlaksanaan Operasi",
+      "operationalDesc": "Logistik pelaksanaan, sumber, dan garis masa"
+    },
+    "sections": {
+      "financial": "Analisis Kewangan",
+      "financialDesc": "Kesan belanjawan dan pecahan kos",
+      "timeframeDesc": "Tempoh projek dan analisis pentadbiran",
+      "locationDesc": "Tapak pelaksanaan yang disyorkan",
+      "categoriesDesc": "Pecahan skor mengikut kategori",
+      "actionItems": "Perkara Tindakan",
+      "actionItemsDesc": "Risiko utama untuk ditangani dan langkah seterusnya yang disyorkan",
+      "alternativeDesc": "Pendekatan alternatif yang dicadangkan"
+    },
+    "demandAnalysis": {
+      "title": "Analisis Permintaan",
+      "targetPopulation": "Populasi Sasaran",
+      "currentCapacity": "Kapasiti Semasa",
+      "proposedCapacity": "Kapasiti Dicadangkan",
+      "capacityGap": "Jurang Kapasiti",
+      "utilizationForecast": "Unjuran Penggunaan",
+      "demandScore": "Skor Permintaan",
+      "scalingRecommendation": "Cadangan Penskalaan",
+      "appropriate": "Skala Bersesuaian",
+      "scaleUp": "Pertimbangkan Untuk Meningkatkan Skala",
+      "scaleDown": "Pertimbangkan Untuk Mengurangkan Skala",
+      "reconsider": "Pertimbangkan Semula Projek"
+    },
+    "budgetAlignment": {
+      "title": "Penjajaran Belanjawan",
+      "costVsBudget": "Kos Berbanding Belanjawan Tersedia",
+      "affordabilityScore": "Skor Kemampuan",
+      "fundingGap": "Jurang Pembiayaan",
+      "suggestedSources": "Sumber Pembiayaan Dicadangkan",
+      "budgetImpact": "Kesan Belanjawan",
+      "cofogCategory": "Klasifikasi Perbelanjaan (COFOG)",
+      "sectorBudget": "Belanjawan Sektor",
+      "entityAllocation": "Peruntukan Belanjawan Entiti",
+      "allocatedBudget": "Belanjawan Diperuntukkan"
+    },
+    "verdict": {
+      "title": "Patutkah Negara Ini Meneruskan?"
+    },
+    "budgetRatio": {
+      "title": "Kesan Belanjawan",
+      "ofBudget": "daripada belanjawan",
+      "projectCost": "Kos Projek",
+      "totalBudget": "Belanjawan Negara",
+      "asPercentage": "sebagai peratusan belanjawan negara"
+    },
+    "alternative": {
+      "title": "Projek Alternatif Dicadangkan",
+      "why": "Mengapa pertimbangkan alternatif ini?",
+      "benefits": "Manfaat Berpotensi"
+    },
+    "timeframe": {
+      "title": "Garis Masa Projek",
+      "months": "bulan",
+      "range": "Julat",
+      "canComplete": "Pentadbiran semasa boleh menyiapkan",
+      "cannotComplete": "Mungkin melebihi penggal semasa",
+      "delayRisk": "Risiko Kelewatan",
+      "delayFactors": "Faktor Kelewatan Berpotensi",
+      "risk": {
+        "low": "Rendah",
+        "medium": "Sederhana",
+        "high": "Tinggi"
+      }
+    },
+    "risks": {
+      "title": "Risiko Utama"
+    },
+    "nextSteps": {
+      "title": "Langkah Seterusnya Yang Disyorkan"
+    },
+    "pros": "Kelebihan",
+    "cons": "Cabaran",
+    "recommendations": "Cadangan",
+    "dataQuality": "Nota Kualiti Data",
+    "disclaimer": "Penafian",
+    "references": {
+      "title": "Rujukan & Sumber",
+      "subtitle": "Sumber data yang digunakan dalam analisis kebolehlaksanaan ini",
+      "noSources": "Tiada sumber luar yang dirujuk dalam analisis ini."
+    },
+    "share": "Kongsi Laporan",
+    "download": "Muat Turun PDF",
+    "newAnalysis": "Analisis Baharu",
+    "toc": "Lompat ke bahagian",
+    "discussion": {
+      "title": "Perbincangan Panel",
+      "discuss": "Bincang",
+      "start": "Mulakan Perbincangan",
+      "join": "Sertai Perbincangan",
+      "ctaTitle": "Mulakan Perbincangan Panel",
+      "ctaDescription": "Dapatkan pandangan yang lebih mendalam daripada panel pakar AI kami. Tanya soalan dan terima perspektif daripada pakar ekonomi, teknikal, undang-undang, alam sekitar, sosial, dan operasi.",
+      "loadingReport": "Memuatkan laporan...",
+      "loadingDiscussion": "Memuatkan perbincangan...",
+      "backToReport": "Kembali ke Laporan",
+      "concluded": "Selesai",
+      "discussionConcluded": "Perbincangan Telah Selesai",
+      "summaryLabel": "Ringkasan",
+      "concludeDiscussion": "Tamatkan Perbincangan",
+      "concludeConfirm": "Adakah anda pasti mahu menamatkan perbincangan ini? Tindakan ini tidak boleh dibatalkan.",
+      "stopAutoDiscussion": "Hentikan Perbincangan Auto",
+      "showExperts": "Tunjukkan Pakar",
+      "hideExperts": "Sembunyikan Pakar",
+      "panelExperts": "Pakar Panel",
+      "startTitle": "Mulakan Perbincangan",
+      "startDescription": "Tanya soalan tentang analisis kebolehlaksanaan ini dan dapatkan pandangan daripada panel pakar AI kami. Setiap pakar akan memberikan perspektif khusus domain mereka.",
+      "concludedMessage": "Perbincangan ini telah ditamatkan.",
+      "returnToReport": "Kembali ke laporan",
+      "placeholder": "Tanya soalan kepada panel...",
+      "autoInProgress": "Perbincangan auto sedang berjalan...",
+      "noDescription": "Tiada huraian tersedia",
+      "locationTbd": "Lokasi akan ditentukan",
+      "scoreLabel": "Skor",
+      "confidenceLabel": "Keyakinan",
+      "experts": "Pakar AI",
+      "guests": "Tetamu Aktif",
+      "stop": "Berhenti",
+      "description": "Huraian",
+      "autoDiscussion": "Perbincangan Auto",
+      "you": "Anda",
+      "input": {
+        "allExperts": "Semua Pakar",
+        "askAllExperts": "Tanya semua pakar",
+        "quick": "Pantas",
+        "enterToSend": "Tekan Enter untuk hantar, Shift+Enter untuk baris baharu",
+        "autoDiscussion": "Perbincangan Auto",
+        "autoDiscussionDesc": "Tonton pakar AI berbincang secara automatik",
+        "askAll": "Tanya Semua",
+        "askAllDesc": "Dapatkan input daripada semua pakar",
+        "challengeScore": "Cabar Skor",
+        "challengeScoreDesc": "Persoalkan skor sesuatu kategori",
+        "deepDive": "Analisis Mendalam",
+        "deepDiveDesc": "Minta analisis terperinci",
+        "summarize": "Ringkaskan",
+        "summarizeDesc": "Dapatkan ringkasan perbincangan",
+        "mentionExpert": "Sebut seorang pakar",
+        "auto": "Auto",
+        "placeholder": "Taip mesej anda...",
+        "mentionHint": "Taip",
+        "toSend": "untuk hantar",
+        "replyingTo": "Membalas {{name}}"
+      },
+      "reconnecting": "Menyambung semula...",
+      "disconnected": "Luar talian",
+      "projectInfo": "Maklumat Projek",
+      "suggestedQuestions": "Cuba tanya:",
+      "suggestion1": "Apakah risiko utama projek ini?",
+      "suggestion2": "Bagaimana kita boleh meningkatkan skor kebolehlaksanaan?",
+      "suggestion3": "Apakah permit dan kelulusan yang diperlukan?"
+    }
+  },
+  "countries": {
+    "maldives": "Maldives",
+    "india": "India",
+    "bangladesh": "Bangladesh",
+    "srilanka": "Sri Lanka",
+    "malaysia": "Malaysia"
+  },
+  "countryRequest": {
+    "title": "Mohon Negara Baharu",
+    "requestNew": "Mohon negara",
+    "description": "Tidak dapat mencari negara anda? Mohon di sini dan kami akan menambahkannya ke platform.",
+    "countryName": "Nama Negara",
+    "countryNamePlaceholder": "cth., Jepun, Brazil, Kenya",
+    "yourName": "Nama Anda",
+    "yourNamePlaceholder": "Nama anda",
+    "yourEmail": "E-mel Anda",
+    "yourEmailPlaceholder": "emel@contoh.com",
+    "emailNote": "Kami akan memaklumkan anda apabila negara anda ditambahkan",
+    "submit": "Hantar Permohonan",
+    "submitting": "Menghantar...",
+    "success": {
+      "title": "Permohonan Dihantar!",
+      "message": "Kami akan menyemak permohonan anda dan memaklumkan anda apabila ia siap.",
+      "requestId": "ID Permohonan"
+    },
+    "errors": {
+      "nameRequired": "Sila masukkan nama negara"
+    }
+  },
+  "languages": {
+    "en": "English",
+    "dv": "ދިވެހި",
+    "hi": "हिंदी",
+    "bn": "বাংলা",
+    "si": "සිංහල",
+    "ta": "தமிழ்",
+    "ms": "Bahasa Melayu"
+  },
+  "footer": {
+    "description": "Analisis dikuasakan AI untuk projek infrastruktur dan pembangunan",
+    "madeWith": "Dibuat dengan",
+    "forThe": "untuk rakyat",
+    "copyright": "Hak cipta terpelihara",
+    "privacy": "Dasar Privasi",
+    "terms": "Terma Perkhidmatan",
+    "contact": "Hubungi Kami",
+    "githubLabel": "GitHub",
+    "twitterLabel": "Twitter"
+  },
+  "score": {
+    "highlyFeasible": "Sangat Boleh Dilaksanakan",
+    "moderatelyFeasible": "Sederhana Boleh Dilaksanakan",
+    "challenging": "Mencabar",
+    "difficult": "Sukar",
+    "notRecommended": "Tidak Disyorkan"
+  },
+  "ui": {
+    "less": "Kurang",
+    "details": "Butiran",
+    "showLess": "Tunjukkan Kurang",
+    "showMore": "Tunjukkan Lagi",
+    "linkCopied": "Pautan disalin ke papan keratan!",
+    "toggleTheme": "Tukar tema"
+  },
+  "errors": {
+    "generic": "Sesuatu telah berlaku. Sila cuba semula.",
+    "network": "Ralat rangkaian. Sila semak sambungan anda.",
+    "notFound": "Halaman tidak ditemui",
+    "invalidInput": "Sila semak input anda dan cuba semula",
+    "analysisError": "Analisis gagal. Sila cuba semula.",
+    "highUsage": "Pelayan kami mengalami permintaan yang tinggi. Sila cuba semula sebentar lagi.",
+    "highUsageTitle": "Permintaan Tinggi",
+    "reportNotFound": "Laporan Tidak Ditemui",
+    "reportNotFoundDescription": "Laporan ini tidak wujud atau telah dialih keluar.",
+    "failedToStartAnalysis": "Gagal memulakan analisis",
+    "streamingNotSupported": "Penstriman tidak disokong",
+    "failedToStartDiscussion": "Gagal memulakan perbincangan",
+    "failedToStartAutoDiscussion": "Gagal memulakan perbincangan auto",
+    "translationFailed": "Terjemahan gagal",
+    "translationFallback": "Menunjukkan laporan dalam Bahasa Inggeris. Terjemahan tidak dapat dimuatkan.",
+    "reconnectionFailed": "Tidak dapat menyambung semula. Sila cuba mulakan analisis baharu."
+  },
+  "chart": {
+    "loadingCategories": "Memuatkan kategori...",
+    "noCategoryData": "Tiada data kategori tersedia",
+    "progress": "Kemajuan",
+    "radar": "Radar",
+    "score": "Skor"
+  },
+  "categories": {
+    "government": "Kerajaan",
+    "infrastructure": "Infrastruktur",
+    "transportation": "Pengangkutan",
+    "housing": "Perumahan",
+    "commercial": "Komersial",
+    "social": "Sosial",
+    "economic": "Ekonomi",
+    "environmental": "Alam Sekitar",
+    "healthcare": "Penjagaan Kesihatan",
+    "education": "Pendidikan",
+    "other": "Lain-lain"
+  },
+  "learnMore": {
+    "badge": "Ketahui Lebih Lanjut Tentang Unbiased",
+    "hero": {
+      "title": "Analisis Kebolehlaksanaan Dikuasakan AI untuk Membuat Keputusan Lebih Baik",
+      "description": "Unbiased membantu kerajaan, penggubal dasar, dan komuniti membuat keputusan bermaklumat tentang projek pembangunan melalui analisis kebolehlaksanaan menyeluruh dikuasakan AI.",
+      "cta": "Cuba Sekarang"
+    },
+    "whatIs": {
+      "title": "Apakah Unbiased?",
+      "description": "Unbiased ialah platform inovatif yang menggabungkan kecerdasan buatan dengan data dunia sebenar untuk menilai kebolehlaksanaan projek kerajaan dan pembangunan.",
+      "card1": {
+        "title": "Pandangan Berasaskan Data",
+        "description": "Kami menganalisis projek menggunakan data banci sebenar, maklumat belanjawan, penunjuk ekonomi, dan faktor alam sekitar untuk memberikan penilaian kebolehlaksanaan yang menyeluruh."
+      },
+      "card2": {
+        "title": "Panel Pakar AI",
+        "description": "Berinteraksi dengan persona pakar AI yang mewakili pelbagai domain - perspektif ekonomi, teknikal, undang-undang, alam sekitar, sosial, dan operasi."
+      }
+    },
+    "howItWorks": {
+      "title": "Bagaimana Ia Berfungsi",
+      "description": "Dapatkan laporan kebolehlaksanaan menyeluruh dalam empat langkah mudah",
+      "step1": {
+        "title": "Huraikan Projek Anda",
+        "description": "Berikan butiran tentang projek yang dicadangkan, termasuk skop, objektif, dan anggaran kos"
+      },
+      "step2": {
+        "title": "Analisis AI",
+        "description": "AI kami menganalisis projek anda terhadap data dunia sebenar, kekangan belanjawan, dan faktor kebolehlaksanaan"
+      },
+      "step3": {
+        "title": "Terima Laporan Terperinci",
+        "description": "Dapatkan skor merentas 6 kategori dengan pandangan yang boleh diambil tindakan, risiko, dan cadangan"
+      },
+      "step4": {
+        "title": "Libatkan Panel Pakar",
+        "description": "Mulakan perbincangan dengan pakar AI untuk mendalami aspek tertentu projek anda"
+      }
+    },
+    "categories": {
+      "title": "Enam Kategori Analisis Menyeluruh",
+      "description": "Setiap projek dinilai merentas dimensi kritikal ini",
+      "technical": "Menilai sama ada projek boleh dibina dengan teknologi, sumber, dan infrastruktur yang tersedia",
+      "economic": "Menilai daya maju kewangan, nisbah kos-manfaat, dan kesan ekonomi kepada komuniti",
+      "environmental": "Menganalisis kesan alam sekitar, kelestarian, dan pematuhan peraturan alam sekitar",
+      "social": "Meneliti manfaat sosial, kesan komuniti, kebolehcapaian, dan pertimbangan kesaksamaan",
+      "legal": "Menyemak pematuhan peraturan, permit yang diperlukan, dan sokongan politik untuk projek",
+      "operational": "Menilai kelestarian jangka panjang, keperluan penyelenggaraan, dan kebolehlaksanaan operasi"
+    },
+    "features": {
+      "title": "Ciri-ciri Utama",
+      "description": "Semua yang anda perlukan untuk membuat keputusan projek yang bermaklumat",
+      "aiPowered": {
+        "title": "Analisis Dikuasakan AI",
+        "description": "Model AI canggih menganalisis projek anda terhadap data dunia sebenar dan amalan terbaik"
+      },
+      "expertPanel": {
+        "title": "Perbincangan Panel Pakar",
+        "description": "Berinteraksi dengan pakar AI dari pelbagai domain untuk meneroka pelbagai perspektif"
+      },
+      "comprehensive": {
+        "title": "Laporan Menyeluruh",
+        "description": "Skor kebolehlaksanaan terperinci, penilaian risiko, analisis belanjawan, dan cadangan yang boleh diambil tindakan"
+      },
+      "transparent": {
+        "title": "Pemarkahan Telus",
+        "description": "Skor yang jelas dan boleh dijelaskan dengan alasan terperinci untuk setiap kategori"
+      },
+      "fast": {
+        "title": "Keputusan Pantas",
+        "description": "Dapatkan laporan kebolehlaksanaan menyeluruh dalam beberapa minit, bukan berminggu-minggu"
+      },
+      "multilingual": {
+        "title": "Sokongan Pelbagai Bahasa",
+        "description": "Tersedia dalam pelbagai bahasa untuk melayani komuniti yang pelbagai"
+      }
+    },
+    "useCases": {
+      "title": "Siapa Yang Boleh Mendapat Manfaat?",
+      "description": "Unbiased direka untuk sesiapa yang terlibat dalam keputusan pembangunan dan dasar",
+      "infrastructure": {
+        "title": "Projek Infrastruktur",
+        "description": "Jalan raya, jambatan, lapangan terbang, pelabuhan, dan infrastruktur pengangkutan lain"
+      },
+      "publicServices": {
+        "title": "Perkhidmatan Awam",
+        "description": "Hospital, sekolah, pusat komuniti, dan kemudahan awam"
+      },
+      "environmental": {
+        "title": "Inisiatif Alam Sekitar",
+        "description": "Tenaga boleh baharu, pengurusan sisa, pemuliharaan, dan projek kelestarian"
+      },
+      "technology": {
+        "title": "Teknologi & Inovasi",
+        "description": "Infrastruktur digital, inisiatif bandar pintar, dan program penggunaan teknologi"
+      },
+      "social": {
+        "title": "Program Sosial",
+        "description": "Projek perumahan, program kebajikan, dan inisiatif pembangunan komuniti"
+      }
+    },
+    "cta": {
+      "title": "Bersedia untuk Menganalisis Projek Anda?",
+      "description": "Mulakan dengan Unbiased hari ini dan buat keputusan berasaskan data untuk hari esok yang lebih baik.",
+      "start": "Mulakan Analisis",
+      "browse": "Layari Laporan"
+    }
+  }
+}

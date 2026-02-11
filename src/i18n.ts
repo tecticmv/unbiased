@@ -8,6 +8,7 @@ import hi from './locales/hi.json';
 import bn from './locales/bn.json';
 import si from './locales/si.json';
 import ta from './locales/ta.json';
+import ms from './locales/ms.json';
 
 export const languages = [
   { code: 'en', name: 'English', nativeName: 'English', dir: 'ltr' },
@@ -16,6 +17,7 @@ export const languages = [
   { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', dir: 'ltr' },
   { code: 'si', name: 'Sinhala', nativeName: 'සිංහල', dir: 'ltr' },
   { code: 'ta', name: 'Tamil', nativeName: 'தமிழ்', dir: 'ltr' },
+  { code: 'ms', name: 'Malay', nativeName: 'Bahasa Melayu', dir: 'ltr' },
 ] as const;
 
 export type LanguageCode = typeof languages[number]['code'];
@@ -27,6 +29,7 @@ const resources = {
   bn: { translation: bn },
   si: { translation: si },
   ta: { translation: ta },
+  ms: { translation: ms },
 };
 
 i18n
@@ -36,7 +39,7 @@ i18n
     resources,
     // Note: Don't set `lng` here - let LanguageDetector restore from localStorage
     fallbackLng: 'en',
-    supportedLngs: ['en', 'dv', 'hi', 'bn', 'si', 'ta'],
+    supportedLngs: ['en', 'dv', 'hi', 'bn', 'si', 'ta', 'ms'],
     load: 'languageOnly', // Strip region codes (en-US -> en)
     debug: import.meta.env.DEV,
     interpolation: {
