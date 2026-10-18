@@ -546,11 +546,6 @@ Respond with ONLY the JSON, no markdown or explanation.`;
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.1,
-            topP: 0.8,
-            topK: 10,
-          },
         }),
       }
     );
