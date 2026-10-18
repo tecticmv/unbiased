@@ -56,7 +56,6 @@ RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemi
       }]
     }],
     \"generationConfig\": {
-      \"temperature\": 0.2,
       \"maxOutputTokens\": 8000,
       \"responseMimeType\": \"application/json\"
     }
