@@ -348,7 +348,7 @@ wrangler secret put TELEGRAM_BOT_TOKEN
 | `pnpm dev:worker` | Start Wrangler dev server (API + WebSocket) |
 | `pnpm build` | Build frontend for production |
 | `pnpm preview` | Preview production build locally |
-| `pnpm deploy` | Build and deploy to Cloudflare |
+| `pnpm run deploy` | Build and deploy to Cloudflare |
 | `pnpm db:generate` | Generate Drizzle migrations from schema changes |
 | `pnpm db:migrate:local` | Apply migrations to local D1 database |
 | `pnpm db:migrate` | Apply migrations to production D1 database |
@@ -620,7 +620,7 @@ pnpm db:migrate
 
 **Option 1: Manual**
 ```bash
-pnpm deploy
+pnpm run deploy
 ```
 
 **Option 2: GitHub Actions (recommended)**
@@ -637,12 +637,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - run: pnpm install
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - run: npx wrangler deploy
+      - run: pnpm exec wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 ```
