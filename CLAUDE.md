@@ -20,7 +20,7 @@ pnpm dev:worker       # Backend: Wrangler on localhost:8787
 
 # Build and deploy
 pnpm build            # Build frontend to dist/
-pnpm deploy           # Build + deploy to Cloudflare Workers
+pnpm run deploy           # Build + deploy to Cloudflare Workers
 
 # Database
 pnpm db:generate      # Generate Drizzle migrations

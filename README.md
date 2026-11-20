@@ -265,7 +265,7 @@ wrangler d1 create unbiased-db
 pnpm db:migrate
 
 # 4. Build and deploy
-pnpm deploy
+pnpm run deploy
 ```
 
 For detailed developer documentation (architecture, API docs, automated country addition, troubleshooting), see **[DEVELOPMENT.md](DEVELOPMENT.md)**.
